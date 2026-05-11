@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Crise: Filosofia do Direito</title>
+    <title>Simulador de Crise: Guardião da Ordem</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,11 +14,16 @@
         .mono { font-family: 'JetBrains Mono', monospace; }
         .bar-transition { transition: width 1s ease-in-out; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        /* Anti-Cópia */
-        .no-select { user-select: none; -webkit-user-select: none; }
+        /* Anti-Cópia e Anti-Seleção */
+        .no-select { 
+            user-select: none; 
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+        }
     </style>
 </head>
-<body class="no-select" oncontextmenu="return false;">
+<body class="no-select" oncontextmenu="return false;" oncopy="return false;" oncut="return false;" onpaste="return false;">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -31,30 +36,30 @@
                 title: "A Crise das Normas Emergenciais",
                 text: "O Governo edita um decreto que suspende garantias individuais para 'preservar a paz social' após distúrbios civis. Como magistrado, você é provocado a decidir sobre a validade dessa norma, considerando que o Direito é um 'objeto de cultura' (Nader).",
                 options: [
-                    { text: "Sustentar a validade: A segurança coletiva é a mola propulsora da cultura atual.", score: 0.5, impact: { leg: 40, seg: 80, lib: 20 }, feedback: "Você priorizou a Ordem. A Segurança Jurídica subiu, mas a Liberdade foi ferida." },
-                    { text: "Declarar Inconstitucional: O Direito deve proteger a liberdade como valor supremo.", score: 0.5, impact: { leg: 80, seg: 30, lib: 90 }, feedback: "Decisão corajosa. A Legitimidade popular sobe, mas o Estado perde controle." },
-                    { text: "Admitir excepcionalidade temporária com controle rigoroso.", score: 0.3, impact: { leg: 60, seg: 60, lib: 60 }, feedback: "O caminho do meio. Equilíbrio instável mantido." }
+                    { text: "Sustentar a validade: A segurança coletiva é a mola propulsora da cultura atual.", score: 0.5, impact: { leg: 40, seg: 80, lib: 20 }, feedback: "Priorizou a Ordem. A Segurança subiu, mas a Liberdade foi ferida." },
+                    { text: "Declarar Inconstitucional: O Direito deve proteger a liberdade como valor supremo.", score: 0.5, impact: { leg: 80, seg: 30, lib: 90 }, feedback: "Decisão corajosa. A Legitimidade sobe, mas o Estado perde controle." },
+                    { text: "Admitir excepcionalidade temporária com controle rigoroso.", score: 0.3, impact: { leg: 60, seg: 60, lib: 60 }, feedback: "Caminho do meio. Equilíbrio instável mantido." }
                 ]
             },
             {
                 id: 2,
                 chapter: "Capítulo II: Coercibilidade e Força",
                 title: "A Resistência Passiva",
-                text: "Um grupo de cidadãos recusa-se a cumprir uma nova obrigação tributária por considerá-la imoral. Para Miguel Reale, o Direito possui a 'possibilidade lógica da interferência da força'. O Estado pede autorização para penhora imediata de bens.",
+                text: "Cidadãos recusam-se a cumprir uma obrigação tributária por considerá-la imoral. Para Miguel Reale, o Direito possui a 'possibilidade lógica da interferência da força'. O Estado pede autorização para penhora imediata de bens.",
                 options: [
-                    { text: "Autorizar: O Direito exige coercibilidade para não se tornar mera recomendação moral.", score: 0.5, impact: { leg: 40, seg: 90, lib: 40 }, feedback: "A força do Direito foi reafirmada. Segurança total, legitimidade baixa." },
-                    { text: "Negar: O ato de resistência é uma manifestação de espontaneidade moral que o Direito deve respeitar.", score: 0.1, impact: { leg: 70, seg: 20, lib: 80 }, feedback: "A Moral venceu o Direito, mas o sistema jurídico enfraqueceu perigosamente." },
-                    { text: "Mediar: Condicionar a força à prova de que o tributo fere a dignidade humana.", score: 0.4, impact: { leg: 90, seg: 50, lib: 60 }, feedback: "Alta legitimidade ética, mas gera incerteza arrecadatória." }
+                    { text: "Autorizar: O Direito exige coercibilidade para não ser mera recomendação moral.", score: 0.5, impact: { leg: 40, seg: 90, lib: 40 }, feedback: "A força do Direito foi reafirmada. Segurança total." },
+                    { text: "Negar: O ato de resistência é uma manifestação de espontaneidade moral.", score: 0.1, impact: { leg: 70, seg: 20, lib: 80 }, feedback: "A Moral venceu, mas o sistema jurídico enfraqueceu." },
+                    { text: "Mediar: Condicionar a força à prova de que o tributo fere a dignidade humana.", score: 0.4, impact: { leg: 90, seg: 50, lib: 60 }, feedback: "Alta legitimidade ética, incerteza arrecadatória." }
                 ]
             },
             {
                 id: 3,
                 chapter: "Capítulo III: Liberdade e Vontade",
                 title: "O Caso da Vigilância Digital",
-                text: "O Estado implementa vigilância facial algorítmica. Eduardo Bittar discute a sensação de 'não-liberdade'. O ímpeto da vontade humana está sendo tolhido preventivamente. Qual sua posição no Conselho Constitucional?",
+                text: "O Estado implementa vigilância facial algorítmica. Eduardo Bittar discute a sensação de 'não-liberdade'. O ímpeto da vontade humana está sendo tolhido preventivamente.",
                 options: [
-                    { text: "Proibir: A liberdade é horizonte sem fronteiras; a vigilância é a gaiola invisível.", score: 0.5, impact: { leg: 80, seg: 40, lib: 100 }, feedback: "Você protegeu o ímpeto da vontade. Liberdade máxima!" },
-                    { text: "Permitir: A tecnologia é o novo 'objeto de cultura' necessário para a proteção da vida.", score: 0.3, impact: { leg: 50, seg: 90, lib: 20 }, feedback: "A Ordem prevaleceu. Os cidadãos estão seguros, mas vigiados." },
+                    { text: "Proibir: A liberdade é o horizonte; a vigilância é a gaiola invisível.", score: 0.5, impact: { leg: 80, seg: 40, lib: 100 }, feedback: "Protegeu o ímpeto da vontade. Liberdade máxima!" },
+                    { text: "Permitir: A tecnologia é o novo objeto de cultura necessário para a proteção da vida.", score: 0.3, impact: { leg: 50, seg: 90, lib: 20 }, feedback: "A Ordem prevaleceu. Cidadãos seguros, mas vigiados." },
                     { text: "Regulamentar: Permitir apenas para crimes hediondos, com auditoria humana.", score: 0.5, impact: { leg: 70, seg: 70, lib: 70 }, feedback: "Ponderação técnica equilibrada." }
                 ]
             },
@@ -62,10 +67,10 @@
                 id: 4,
                 chapter: "Capítulo IV: Ação Externa (Kant)",
                 title: "A Lei da Intenção",
-                text: "Propõe-se uma lei que pune não apenas o crime, mas a 'intenção manifesta' em redes sociais. Kant afirma que o Direito é uma 'ação externa'. Você deve dar o parecer final.",
+                text: "Propõe-se uma lei que pune não apenas o crime, mas a 'intenção manifesta' em redes sociais. Kant afirma que o Direito é uma 'ação externa'. Qual seu parecer?",
                 options: [
-                    { text: "Rejeitar: O Direito não pode julgar o 'foro íntimo', apenas a ação externa física.", score: 0.5, impact: { leg: 90, seg: 50, lib: 90 }, feedback: "Fiel a Kant! O Direito não entra na alma do cidadão." },
-                    { text: "Aprovar: Na era digital, a intenção digital já é uma extensão da ação externa.", score: 0.1, impact: { leg: 30, seg: 90, lib: 10 }, feedback: "Precedente perigoso. O Estado tornou-se o juiz das mentes." },
+                    { text: "Rejeitar: O Direito não pode julgar o foro íntimo, apenas a ação física.", score: 0.5, impact: { leg: 90, seg: 50, lib: 90 }, feedback: "Fiel a Kant! O Direito não entra na alma do cidadão." },
+                    { text: "Aprovar: Na era digital, a intenção digital já é uma extensão da ação externa.", score: 0.1, impact: { leg: 30, seg: 90, lib: 10 }, feedback: "Precedente perigoso. O Estado julga mentes." },
                     { text: "Ajustar: Punir apenas se houver preparação material evidente.", score: 0.4, impact: { leg: 60, seg: 70, lib: 60 }, feedback: "Busca pela objetividade material." }
                 ]
             },
@@ -73,18 +78,15 @@
                 id: 5,
                 chapter: "Capítulo V: O Alvo da Justiça",
                 title: "A Sentença Final",
-                text: "Uma grande corporação faliu, deixando milhares sem salário, mas cumpriu todas as leis vigentes. Nader fala em 'Meta Optata' (Justiça como alvo). Você decide pelo confisco de bens dos sócios (desconsideração da personalidade), mesmo sem previsão legal clara.",
+                text: "Uma corporação faliu deixando milhares sem salário, mas cumpriu as leis. Nader fala em 'Meta Optata' (Justiça como alvo). Você decide pelo confisco de bens dos sócios sem previsão legal clara.",
                 options: [
-                    { text: "Confiscar: A justiça material deve prevalecer sobre a forma técnica da lei.", score: 0.5, impact: { leg: 100, seg: 20, lib: 50 }, feedback: "Justiça feita! Mas os investidores agora temem o mercado jurídico local." },
-                    { text: "Negar: Sem base legal, o juiz vira ditador. A segurança jurídica é a justiça dos juízes.", score: 0.5, impact: { leg: 40, seg: 100, lib: 60 }, feedback: "Dura Lex, Sed Lex. A estabilidade do sistema foi mantida acima de tudo." },
-                    { text: "Intermediar: Bloqueio parcial até que o legislativo se manifeste.", score: 0.2, impact: { leg: 50, seg: 50, lib: 50 }, feedback: "Decisão política que agradou a poucos." }
+                    { text: "Confiscar: A justiça material deve prevalecer sobre a forma técnica da lei.", score: 0.5, impact: { leg: 100, seg: 20, lib: 50 }, feedback: "Justiça feita, mas gera insegurança para investimentos." },
+                    { text: "Negar: Sem base legal, o juiz vira ditador. A lei deve ser seguida.", score: 0.5, impact: { leg: 40, seg: 100, lib: 60 }, feedback: "Dura Lex, Sed Lex. Estabilidade mantida." },
+                    { text: "Intermediar: Bloqueio parcial até que o legislativo se manifeste.", score: 0.2, impact: { leg: 50, seg: 50, lib: 50 }, feedback: "Decisão política cautelosa." }
                 ]
             }
         ];
 
-        // ==========================================================
-        // CONFIGURAÇÃO FORMSPREE
-        // ==========================================================
         const FORMSPREE_ID = "xzdoopyw"; 
 
         function App() {
@@ -96,50 +98,70 @@
             const [feedback, setFeedback] = useState(null);
             const [timer, setTimer] = useState(60);
 
+            // Bloqueia Ctrl+C no teclado
+            useEffect(() => {
+                const handleKeyDown = (e) => {
+                    if ((e.ctrlKey || e.metaKey) && (e.key === 'c' || e.key === 'C')) {
+                        e.preventDefault();
+                    }
+                };
+                window.addEventListener('keydown', handleKeyDown);
+                return () => window.removeEventListener('keydown', handleKeyDown);
+            }, []);
+
             useEffect(() => {
                 if (gameState === 'playing' && !feedback) {
-                    if (timer <= 0) { nextStep(0, {leg:-10, seg:-10, lib:-10}, "Tempo Esgotado! Omissão gera caos."); return; }
+                    if (timer <= 0) { handleSelection(0, {leg:-10, seg:-10, lib:-10}, "Tempo Esgotado!"); return; }
                     const t = setInterval(() => setTimer(v => v - 1), 1000);
                     return () => clearInterval(t);
                 }
             }, [gameState, timer, feedback]);
 
-            const nextStep = (points, impacts, text) => {
-                setScore(s => s + points);
-                setMetrics(m => ({
-                    leg: Math.min(100, Math.max(0, m.leg + (impacts.leg - 50) / 2)),
-                    seg: Math.min(100, Math.max(0, m.seg + (impacts.seg - 50) / 2)),
-                    lib: Math.min(100, Math.max(0, m.lib + (impacts.lib - 50) / 2)),
-                }));
-                setFeedback(text);
+            const handleSelection = (points, impacts, feedbackText) => {
+                // Cálculo imediato para evitar atraso do React
+                const newScore = score + points;
+                const newMetrics = {
+                    leg: Math.min(100, Math.max(0, metrics.leg + (impacts.leg - 50) / 2)),
+                    seg: Math.min(100, Math.max(0, metrics.seg + (impacts.seg - 50) / 2)),
+                    lib: Math.min(100, Math.max(0, metrics.lib + (impacts.lib - 50) / 2)),
+                };
+
+                setScore(newScore);
+                setMetrics(newMetrics);
+                setFeedback(feedbackText);
                 
                 setTimeout(() => {
                     setFeedback(null);
                     setTimer(60);
-                    if (currentIdx < SCENARIOS.length - 1) setCurrentIdx(i => i + 1);
-                    else finish();
-                }, 3500);
+                    if (currentIdx < SCENARIOS.length - 1) {
+                        setCurrentIdx(i => i + 1);
+                    } else {
+                        finishGame(newScore, newMetrics);
+                    }
+                }, 3000);
             };
 
-            const finish = async () => {
+            const finishGame = async (finalScore, finalMetrics) => {
                 setGameState('sending');
-                const finalScore = score.toFixed(1);
                 
-                // Envio para Formspree
+                const payload = {
+                    estudante: user.name,
+                    turma: user.class,
+                    nota_final: finalScore.toFixed(1),
+                    legitimidade: finalMetrics.leg.toFixed(0) + "%",
+                    seguranca: finalMetrics.seg.toFixed(0) + "%",
+                    liberdade: finalMetrics.lib.toFixed(0) + "%"
+                };
+
                 try {
-                    await fetch(`https://formspree.io/f/xzdoopyw}`, {
+                    await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            nome: user.name,
-                            turma: user.class,
-                            nota: finalScore,
-                            legitimidade: metrics.leg.toFixed(0),
-                            seguranca: metrics.seg.toFixed(0),
-                            liberdade: metrics.lib.toFixed(0)
-                        })
+                        body: JSON.stringify(payload)
                     });
-                } catch (e) { console.error("Erro no envio"); }
+                } catch (e) {
+                    console.error("Falha ao enviar e-mail");
+                }
                 
                 setGameState('end');
             };
@@ -147,44 +169,54 @@
             if (gameState === 'intro') return (
                 <div className="min-h-screen flex items-center justify-center p-6">
                     <div className="glass p-10 rounded-3xl max-w-lg w-full shadow-2xl border-t-4 border-cyan-500">
-                        <h1 className="text-4xl font-black mb-2 text-white uppercase tracking-tighter">Guardião da Ordem</h1>
-                        <p className="text-cyan-400 mono text-sm mb-8">Simulação de Crise Institucional v1.0</p>
+                        <h1 className="text-4xl font-black mb-2 text-white tracking-tighter">GUARDIÃO DA ORDEM</h1>
+                        <p className="text-cyan-400 mono text-xs mb-8 uppercase tracking-widest">Avaliação de Filosofia do Direito</p>
                         <div className="space-y-4">
-                            <input placeholder="NOME DO MAGISTRADO" className="w-full bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-cyan-500 mono" onChange={e=>setUser({...user, name: e.target.value})} />
-                            <input placeholder="CÓDIGO DA TURMA" className="w-full bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-cyan-500 mono" onChange={e=>setUser({...user, class: e.target.value})} />
-                            <button onClick={()=>user.name && setGameState('playing')} className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold p-5 rounded-xl transition-all shadow-lg shadow-cyan-900/20">ASSUMIR TRIBUNAL</button>
+                            <input required placeholder="NOME COMPLETO" className="w-full bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-cyan-500 mono text-sm" onChange={e=>setUser({...user, name: e.target.value})} />
+                            <input required placeholder="TURMA" className="w-full bg-slate-900 p-4 rounded-xl border border-slate-700 outline-none focus:border-cyan-500 mono text-sm" onChange={e=>setUser({...user, class: e.target.value})} />
+                            <button onClick={()=>user.name && user.class && setGameState('playing')} className="w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold p-5 rounded-xl transition-all shadow-lg">INICIAR SIMULAÇÃO</button>
                         </div>
+                        <p className="text-[10px] text-slate-500 mt-6 text-center italic">Aviso: O sistema bloqueia cópias e monitora o tempo.</p>
                     </div>
                 </div>
             );
 
-            if (gameState === 'sending') return <div className="h-screen flex items-center justify-center animate-pulse mono text-cyan-400">SINCRONIZANDO COM OS ARQUIVOS DO ESTADO...</div>;
+            if (gameState === 'sending') return (
+                <div className="h-screen flex items-center justify-center flex-col gap-4">
+                    <div className="w-12 h-12 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="mono text-cyan-400 animate-pulse">PROTOCOLANDO DECISÕES NO TRIBUNAL...</div>
+                </div>
+            );
 
             if (gameState === 'end') return (
                 <div className="min-h-screen flex items-center justify-center p-6 text-center">
                     <div className="glass p-12 rounded-3xl max-w-2xl border-t-4 border-green-500">
-                        <h2 className="text-5xl font-black mb-4 text-white uppercase">Missão Concluída</h2>
-                        <p className="text-xl text-slate-400 mb-8 font-light">Seu perfil decisório foi processado e arquivado.</p>
+                        <h2 className="text-5xl font-black mb-4 text-white uppercase">Relatório Final</h2>
+                        <p className="text-xl text-slate-400 mb-8">As decisões do magistrado <b>{user.name}</b> foram arquivadas.</p>
                         
-                        <div className="grid grid-cols-3 gap-4 mb-10">
-                            <div className="p-4 bg-slate-900 rounded-2xl border border-slate-800">
-                                <div className="text-xs text-slate-500 uppercase mb-1">Legitimidade</div>
-                                <div className="text-2xl font-bold text-blue-400">{metrics.leg.toFixed(0)}%</div>
+                        <div className="grid grid-cols-3 gap-4 mb-10 text-center">
+                            <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+                                <div className="text-[10px] text-slate-500 uppercase mb-1">Legitimidade</div>
+                                <div className="text-xl font-bold text-blue-400">{metrics.leg.toFixed(0)}%</div>
                             </div>
-                            <div className="p-4 bg-slate-900 rounded-2xl border border-slate-800">
-                                <div className="text-xs text-slate-500 uppercase mb-1">Segurança</div>
-                                <div className="text-2xl font-bold text-yellow-400">{metrics.seg.toFixed(0)}%</div>
+                            <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+                                <div className="text-[10px] text-slate-500 uppercase mb-1">Segurança</div>
+                                <div className="text-xl font-bold text-yellow-400">{metrics.seg.toFixed(0)}%</div>
                             </div>
-                            <div className="p-4 bg-slate-900 rounded-2xl border border-slate-800">
-                                <div className="text-xs text-slate-500 uppercase mb-1">Liberdade</div>
-                                <div className="text-2xl font-bold text-green-400">{metrics.lib.toFixed(0)}%</div>
+                            <div className="p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+                                <div className="text-[10px] text-slate-500 uppercase mb-1">Liberdade</div>
+                                <div className="text-xl font-bold text-green-400">{metrics.lib.toFixed(0)}%</div>
                             </div>
                         </div>
 
-                        <div className="inline-block px-10 py-6 bg-green-500/10 rounded-2xl border border-green-500/50">
-                            <div className="text-sm text-green-500 uppercase font-bold tracking-widest mb-1">Nota de Desempenho</div>
-                            <div className="text-6xl font-black text-green-400 leading-none">{score.toFixed(1)} <span className="text-2xl opacity-50">/ 5.0</span></div>
+                        <div className="inline-block px-12 py-8 bg-cyan-500/10 rounded-3xl border border-cyan-500/50">
+                            <div className="text-xs text-cyan-500 uppercase font-bold tracking-widest mb-2">Nota de Desempenho</div>
+                            <div className="text-7xl font-black text-white">{score.toFixed(1)}<span className="text-2xl opacity-40"> / 5.0</span></div>
                         </div>
+                        <p className="mt-8 text-green-500 font-bold flex items-center justify-center gap-2">
+                             <span className="w-2 h-2 bg-green-500 rounded-full animate-ping"></span>
+                             Enviado com sucesso para o professor.
+                        </p>
                     </div>
                 </div>
             );
@@ -193,37 +225,35 @@
 
             return (
                 <div className="min-h-screen p-6 max-w-5xl mx-auto flex flex-col">
-                    {/* Header: Status Bars */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                         <MetricBar label="Legitimidade" val={metrics.leg} color="bg-blue-500" />
                         <MetricBar label="Segurança Jurídica" val={metrics.seg} color="bg-yellow-500" />
                         <MetricBar label="Liberdade" val={metrics.lib} color="bg-green-500" />
                     </div>
 
                     <div className="flex-1 grid md:grid-cols-3 gap-8 items-start">
-                        {/* Dossier Area */}
-                        <div className="glass p-6 rounded-3xl md:col-span-2 relative min-h-[400px] flex flex-col">
+                        <div className="glass p-8 rounded-3xl md:col-span-2 relative min-h-[450px] flex flex-col shadow-2xl">
                             {feedback && (
-                                <div className="absolute inset-0 bg-slate-900/95 z-20 flex items-center justify-center p-10 text-center rounded-3xl border-2 border-cyan-500 animate-in fade-in duration-300">
+                                <div className="absolute inset-0 bg-slate-900/95 z-20 flex items-center justify-center p-10 text-center rounded-3xl border-2 border-cyan-500 animate-in fade-in zoom-in duration-300">
                                     <div>
-                                        <div className="text-4xl mb-4">⚖️</div>
-                                        <div className="text-2xl font-bold text-white mb-2 uppercase">Consequência</div>
-                                        <p className="text-lg text-slate-300 mono">{feedback}</p>
+                                        <div className="text-5xl mb-6">⚖️</div>
+                                        <div className="text-xl font-bold text-white mb-4 uppercase tracking-widest">Análise de Impacto</div>
+                                        <p className="text-xl text-cyan-300 mono italic">{feedback}</p>
                                     </div>
                                 </div>
                             )}
 
-                            <div className="flex justify-between items-start mb-6">
+                            <div className="flex justify-between items-start mb-6 border-b border-slate-700 pb-4">
                                 <div>
-                                    <span className="bg-cyan-500/10 text-cyan-400 text-[10px] px-3 py-1 rounded-full border border-cyan-500/30 font-bold uppercase tracking-widest">{current.chapter}</span>
-                                    <h3 className="text-2xl font-black text-white mt-2 uppercase italic tracking-tight">{current.title}</h3>
+                                    <span className="bg-cyan-500/20 text-cyan-400 text-[10px] px-3 py-1 rounded-full border border-cyan-500/30 font-bold uppercase tracking-widest">{current.chapter}</span>
+                                    <h3 className="text-2xl font-black text-white mt-2 uppercase tracking-tight">{current.title}</h3>
                                 </div>
-                                <div className={`text-3xl font-black mono ${timer < 10 ? 'text-red-500 animate-pulse' : 'text-slate-500'}`}>
+                                <div className={`text-4xl font-black mono ${timer < 10 ? 'text-red-500 animate-pulse' : 'text-slate-600'}`}>
                                     {timer}s
                                 </div>
                             </div>
                             
-                            <p className="text-lg text-slate-300 leading-relaxed font-light mb-8 flex-1">
+                            <p className="text-lg text-slate-300 leading-relaxed mb-8 flex-1">
                                 {current.text}
                             </p>
 
@@ -231,27 +261,27 @@
                                 {current.options.map((opt, i) => (
                                     <button 
                                         key={i} 
-                                        onClick={() => nextStep(opt.score, opt.impact, opt.feedback)}
-                                        className="text-left p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-700 hover:border-cyan-500 transition-all group flex items-center"
+                                        onClick={() => handleSelection(opt.score, opt.impact, opt.feedback)}
+                                        className="text-left p-4 rounded-2xl border border-slate-700 bg-slate-800/40 hover:bg-slate-700 hover:border-cyan-500 transition-all group flex items-center"
                                     >
-                                        <span className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center mr-4 text-cyan-500 font-bold group-hover:bg-cyan-500 group-hover:text-white transition-colors">{String.fromCharCode(65+i)}</span>
+                                        <span className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center mr-4 text-cyan-500 font-bold group-hover:bg-cyan-500 group-hover:text-white transition-all shadow-lg">{String.fromCharCode(65+i)}</span>
                                         <span className="flex-1 text-sm font-medium">{opt.text}</span>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Sidebar Info */}
-                        <div className="space-y-6">
-                            <div className="glass p-6 rounded-3xl border-l-4 border-cyan-500">
-                                <h4 className="font-bold text-cyan-400 uppercase text-xs mb-3 tracking-widest">Situação Atual</h4>
-                                <p className="text-xs text-slate-400 leading-relaxed italic">"O Direito não é uma pirâmide estática, mas um círculo que se cruza a cada decisão. Sua autoridade depende do equilíbrio entre a força e o valor."</p>
+                        <div className="space-y-4">
+                            <div className="glass p-6 rounded-3xl border-l-4 border-cyan-500 shadow-xl">
+                                <h4 className="font-bold text-cyan-400 uppercase text-[10px] mb-3 tracking-[0.2em]">Painel do Magistrado</h4>
+                                <p className="text-sm font-bold text-white mb-1">{user.name}</p>
+                                <p className="text-xs text-slate-500 mono">{user.class}</p>
                             </div>
-                            <div className="glass p-6 rounded-3xl">
-                                <h4 className="font-bold text-slate-400 uppercase text-xs mb-4 tracking-widest">Progresso da Missão</h4>
+                            <div className="glass p-6 rounded-3xl shadow-xl">
+                                <h4 className="font-bold text-slate-400 uppercase text-[10px] mb-4 tracking-widest text-center">Fases da Crise</h4>
                                 <div className="flex gap-2">
                                     {SCENARIOS.map((_, i) => (
-                                        <div key={i} className={`h-2 flex-1 rounded-full ${i === currentIdx ? 'bg-cyan-500 animate-pulse' : i < currentIdx ? 'bg-green-500' : 'bg-slate-800'}`}></div>
+                                        <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${i === currentIdx ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : i < currentIdx ? 'bg-green-500' : 'bg-slate-800'}`}></div>
                                     ))}
                                 </div>
                             </div>
@@ -263,13 +293,13 @@
 
         function MetricBar({ label, val, color }) {
             return (
-                <div className="glass p-4 rounded-2xl">
-                    <div className="flex justify-between text-[10px] uppercase font-bold tracking-widest mb-2 opacity-60">
+                <div className="glass p-5 rounded-2xl shadow-lg border-b-2 border-slate-800">
+                    <div className="flex justify-between text-[10px] uppercase font-black tracking-widest mb-3 opacity-70">
                         <span>{label}</span>
-                        <span>{val.toFixed(0)}%</span>
+                        <span className="mono">{val.toFixed(0)}%</span>
                     </div>
-                    <div className="h-2 bg-slate-900 rounded-full overflow-hidden">
-                        <div className={`h-full ${color} bar-transition`} style={{ width: `${val}%` }}></div>
+                    <div className="h-1.5 bg-slate-900 rounded-full overflow-hidden">
+                        <div className={`h-full ${color} bar-transition shadow-[0_0_10px_rgba(255,255,255,0.1)]`} style={{ width: `${val}%` }}></div>
                     </div>
                 </div>
             );
