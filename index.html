@@ -34,60 +34,135 @@
         const PROFESSORA_IMAGE = "https://raw.githubusercontent.com/simscreiando/philosophy.prof_siomara/72cd32ed88c92ff78ec2785c4779aacd652d6230/professora.png";
 
         const ALL_SCENARIOS = [
-            // CAPÍTULO 1: O COLAPSO DA ORDEM (6 Segmentos)
-            { ch: 1, seg: 1, title: "Cultura e Natureza", text: "O povo questiona: 'Por que obedecer leis criadas por homens se a natureza é livre?'. Segundo Paulo Nader, o Direito é um objeto de cultura. Como você responde?", options: [
+            // CAPÍTULO 1: O COLAPSO DA ORDEM (Paulo Nader)
+            { ch: 1, seg: 1, title: "Cultura e Natureza", text: "O povo questiona: 'Por que obedecer leis se a natureza é livre?'. Segundo Paulo Nader, o Direito é um objeto de cultura. Como você responde?", options: [
                 { t: "O Direito adapta a natureza aos fins humanos e valores éticos.", s: 0.16, i: {leg: 80, seg: 70, lib: 60}, f: "Correto! O Direito é o que o homem acrescenta à natureza." },
                 { t: "O Direito deve apenas copiar as leis biológicas da sobrevivência.", s: 0.05, i: {leg: 30, seg: 90, lib: 20}, f: "Isso seria o retorno à barbárie. Nader discordaria." }
             ]},
-            { ch: 1, seg: 2, title: "O Valor da Norma", text: "Um novo decreto é proposto, mas ele ignora totalmente os costumes locais. O Direito como cultura pode ignorar os valores de um povo?", options: [
+            { ch: 1, seg: 2, title: "O Valor da Norma", text: "Um novo decreto ignora os costumes locais. O Direito como cultura pode ignorar os valores de um povo?", options: [
                 { t: "Não. A norma jurídica deve ser a expressão dos valores culturais.", s: 0.16, i: {leg: 90, seg: 50, lib: 80}, f: "Exato! Sem valor, a norma é apenas força vazia." },
                 { t: "Sim, o Direito é técnica pura e independente da cultura.", s: 0.05, i: {leg: 20, seg: 100, lib: 10}, f: "Isso gera resistência social e falta de legitimidade." }
             ]},
-            { ch: 1, seg: 3, title: "A Meta Optata", text: "Você precisa definir o alvo do seu tribunal. Se o Direito é cultura, qual seu objetivo final (Meta Optata)?", options: [
+            { ch: 1, seg: 3, title: "A Meta Optata", text: "Qual o alvo final (Meta Optata) que o Direito busca como objeto cultural?", options: [
                 { t: "A realização da Justiça.", s: 0.16, i: {leg: 100, seg: 60, lib: 70}, f: "A Justiça é o alvo supremo do Direito como cultura." },
-                { t: "A manutenção do poder governamental.", s: 0, i: {leg: 10, seg: 90, lib: 10}, f: "Isso é política de dominação, não Filosofia do Direito." }
+                { t: "A manutenção do status quo governamental.", s: 0, i: {leg: 10, seg: 90, lib: 10}, f: "Isso é política de dominação, não Filosofia do Direito." }
             ]},
-            { ch: 1, seg: 4, title: "O Objeto Ideal", text: "As leis são apenas papéis ou são ideias que moldam a realidade?", options: [
+            { ch: 1, seg: 4, title: "O Objeto Ideal", text: "As leis são apenas papéis ou são ideias que moldam a realidade social?", options: [
                 { t: "São objetos culturais que dão sentido à vida social.", s: 0.16, i: {leg: 80, seg: 80, lib: 60}, f: "Muito bem! O Direito dá forma e sentido à coexistência." },
                 { t: "São apenas ferramentas de controle físico.", s: 0.05, i: {leg: 40, seg: 90, lib: 30}, f: "Visão muito limitada. O Direito é mais do que força." }
             ]},
-            { ch: 1, seg: 5, title: "A Mudança dos Tempos", text: "Um costume antigo tornou-se ofensivo para a sociedade atual. O que fazer com a lei que o protegia?", options: [
+            { ch: 1, seg: 5, title: "A Mudança Social", text: "Um costume antigo tornou-se ofensivo para a sociedade atual. O que fazer com a lei?", options: [
                 { t: "Revogar: O Direito deve evoluir com a cultura.", s: 0.16, i: {leg: 90, seg: 40, lib: 90}, f: "O Direito é dinâmico, como a própria cultura humana." },
-                { t: "Manter: A tradição é superior à vontade presente.", s: 0.08, i: {leg: 50, seg: 100, lib: 20}, f: "Tradição é importante, mas o anacronismo mata o Direito." }
+                { t: "Manter: A tradição é superior à vontade presente.", s: 0.08, i: {leg: 50, seg: 100, lib: 20}, f: "Tradição é importante, mas o anacronismo gera injustiça." }
             ]},
-            { ch: 1, seg: 6, title: "Síntese do Capítulo I", text: "Para encerrar esta fase: Qual a diferença fundamental entre uma lei física e uma lei jurídica?", options: [
-                { t: "A jurídica busca o 'dever-ser' baseado em valores.", s: 0.20, i: {leg: 100, seg: 70, lib: 70}, f: "Perfeito! Terminamos o Capítulo I com excelência." },
-                { t: "Não há diferença, ambas são inevitáveis.", s: 0, i: {leg: 20, seg: 20, lib: 20}, f: "Incorreto. O Direito permite a liberdade de escolha." }
+            { ch: 1, seg: 6, title: "Dever-Ser", text: "Qual a diferença fundamental entre uma lei física e uma lei jurídica?", options: [
+                { t: "A jurídica busca o 'dever-ser' baseado em valores.", s: 0.20, i: {leg: 100, seg: 70, lib: 70}, f: "Perfeito! O Direito trabalha no campo da liberdade e ética." },
+                { t: "Não há diferença, ambas são leis mecânicas.", s: 0, i: {leg: 20, seg: 20, lib: 20}, f: "Incorreto. Na natureza não há escolha; no Direito, há dever." }
             ]},
 
-            // CAPÍTULO 2: COERCIBILIDADE E REALE (6 Segmentos)
-            { ch: 2, seg: 1, title: "A Força do Direito", text: "Miguel Reale afirma que o Direito possui algo que a Moral não tem. O que seria?", options: [
+            // CAPÍTULO 2: MORAL E DIREITO (Miguel Reale)
+            { ch: 2, seg: 1, title: "Coercibilidade", text: "Miguel Reale afirma que o Direito possui algo que a Moral não tem. O que seria?", options: [
                 { t: "Coercibilidade (possibilidade de uso da força).", s: 0.16, i: {leg: 60, seg: 100, lib: 40}, f: "Isso! O Direito pode ser imposto, a Moral é espontânea." },
-                { t: "Espontaneidade absoluta.", s: 0, i: {leg: 40, seg: 10, lib: 90}, f: "Não, isso é característica da Moral, segundo Reale." }
+                { t: "Espontaneidade interna absoluta.", s: 0, i: {leg: 40, seg: 10, lib: 90}, f: "Não, isso é característica da Moral, segundo Reale." }
             ]},
-            { ch: 2, seg: 2, title: "Bilateralidade Atributiva", text: "Ao julgar uma briga entre vizinhos, você aplica o conceito de que o Direito une dois lados atribuindo poder e dever. O nome disso é:", options: [
+            { ch: 2, seg: 2, title: "Bilateralidade Atributiva", text: "Como Reale define a estrutura que une dois lados atribuindo poder e dever?", options: [
                 { t: "Bilateralidade Atributiva.", s: 0.16, i: {leg: 80, seg: 80, lib: 60}, f: "Exato! É a estrutura básica da relação jurídica." },
-                { t: "Unilateralidade subjetiva.", s: 0, i: {leg: 50, seg: 50, lib: 50}, f: "Incorreto. O Direito sempre envolve o outro." }
+                { t: "Unilateralidade subjetiva.", s: 0, i: {leg: 50, seg: 50, lib: 50}, f: "Incorreto. O Direito sempre envolve a relação com o outro." }
             ]},
-            { ch: 2, seg: 3, title: "Ato Jurídico vs Ato Moral", text: "Um homem ajuda um idoso por caridade. Outro ajuda porque há uma lei obrigando. Qual o foco do Direito?", options: [
-                { t: "O cumprimento externo da norma (heteronomia).", s: 0.16, i: {leg: 70, seg: 90, lib: 50}, f: "Correto. O Direito se contenta com a ação externa." },
-                { t: "A intenção pura e oculta do coração.", s: 0.05, i: {leg: 80, seg: 30, lib: 70}, f: "Isso é foro íntimo, pertence à Moral ou Religião." }
+            { ch: 2, seg: 3, title: "Ação Externa", text: "Um homem ajuda um idoso apenas por medo da multa. Para o Direito, isso basta?", options: [
+                { t: "Sim, o Direito foca no cumprimento externo da norma.", s: 0.16, i: {leg: 70, seg: 90, lib: 50}, f: "Correto. A intenção interna é o reino da Moral." },
+                { t: "Não, o Direito exige que ele ame o próximo.", s: 0.05, i: {leg: 80, seg: 30, lib: 70}, f: "Isso seria invadir o foro íntimo, o que Reale evita." }
             ]},
-            { ch: 2, seg: 4, title: "Possibilidade Lógica", text: "Se o Estado não tem policiais suficientes para aplicar uma multa hoje, ela deixa de ser Direito?", options: [
-                { t: "Não, pois a coercibilidade é uma possibilidade lógica.", s: 0.16, i: {leg: 60, seg: 100, lib: 50}, f: "Brilhante! A força não precisa ser usada, basta que possa ser." },
-                { t: "Sim, lei que não se aplica na hora não é lei.", s: 0, i: {leg: 30, seg: 20, lib: 30}, f: "Confundiu eficácia momentânea com validade jurídica." }
+            { ch: 2, seg: 4, title: "Possibilidade Lógica", text: "Se não há polícia para fiscalizar uma lei agora, ela deixa de ser coercível?", options: [
+                { t: "Não, a coercibilidade é uma possibilidade lógica de força.", s: 0.16, i: {leg: 60, seg: 100, lib: 50}, f: "Brilhante! A força é latente, não precisa ser imediata." },
+                { t: "Sim, sem aplicação instantânea não existe Direito.", s: 0, i: {leg: 30, seg: 20, lib: 30}, f: "Confundiu eficácia social com a natureza da norma." }
             ]},
-            { ch: 2, seg: 5, title: "O Papel do Estado", text: "Para Reale, o Estado é a organização que detém o monopólio da:", options: [
-                { t: "Coação organizada.", s: 0.16, i: {leg: 70, seg: 100, lib: 30}, f: "Isso garante que não haja justiça pelas próprias mãos." },
-                { t: "Verdade absoluta.", s: 0, i: {leg: 10, seg: 60, lib: 10}, f: "Nenhum Estado democrático detém a verdade, apenas a lei." }
+            { ch: 2, seg: 5, title: "Monopólio da Coação", text: "Quem detém o poder legítimo de aplicar a coação no Direito moderno?", options: [
+                { t: "O Estado, de forma organizada.", s: 0.16, i: {leg: 70, seg: 100, lib: 30}, f: "Isso garante que a vingança privada não domine." },
+                { t: "Qualquer cidadão que se sinta injustiçado.", s: 0, i: {leg: 10, seg: 10, lib: 10}, f: "Isso geraria o caos social e o fim do Direito." }
             ]},
-            { ch: 2, seg: 6, title: "Síntese do Capítulo II", text: "O Direito pode ser definido apenas como força física?", options: [
-                { t: "Não, é força a serviço de uma ideia de Justiça.", s: 0.20, i: {leg: 100, seg: 80, lib: 70}, f: "Excelente! Concluímos a lógica de Miguel Reale." },
-                { t: "Sim, quem tem a arma faz o Direito.", s: 0, i: {leg: 0, seg: 100, lib: 0}, f: "Isso é tirania, o oposto do Estado de Direito." }
+            { ch: 2, seg: 6, title: "Direito e Força", text: "Qual a síntese da relação entre Direito e Força para Reale?", options: [
+                { t: "O Direito não é força, mas é força a serviço da Justiça.", s: 0.20, i: {leg: 100, seg: 80, lib: 70}, f: "Excelente! A força é o instrumento, a Justiça é o fim." },
+                { t: "O Direito é puramente a força do mais forte.", s: 0, i: {leg: 0, seg: 100, lib: 0}, f: "Visão sofista, superada pela Teoria Tridimensional." }
             ]},
 
-            // OS DEMAIS CAPÍTULOS SEGUEM A MESMA ESTRUTURA ATÉ O SEGMENTO 30
-            // ... (Ajustado para o fluxo total de 30 questões)
+            // CAPÍTULO 3: JUSTIÇA E VONTADE (Eduardo Bittar)
+            { ch: 3, seg: 1, title: "A Intencionalidade", text: "Eduardo Bittar discute a vontade. Um ato sem intenção livre pode ser considerado ético?", options: [
+                { t: "Não, a ética exige o livre-arbítrio da vontade.", s: 0.16, i: {leg: 90, seg: 50, lib: 90}, f: "Exato! Sem liberdade de escolha, não há responsabilidade." },
+                { t: "Sim, apenas o resultado importa na ética.", s: 0, i: {leg: 40, seg: 80, lib: 30}, f: "Isso seria utilitarismo cego, Bittar foca na consciência." }
+            ]},
+            { ch: 3, seg: 2, title: "A Virtude da Justiça", text: "Para Bittar, a justiça é uma construção constante ou um objeto pronto?", options: [
+                { t: "Uma construção social baseada na alteridade.", s: 0.16, i: {leg: 100, seg: 60, lib: 80}, f: "Correto. Justiça se faz olhando para o outro." },
+                { t: "Um conceito estático definido para sempre.", s: 0.05, i: {leg: 40, seg: 90, lib: 20}, f: "A justiça é histórica e humana, ela pulsa com a sociedade." }
+            ]},
+            { ch: 3, seg: 3, title: "O Outro no Direito", text: "Qual a importância da 'Alteridade' no julgamento de um conflito?", options: [
+                { t: "É essencial reconhecer o outro como sujeito de direitos.", s: 0.16, i: {leg: 95, seg: 60, lib: 90}, f: "Sem o outro, não há necessidade de Direito." },
+                { t: "Nenhuma, o juiz deve olhar apenas para o código.", s: 0, i: {leg: 20, seg: 100, lib: 10}, f: "O código é o mapa, mas o outro é o destino da justiça." }
+            ]},
+            { ch: 3, seg: 4, title: "Vontade Corrompida", text: "Se um réu é coagido a confessar, como a Filosofia do Direito vê esse ato?", options: [
+                { t: "Inexistente como ato ético, pois falta liberdade.", s: 0.16, i: {leg: 90, seg: 40, lib: 100}, f: "Perfeito. O Direito protege a integridade da vontade." },
+                { t: "Válido, pois a ordem pública exige resultados.", s: 0, i: {leg: 10, seg: 90, lib: 0}, f: "Isso fere os direitos fundamentais e a ética jurídica." }
+            ]},
+            { ch: 3, seg: 5, title: "Justiça Distributiva", text: "Ao decidir sobre recursos públicos, você aplica a regra de tratar desiguais na medida de sua desigualdade. Isso é:", options: [
+                { t: "Justiça Distributiva (Aristóteles/Bittar).", s: 0.16, i: {leg: 90, seg: 60, lib: 80}, f: "Correto! É a justiça que busca o equilíbrio social." },
+                { t: "Justiça Vingativa.", s: 0, i: {leg: 10, seg: 80, lib: 10}, f: "Longe disso. A vingança é o oposto da justiça jurídica." }
+            ]},
+            { ch: 3, seg: 6, title: "Síntese do Capítulo III", text: "Qual o papel do jurista frente à injustiça da lei?", options: [
+                { t: "Ser um crítico e buscar a justiça além da norma posta.", s: 0.20, i: {leg: 100, seg: 50, lib: 90}, f: "Excelente! Bittar propõe um jurista comprometido com a ética." },
+                { t: "Ser um escravo da lei, mesmo que ela seja injusta.", s: 0, i: {leg: 20, seg: 90, lib: 10}, f: "Isso é legalismo acrítico, perigoso para a democracia." }
+            ]},
+
+            // CAPÍTULO 4: LIBERDADE E RAZÃO (Kant e a Ação)
+            { ch: 4, seg: 1, title: "Imperativo Categórico", text: "Você deve criar uma regra para o tribunal. Kant diria: 'Aja de modo que sua regra possa virar...'", options: [
+                { t: "Uma Lei Universal.", s: 0.16, i: {leg: 100, seg: 80, lib: 80}, f: "Exato! Essa é a base da ética kantiana." },
+                { t: "Uma vantagem para o seu grupo.", s: 0, i: {leg: 10, seg: 50, lib: 20}, f: "Isso seria agir por interesse, não por dever." }
+            ]},
+            { ch: 4, seg: 2, title: "Autonomia vs Heteronomia", text: "A Moral é autônoma (vem de dentro). O Direito é o que para Kant?", options: [
+                { t: "Heterônomo (vem de uma autoridade externa).", s: 0.16, i: {leg: 70, seg: 90, lib: 60}, f: "Correto! O Estado dita a regra externa." },
+                { t: "Autônomo também.", s: 0, i: {leg: 40, seg: 40, lib: 90}, f: "Incorreto. O Direito exige obediência externa, independente do querer." }
+            ]},
+            { ch: 4, seg: 3, title: "O Fim em Si Mesmo", text: "Ao julgar, você pode usar um ser humano como 'exemplo' para assustar os outros?", options: [
+                { t: "Não. O ser humano é um fim em si mesmo.", s: 0.16, i: {leg: 100, seg: 40, lib: 100}, f: "Dignidade da Pessoa Humana! Kant ficaria orgulhoso." },
+                { t: "Sim, o importante é o medo na sociedade.", s: 0, i: {leg: 20, seg: 100, lib: 10}, f: "Isso viola a dignidade humana. Nunca use pessoas como meios." }
+            ]},
+            { ch: 4, seg: 4, title: "Liberdade Externa", text: "Para Kant, o Direito serve para compatibilizar a sua liberdade com a do outro?", options: [
+                { t: "Sim, é o limite da liberdade externa de todos.", s: 0.16, i: {leg: 90, seg: 80, lib: 90}, f: "Perfeito! Minha liberdade acaba onde começa a sua." },
+                { t: "Não, o Direito serve para anular a liberdade.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "O Direito sem liberdade é apenas opressão." }
+            ]},
+            { ch: 4, seg: 5, title: "O Dever de Agir", text: "Um juiz deve seguir a lei por medo da punição ou por respeito ao dever?", options: [
+                { t: "Por respeito ao dever racional.", s: 0.16, i: {leg: 100, seg: 70, lib: 70}, f: "Ética do Dever. A razão guia a vontade boa." },
+                { t: "Pelo salário no fim do mês.", s: 0, i: {leg: 30, seg: 50, lib: 30}, f: "Isso é pragmatismo, não é o agir ético kantiano." }
+            ]},
+            { ch: 4, seg: 6, title: "Síntese do Capítulo IV", text: "O que define um ato jurídico justo em Kant?", options: [
+                { t: "Aquele que permite a coexistência de arbítrios livres.", s: 0.20, i: {leg: 100, seg: 90, lib: 100}, f: "Excelente! A paz jurídica é a harmonia das liberdades." },
+                { t: "Aquele que dá lucro ao Estado.", s: 0, i: {leg: 20, seg: 60, lib: 20}, f: "Visão econômica, não jurídica de Kant." }
+            ]},
+
+            // CAPÍTULO 5: TÉCNICA E COERÇÃO (Tércio Sampaio / Gusmão)
+            { ch: 5, seg: 1, title: "A Linguagem do Direito", text: "Tércio Sampaio diz que o Direito é um sistema de comunicação. Qual o seu objetivo?", options: [
+                { t: "Decidir conflitos e reduzir incertezas.", s: 0.16, i: {leg: 70, seg: 100, lib: 60}, f: "Exato! O Direito traz previsibilidade para a vida." },
+                { t: "Confundir as pessoas com palavras difíceis.", s: 0, i: {leg: 10, seg: 10, lib: 10}, f: "Isso é burocratismo patológico, não a função do Direito." }
+            ]},
+            { ch: 5, seg: 2, title: "Gusmão e a Sanção", text: "Paulo Dourado de Gusmão foca na sanção. O que acontece com a norma sem sanção?", options: [
+                { t: "Perde sua força de garantia social.", s: 0.16, i: {leg: 50, seg: 100, lib: 40}, f: "Correto. A sanção é a garantia da ordem." },
+                { t: "Fica mais bonita e poética.", s: 0, i: {leg: 20, seg: 10, lib: 80}, f: "Poesia não resolve conflitos de posse ou família." }
+            ]},
+            { ch: 5, seg: 3, title: "Zetética vs Dogmática", text: "Tércio diferencia o pensar (Zetética) do decidir (Dogmática). O juiz na hora da sentença atua na:", options: [
+                { t: "Dogmática (precisa decidir e pôr fim à dúvida).", s: 0.16, i: {leg: 80, seg: 100, lib: 50}, f: "Isso! O tribunal é lugar de decisão, não de dúvida infinita." },
+                { t: "Zetética (pode ficar apenas questionando sem decidir).", s: 0, i: {leg: 60, seg: 20, lib: 90}, f: "Se o juiz não decide, ele nega a jurisdição." }
+            ]},
+            { ch: 5, seg: 4, title: "A Coação Psicológica", text: "A lei funciona apenas quando o policial aparece ou ela já atua no pensamento?", options: [
+                { t: "Atua como coação psicológica e temor reverencial.", s: 0.16, i: {leg: 70, seg: 90, lib: 60}, f: "Sim! O Direito molda o comportamento pelo receio da sanção." },
+                { t: "Só funciona se houver agressão física.", s: 0, i: {leg: 10, seg: 100, lib: 10}, f: "Isso seria o estado de guerra, não de Direito." }
+            ]},
+            { ch: 5, seg: 5, title: "Justiça e Tecnologia", text: "O uso de I.A. no Direito deve seguir qual critério de Tércio Sampaio?", options: [
+                { t: "A técnica deve servir ao humano e à decidibilidade.", s: 0.16, i: {leg: 80, seg: 90, lib: 80}, f: "Correto. A técnica é meio, a justiça é o sentido." },
+                { t: "A I.A. deve substituir a moral humana totalmente.", s: 0, i: {leg: 0, seg: 100, lib: 0}, f: "Isso seria o fim da Filosofia do Direito." }
+            ]},
+            { ch: 5, seg: 6, title: "O Grande Final", text: "Para concluir sua jornada: O Direito é um sistema fechado ou aberto à vida?", options: [
+                { t: "Um sistema que se abre aos valores sociais para ser justo.", s: 0.20, i: {leg: 100, seg: 100, lib: 100}, f: "Perfeito! Você se formou com honras na Magistratura de Crise!" },
+                { t: "Um labirinto sem saída de papel e carimbos.", s: 0, i: {leg: 0, seg: 0, lib: 0}, f: "Infelizmente, você se perdeu na burocracia. Tente novamente." }
+            ]},
         ];
 
         function App() {
