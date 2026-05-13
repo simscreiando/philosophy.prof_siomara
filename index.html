@@ -33,136 +33,200 @@
         // Link RAW extraído do seu repositório para funcionar no HTML:
         const PROFESSORA_IMAGE = "https://raw.githubusercontent.com/simscreiando/philosophy.prof_siomara/72cd32ed88c92ff78ec2785c4779aacd652d6230/professora.png";
 
-        const ALL_SCENARIOS = [
-            // CAPÍTULO 1: O COLAPSO DA ORDEM (Paulo Nader)
-            { ch: 1, seg: 1, title: "Cultura e Natureza", text: "O povo questiona: 'Por que obedecer leis se a natureza é livre?'. Segundo Paulo Nader, o Direito é um objeto de cultura. Como você responde?", options: [
-                { t: "O Direito adapta a natureza aos fins humanos e valores éticos.", s: 0.16, i: {leg: 80, seg: 70, lib: 60}, f: "Correto! O Direito é o que o homem acrescenta à natureza." },
-                { t: "O Direito deve apenas copiar as leis biológicas da sobrevivência.", s: 0.05, i: {leg: 30, seg: 90, lib: 20}, f: "Isso seria o retorno à barbárie. Nader discordaria." }
+       // CAPÍTULO 1: O DIREITO COMO OBJETO CULTURAL (PAULO NADER)
+        const CAP_1_SEGMENTOS = [
+            { ch: 1, seg: 1, title: "CONCEITO DE DIREITO E ORDENAMENTO JURÍDICO", text: "Após conflitos sociais sucessivos, grupos políticos passaram a defender que o Direito apenas limita impulsos naturais humanos e que a sociedade deveria organizar-se pela lógica espontânea da força e da sobrevivência. O Tribunal solicita parecer filosófico.", options: [
+                { t: "O Direito existe para transformar impulsos naturais em convivência social orientada por valores éticos.", s: 0.16, i: {leg: 100, seg: 80, lib: 70}, f: "A alternativa compreende corretamente o Direito como objeto cultural destinado à organização racional da convivência humana." },
+                { t: "A prevalência natural dos mais fortes constitui fundamento legítimo da ordem jurídica.", s: 0, i: {leg: 30, seg: 50, lib: 20}, f: "A resposta aproxima o Direito de relações puramente biológicas de dominação, afastando sua dimensão ética." },
+                { t: "O Direito deve apenas registrar práticas sociais já existentes, sem transformá-las.", s: 0.05, i: {leg: 40, seg: 90, lib: 10}, f: "A alternativa reconhece a influência social sobre o Direito, mas reduz excessivamente sua função normativa." },
+                { t: "Toda forma de regulamentação jurídica compromete necessariamente a liberdade humana.", s: 0, i: {leg: 50, seg: 30, lib: 60}, f: "A resposta ignora que a ausência de normatividade tende a ampliar arbitrariedades e instabilidade social." }
             ]},
-            { ch: 1, seg: 2, title: "O Valor da Norma", text: "Um novo decreto ignora os costumes locais. O Direito como cultura pode ignorar os valores de um povo?", options: [
-                { t: "Não. A norma jurídica deve ser a expressão dos valores culturais.", s: 0.16, i: {leg: 90, seg: 50, lib: 80}, f: "Exato! Sem valor, a norma é apenas força vazia." },
-                { t: "Sim, o Direito é técnica pura e independente da cultura.", s: 0.05, i: {leg: 20, seg: 100, lib: 10}, f: "Isso gera resistência social e falta de legitimidade." }
+            { ch: 1, seg: 2, title: "CONCEITO DE DIREITO E ORDENAMENTO JURÍDICO", text: "O governo instituiu normas inspiradas em modelos estrangeiros sem considerar costumes locais historicamente consolidados. Em pouco tempo, cresceram resistência social e descumprimento coletivo das regras impostas.", options: [
+                { t: "A eficácia jurídica decorre exclusivamente da capacidade estatal de aplicar sanções.", s: 0, i: {leg: 20, seg: 10, lib: 30}, f: "A resposta reduz o Direito à coerção, ignorando fatores sociais de legitimidade normativa." },
+                { t: "A legitimidade do Direito também depende de diálogo com valores culturais compartilhados.", s: 0.16, i: {leg: 100, seg: 70, lib: 80}, f: "A alternativa reconhece adequadamente a dimensão histórica e cultural da experiência jurídica." },
+                { t: "O Direito pode promover mudanças sociais, mas não pode ignorar completamente os valores coletivos.", s: 0.05, i: {leg: 40, seg: 90, lib: 10}, f: "A resposta demonstra compreensão razoável do caráter dinâmico da ordem jurídica." },
+                { t: "A cultura popular deve ser ignorada sempre que dificultar reformas institucionais modernas.", s: 0, i: {leg: 10, seg: 40, lib: 10}, f: "A alternativa compromete a legitimidade democrática e despreza a historicidade do Direito." }
             ]},
-            { ch: 1, seg: 3, title: "A Meta Optata", text: "Qual o alvo final (Meta Optata) que o Direito busca como objeto cultural?", options: [
-                { t: "A realização da Justiça.", s: 0.16, i: {leg: 100, seg: 60, lib: 70}, f: "A Justiça é o alvo supremo do Direito como cultura." },
-                { t: "A manutenção do status quo governamental.", s: 0, i: {leg: 10, seg: 90, lib: 10}, f: "Isso é política de dominação, não Filosofia do Direito." }
+            { ch: 1, seg: 3, title: "CONCEITO DE DIREITO E ORDENAMENTO JURÍDICO", text: "Se uma lei jurídica é violada, ela perde sua validade? Como Nader caracteriza essa situação frente às leis da natureza?", options: [
+                { t: "Sim, pois no 'Dever-Ser' a validade da norma depende do seu cumprimento absoluto por todos.", s: 0, i: {leg: 50, seg: 10, lib: 80}, f: "Incorreto. A validade da norma jurídica é independente da sua violação eventual." },
+                { t: "Não. A violação apenas aciona a sanção, pois o Direito opera no campo da liberdade e do valor.", s: 0.16, i: {leg: 90, seg: 100, lib: 70}, f: "Brilhante! Diferente da lei física, a norma jurídica admite ser violada sem deixar de existir." },
+                { t: "A lei jurídica, se violada, torna-se uma lei física de causa e efeito imediato.", s: 0.05, i: {leg: 30, seg: 90, lib: 20}, f: "A sanção não é um efeito físico mecânico, mas uma consequência jurídica prescrita." },
+                { t: "A lei jurídica perde a validade se um único indivíduo decidir não obedecê-la.", s: 0, i: {leg: 20, seg: 10, lib: 100}, f: "Isso anularia o Direito. A norma é imperativa e resiste à transgressão." }
             ]},
-            { ch: 1, seg: 4, title: "O Objeto Ideal", text: "As leis são apenas papéis ou são ideias que moldam a realidade social?", options: [
-                { t: "São objetos culturais que dão sentido à vida social.", s: 0.16, i: {leg: 80, seg: 80, lib: 60}, f: "Muito bem! O Direito dá forma e sentido à coexistência." },
-                { t: "São apenas ferramentas de controle físico.", s: 0.05, i: {leg: 40, seg: 90, lib: 30}, f: "Visão muito limitada. O Direito é mais do que força." }
+            { ch: 1, seg: 4, title: "CONCEITO DE DIREITO E ORDENAMENTO JURÍDICO", text: "Durante audiência pública, um representante afirmou que normas jurídicas funcionam exatamente como leis físicas da natureza, operando de modo automático e inevitável, independentemente de escolhas humanas.", options: [
+                { t: "Normas jurídicas e leis naturais possuem a mesma estrutura mecânica e inevitável.", s: 0, i: {leg: 10, seg: 100, lib: 10}, f: "A resposta elimina a dimensão ética e volitiva própria do fenômeno jurídico." },
+                { t: "As normas jurídicas pertencem ao campo do dever-ser e pressupõem liberdade e valoração ética.", s: 0.16, i: {leg: 100, seg: 60, lib: 90}, f: "Correto! A alternativa distingue corretamente causalidade natural e normatividade jurídica." },
+                { t: "Embora influenciado pela realidade social, o Direito não se reduz a relações automáticas de causa e efeito.", s: 0.05, i: {leg: 40, seg: 80, lib: 40}, f: "A alternativa apresenta compreensão parcial da diferença entre natureza e normatividade." },
+                { t: "A função do Direito consiste apenas em prever comportamentos humanos recorrentes.", s: 0, i: {leg: 10, seg: 90, lib: 0}, f: "A resposta aproxima o Direito de uma leitura puramente sociológica e desprovida de axiologia." }
             ]},
-            { ch: 1, seg: 5, title: "A Mudança Social", text: "Um costume antigo tornou-se ofensivo para a sociedade atual. O que fazer com a lei?", options: [
-                { t: "Revogar: O Direito deve evoluir com a cultura.", s: 0.16, i: {leg: 90, seg: 40, lib: 90}, f: "O Direito é dinâmico, como a própria cultura humana." },
-                { t: "Manter: A tradição é superior à vontade presente.", s: 0.08, i: {leg: 50, seg: 100, lib: 20}, f: "Tradição é importante, mas o anacronismo gera injustiça." }
+            { ch: 1, seg: 5, title: "CONCEITO DE DIREITO E ORDENAMENTO JURÍDICO", text: "Durante reforma legislativa, surge debate sobre a inclusão de princípios éticos universais no texto constitucional. O Parlamento discute se o Direito deve refletir apenas vontades sociais momentâneas ou também fundamentos permanentes ligados à dignidade e à liberdade humana.", options: [
+                { t: "O Direito Natural constitui sistema absoluto e imutável de regras religiosas que impede qualquer adaptação histórica do Direito Positivo.", s: 0.05, i: {leg: 60, seg: 100, lib: 10}, f: "A alternativa reconhece parcialmente a ideia de permanência axiológica, mas reduz o Direito Natural a um modelo rígido e incompatível com a historicidade da experiência jurídica." },
+                { t: "Direito Natural e Direito Positivo constituem ordens idênticas, inexistindo qualquer margem interpretativa ou função criadora do legislador.", s: 0.05, i: {leg: 100, seg: 70, lib: 80}, f: "A alternativa reconhece a aproximação entre Direito Natural e Direito Positivo, mas elimina indevidamente a dimensão histórica e técnica da atividade legislativa." },
+                { t: "Princípios como liberdade e preservação da vida dependem exclusivamente da vontade política de cada época histórica.", s: 0, i: {leg: 40, seg: 10, lib: 100}, f: "A resposta ignora o caráter universal atribuído aos princípios fundamentais do Direito Natural." },
+                { t: "A ordem jurídica deve articular realidade social e princípios universais do Direito Natural, como vida e liberdade, orientando o legislador na construção de normas justas.", s: 0.16, i: {leg: 30, seg: 50, lib: 40}, f: "A alternativa compreende adequadamente a posição de Paulo Nader. O Direito Natural atua como fundamento axiológico orientador da produção normativa positiva." }
             ]},
-            { ch: 1, seg: 6, title: "Dever-Ser", text: "Qual a diferença fundamental entre uma lei física e uma lei jurídica?", options: [
-                { t: "A jurídica busca o 'dever-ser' baseado em valores.", s: 0.20, i: {leg: 100, seg: 70, lib: 70}, f: "Perfeito! O Direito trabalha no campo da liberdade e ética." },
-                { t: "Não há diferença, ambas são leis mecânicas.", s: 0, i: {leg: 20, seg: 20, lib: 20}, f: "Incorreto. Na natureza não há escolha; no Direito, há dever." }
+            { ch: 1, seg: 6, title: "CONCEITO DE DIREITO E ORDENAMENTO JURÍDICO", text: "Um cidadão é processado por conduta moralmente reprovável, mas sem previsão legal clara de sanção. A defesa sustenta que o Direito exige previsibilidade normativa e tipificação objetiva para legitimar o exercício do poder estatal.", options: [
+                { t: "O Direito exige predeterminação formal mínima, tipificação e previsibilidade normativa, permitindo ao indivíduo conhecer previamente as consequências jurídicas de sua conduta.", s: 0.20, i: {leg: 50, seg: 100, lib: 10}, f: "A alternativa compreende corretamente a relação entre bilateralidade atributiva, certeza jurídica e predeterminação formal na teoria de Miguel Reale." },
+                { t: "A lei deve refletir os valores da sociedade para ter eficácia e cumprir seu papel adaptativo.", s: 0.05, i: {leg: 100, seg: 80, lib: 90}, f: "Perfeito! A coerência com os valores sociais é o que garante a vida do Direito." },
+                { t: "A certeza jurídica impede qualquer atividade interpretativa do Poder Judiciário além da literalidade da norma.", s: 0, i: {leg: 40, seg: 90, lib: 20}, f: "A alternativa reconhece a importância da previsibilidade normativa, mas reduz excessivamente a função interpretativa da jurisdição." },
+                { t: "Sistemas jurídicos baseados em costumes não possuem segurança normativa nem critérios formais de juridicidade.", s: 0, i: {leg: 10, seg: 100, lib: 10}, f: "A resposta ignora que diferentes tradições jurídicas podem desenvolver mecanismos próprios de estabilidade e reconhecimento normativo." }
+            ]}
+        ];
+        // CAPÍTULO 2: DIREITO, MORAL E ÉTICA (REALE, BITTAR E MASCARO)
+        const CAP_2_SEGMENTOS = [
+            { ch: 2, seg: 1, title: "DIREITO, MORAL E ÉTICA", text: "Na crise, muitos cumprem normas por receio de punição, embora discordem delas. O Tribunal pede análise sobre a relação entre Direito e Moral.", options: [
+                { t: "O Direito pode exigir comportamentos externos independente da adesão moral interna do indivíduo.", s: 0.5, i: {leg: 100, seg: 90, lib: 60}, f: "Excelente! Você compreendeu a coercibilidade e a distinção entre foro íntimo e comportamento exigível." },
+                { t: "Normas jurídicas somente são legítimas quando coincidem integralmente com convicções morais individuais.", s: 0.1, i: {leg: 30, seg: 20, lib: 100}, f: "Cuidado. Isso reduziria a autonomia do Direito diante da pluralidade moral da sociedade." },
+                { t: "Direito e Moral possuem exatamente a mesma estrutura coercitiva e mecanismos de imposição.", s: 0, i: {leg: 10, seg: 10, lib: 10}, f: "Incorreto. A alternativa ignora a diferença entre coerção estatal e adesão moral espontânea." },
+                { t: "O Direito atua prioritariamente sobre relações externas, enquanto a Moral foca na consciência.", s: 0.3, i: {leg: 80, seg: 70, lib: 50}, f: "Boa análise, embora menos profunda sobre as diferenças estruturais entre as normas." }
             ]},
-
-            // CAPÍTULO 2: MORAL E DIREITO (Miguel Reale)
-            { ch: 2, seg: 1, title: "Coercibilidade", text: "Miguel Reale afirma que o Direito possui algo que a Moral não tem. O que seria?", options: [
-                { t: "Coercibilidade (possibilidade de uso da força).", s: 0.16, i: {leg: 60, seg: 100, lib: 40}, f: "Isso! O Direito pode ser imposto, a Moral é espontânea." },
-                { t: "Espontaneidade interna absoluta.", s: 0, i: {leg: 40, seg: 10, lib: 90}, f: "Não, isso é característica da Moral, segundo Reale." }
+            { ch: 2, seg: 2, title: "DIREITO, MORAL E ÉTICA", text: "Políticos defendem que normas sem aplicação imediata da força não são jurídicas. Qual o parecer correto sobre a coercibilidade do Direito?", options: [
+                { t: "A coercibilidade jurídica depende necessariamente da aplicação física imediata da força estatal.", s: 0.1, i: {leg: 40, seg: 100, lib: 10}, f: "Não. Isso reduz o Direito à violência material, ignorando sua dimensão institucional potencial." },
+                { t: "A coercibilidade é a possibilidade legítima de imposição pela força, ainda que não usada concretamente.", s: 0.5, i: {leg: 90, seg: 100, lib: 70}, f: "Perfeito! A coercibilidade é um elemento potencial e estruturante da juridicidade." },
+                { t: "A existência de sanções transforma automaticamente qualquer regra moral em norma jurídica.", s: 0, i: {leg: 20, seg: 50, lib: 30}, f: "Errado. A juridicidade exige institucionalização normativa e reconhecimento pelo Estado." },
+                { t: "A força estatal é importante, mas insuficiente para explicar integralmente a experiência jurídica.", s: 0.3, i: {leg: 70, seg: 60, lib: 80}, f: "Correto, você reconheceu os limites da coerção como fundamento exclusivo do sistema." }
             ]},
-            { ch: 2, seg: 2, title: "Bilateralidade Atributiva", text: "Como Reale define a estrutura que une dois lados atribuindo poder e dever?", options: [
-                { t: "Bilateralidade Atributiva.", s: 0.16, i: {leg: 80, seg: 80, lib: 60}, f: "Exato! É a estrutura básica da relação jurídica." },
-                { t: "Unilateralidade subjetiva.", s: 0, i: {leg: 50, seg: 50, lib: 50}, f: "Incorreto. O Direito sempre envolve a relação com o outro." }
+            { ch: 2, seg: 3, title: "DIREITO, MORAL E ÉTICA", text: "Debate: Ética seria o social e Moral a reflexão. O Direito seria extensão da Moral. Qual a distinção correta segundo Bittar e Mascaro?", options: [
+                { t: "A Moral corresponde às práticas sociais vividas, enquanto a Ética realiza a reflexão crítica.", s: 0.5, i: {leg: 100, seg: 60, lib: 90}, f: "Exato! Você captou a distinção filosófica clássica trabalhada por Bittar e Mascaro." },
+                { t: "Ética e Moral são expressões rigorosamente idênticas, sem qualquer distinção conceitual.", s: 0.1, i: {leg: 30, seg: 30, lib: 30}, f: "Atenção. A resposta ignora a distinção entre a prática moral e a reflexão ética crítica." },
+                { t: "O Direito constitui simples subcategoria da Moral, sem autonomia histórica ou institucional.", s: 0, i: {leg: 10, seg: 10, lib: 10}, f: "Incorreto. Isso elimina a especificidade política e institucional do fenômeno jurídico." },
+                { t: "O Direito mantém diálogo com a Moral, mas possui estruturas próprias de normatividade e coação.", s: 0.3, i: {leg: 80, seg: 80, lib: 70}, f: "Correto. O Direito possui uma autonomia relativa frente às demais regulações sociais." }
             ]},
-            { ch: 2, seg: 3, title: "Ação Externa", text: "Um homem ajuda um idoso apenas por medo da multa. Para o Direito, isso basta?", options: [
-                { t: "Sim, o Direito foca no cumprimento externo da norma.", s: 0.16, i: {leg: 70, seg: 90, lib: 50}, f: "Correto. A intenção interna é o reino da Moral." },
-                { t: "Não, o Direito exige que ele ame o próximo.", s: 0.05, i: {leg: 80, seg: 30, lib: 70}, f: "Isso seria invadir o foro íntimo, o que Reale evita." }
+            { ch: 2, seg: 4, title: "DIREITO, MORAL E ÉTICA", text: "Um jurista justifica atos abusivos alegando apenas cumprir ordens. Como a ética de Bittar avalia essa postura?", options: [
+                { t: "O exercício profissional do Direito exige responsabilidade ética pelos impactos sociais das decisões.", s: 0.5, i: {leg: 100, seg: 50, lib: 100}, f: "Muito bem! Bittar destaca o compromisso ético-social inafastável do operador jurídico." },
+                { t: "O jurista deve preocupar-se exclusivamente com resultados técnicos e estratégicos do sistema.", s: 0, i: {leg: 20, seg: 100, lib: 10}, f: "Péssimo. Essa visão ignora a dimensão humana e ética inerente à atuação jurídica." },
+                { t: "A responsabilidade ética existe apenas quando houver violação explícita da legislação positiva.", s: 0.1, i: {leg: 50, seg: 70, lib: 40}, f: "Cuidado. Isso reduz a ética profissional ao mero cumprimento formal da legalidade." },
+                { t: "Decisões jurídicas interferem diretamente na vida social, política e axiológica da coletividade.", s: 0.3, i: {leg: 80, seg: 60, lib: 80}, f: "Correto. Você reconheceu a dimensão interventiva e o peso das práticas jurídicas." }
             ]},
-            { ch: 2, seg: 4, title: "Possibilidade Lógica", text: "Se não há polícia para fiscalizar uma lei agora, ela deixa de ser coercível?", options: [
-                { t: "Não, a coercibilidade é uma possibilidade lógica de força.", s: 0.16, i: {leg: 60, seg: 100, lib: 50}, f: "Brilhante! A força é latente, não precisa ser imediata." },
-                { t: "Sim, sem aplicação instantânea não existe Direito.", s: 0, i: {leg: 30, seg: 20, lib: 30}, f: "Confundiu eficácia social com a natureza da norma." }
+            { ch: 2, seg: 5, title: "DIREITO, MORAL E ÉTICA", text: "Empresa demite funcionário por ato imoral, mas juridicamente lícito. Qual a relação entre os campos segundo Miguel Reale?", options: [
+                { t: "A teoria do mínimo ético diz que toda regra moral relevante vira automaticamente obrigação jurídica.", s: 0.1, i: {leg: 60, seg: 80, lib: 40}, f: "Incompleto. Isso elimina indevidamente a autonomia estrutural do fenômeno jurídico." },
+                { t: "O Direito absorve a moralidade social, não havendo distinção entre ilícito jurídico e reprovação ética.", s: 0, i: {leg: 10, seg: 50, lib: 10}, f: "Errado. Reale defende que são campos distintos com estruturas de sanção diversas." },
+                { t: "Nem toda reprovação moral produz consequência jurídica, pois os campos possuem autonomia relativa.", s: 0.5, i: {leg: 100, seg: 70, lib: 80}, f: "Perfeito! Você compreendeu a crítica ao mínimo ético e a autonomia na teoria de Reale." },
+                { t: "A empresa pode impor qualquer dever de foro íntimo se houver previsão em regulamento interno.", s: 0.3, i: {leg: 70, seg: 90, lib: 30}, f: "Parcialmente correto, mas amplia demais o alcance do Direito sobre a esfera íntima." }
             ]},
-            { ch: 2, seg: 5, title: "Monopólio da Coação", text: "Quem detém o poder legítimo de aplicar a coação no Direito moderno?", options: [
-                { t: "O Estado, de forma organizada.", s: 0.16, i: {leg: 70, seg: 100, lib: 30}, f: "Isso garante que a vingança privada não domine." },
-                { t: "Qualquer cidadão que se sinta injustiçado.", s: 0, i: {leg: 10, seg: 10, lib: 10}, f: "Isso geraria o caos social e o fim do Direito." }
+            { ch: 2, seg: 6, title: "DIREITO, MORAL E ÉTICA", text: "Movimentos defendem o Direito como arma de cidadania. Qual a função transformadora destacada por Bittar e Mascaro?", options: [
+                { t: "O Direito pode atuar como instrumento de transformação social comprometido com a justiça.", s: 0.5, i: {leg: 100, seg: 50, lib: 100}, f: "Excelente! Você captou a função social e democrática defendida pelos autores." },
+                { t: "O Direito deve limitar-se à preservação técnica da ordem vigente, sem preocupações sociais.", s: 0, i: {leg: 40, seg: 100, lib: 10}, f: "Incorreto. Isso reduz o Direito à mera manutenção formal do poder instituído." },
+                { t: "Questões éticas e sociais pertencem exclusivamente à política, não ao campo jurídico.", s: 0.1, i: {leg: 20, seg: 20, lib: 50}, f: "Não. A teoria contemporânea reconhece a intensa interação entre esses campos." },
+                { t: "A experiência jurídica envolve permanente diálogo entre normas, valores e história.", s: 0.3, i: {leg: 90, seg: 60, lib: 90}, f: "Correto. Uma visão equilibrada sobre a complexidade axiológica do Direito." }
+            ]}
+        ];
+        // CAPÍTULO 3: DIREITO, JUSTIÇA E SEGURANÇA JURÍDICA
+        const CAP_3_SEGMENTOS = [
+            { ch: 3, seg: 1, title: "Justiça Material", text: "Uma decisão legal causou grave desigualdade social. O debate questiona se a conformidade à lei basta para caracterizar a verdadeira justiça.", options: [
+                { t: "A legalidade somente preserva legitimidade quando compatível com critérios materiais de justiça.", s: 0.5, i: {leg: 100, seg: 60, lib: 90}, f: "Excelente! Você compreendeu a tensão entre validade formal e justiça material." },
+                { t: "A Justiça corresponde exclusivamente ao cumprimento literal da legislação positiva.", s: 0, i: {leg: 50, seg: 100, lib: 10}, f: "Incorreto. Isso reduz o Direito ao formalismo, ignorando sua dimensão axiológica." },
+                { t: "A estabilidade institucional justifica limitações excepcionais à justiça social.", s: 0.1, i: {leg: 70, seg: 90, lib: 30}, f: "Atenção. Você valorizou demais a ordem em detrimento da realização do justo." },
+                { t: "A interpretação exige equilíbrio entre segurança normativa e realização da justiça.", s: 0.3, i: {leg: 80, seg: 70, lib: 80}, f: "Boa resposta. Demonstra compreensão da complexidade interpretativa contemporânea." }
             ]},
-            { ch: 2, seg: 6, title: "Direito e Força", text: "Qual a síntese da relação entre Direito e Força para Reale?", options: [
-                { t: "O Direito não é força, mas é força a serviço da Justiça.", s: 0.20, i: {leg: 100, seg: 80, lib: 70}, f: "Excelente! A força é o instrumento, a Justiça é o fim." },
-                { t: "O Direito é puramente a força do mais forte.", s: 0, i: {leg: 0, seg: 100, lib: 0}, f: "Visão sofista, superada pela Teoria Tridimensional." }
+            { ch: 3, seg: 2, title: "Justiça Distributiva", text: "Em crise econômica, o governo debate como dividir recursos escassos entre grupos desiguais. Qual o critério da justiça distributiva?", options: [
+                { t: "A justiça distributiva exige tratar desigualmente os desiguais na medida de suas diferenças.", s: 0.5, i: {leg: 90, seg: 70, lib: 100}, f: "Perfeito! Você aplicou corretamente a tradição aristotélica retomada por Bittar." },
+                { t: "A igualdade jurídica exige distribuição idêntica de recursos para todos os grupos.", s: 0.1, i: {leg: 60, seg: 50, lib: 60}, f: "Cuidado. Você confundiu igualdade formal (letra da lei) com justiça material." },
+                { t: "A distribuição deve obedecer exclusivamente aos interesses econômicos do Estado.", s: 0, i: {leg: 20, seg: 100, lib: 10}, f: "Errado. A alternativa ignora a finalidade ética e social das políticas públicas." },
+                { t: "A justiça social depende da consideração das desigualdades historicamente produzidas.", s: 0.3, i: {leg: 80, seg: 60, lib: 90}, f: "Correto. Você reconheceu a dimensão histórica necessária à justiça distributiva." }
             ]},
-
-            // CAPÍTULO 3: JUSTIÇA E VONTADE (Eduardo Bittar)
-            { ch: 3, seg: 1, title: "A Intencionalidade", text: "Eduardo Bittar discute a vontade. Um ato sem intenção livre pode ser considerado ético?", options: [
-                { t: "Não, a ética exige o livre-arbítrio da vontade.", s: 0.16, i: {leg: 90, seg: 50, lib: 90}, f: "Exato! Sem liberdade de escolha, não há responsabilidade." },
-                { t: "Sim, apenas o resultado importa na ética.", s: 0, i: {leg: 40, seg: 80, lib: 30}, f: "Isso seria utilitarismo cego, Bittar foca na consciência." }
+            { ch: 3, seg: 3, title: "Segurança Jurídica", text: "Mudanças jurisprudenciais contraditórias geram insegurança. O que os cidadãos podem exigir do sistema judiciário?", options: [
+                { t: "A segurança jurídica exige estabilidade interpretativa mínima e previsibilidade das normas.", s: 0.5, i: {leg: 100, seg: 100, lib: 70}, f: "Exato! A segurança jurídica preserva a confiança social nas instituições." },
+                { t: "A busca pela justiça autoriza alterações imprevisíveis e constantes das decisões.", s: 0.1, i: {leg: 30, seg: 20, lib: 100}, f: "Risco alto. Isso sacrifica a estabilidade institucional em nome de um ideal volátil." },
+                { t: "A segurança jurídica impede qualquer atualização interpretativa das normas pelo juiz.", s: 0.3, i: {leg: 70, seg: 90, lib: 40}, f: "Parcialmente correto, mas o Direito precisa de uma dinâmica mínima para evoluir." },
+                { t: "A previsibilidade jurídica possui relevância secundária diante dos interesses do Estado.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "Incorreto. Isso compromete a confiança necessária à ordem democrática." }
             ]},
-            { ch: 3, seg: 2, title: "A Virtude da Justiça", text: "Para Bittar, a justiça é uma construção constante ou um objeto pronto?", options: [
-                { t: "Uma construção social baseada na alteridade.", s: 0.16, i: {leg: 100, seg: 60, lib: 80}, f: "Correto. Justiça se faz olhando para o outro." },
-                { t: "Um conceito estático definido para sempre.", s: 0.05, i: {leg: 40, seg: 90, lib: 20}, f: "A justiça é histórica e humana, ela pulsa com a sociedade." }
+            { ch: 3, seg: 4, title: "Dignidade Humana", text: "Corte de gastos em presídios impede assistência médica básica. O debate questiona os limites da pena e da dignidade humana.", options: [
+                { t: "A dignidade impede que a pena produza condições degradantes além da privação de liberdade.", s: 0.5, i: {leg: 100, seg: 50, lib: 100}, f: "Perfeito! A dignidade humana é o limite intransponível do poder punitivo estatal." },
+                { t: "A estabilidade financeira do Estado justifica restrições aos direitos fundamentais de presos.", s: 0.1, i: {leg: 40, seg: 90, lib: 20}, f: "Errado. Direitos fundamentais não podem ser subordinaos a critérios econômicos." },
+                { t: "O sofrimento adicional nas prisões integra legitimamente a finalidade pedagógica da pena.", s: 0, i: {leg: 10, seg: 80, lib: 0}, f: "Inaceitável. Isso viola os limites constitucionais e humanos do exercício do poder." },
+                { t: "A proteção da dignidade depende de critérios morais e não de deveres jurídicos objetivos.", s: 0.3, i: {leg: 70, seg: 40, lib: 80}, f: "Atenção. Embora tenha base ética, a dignidade é um dever jurídico concreto." }
             ]},
-            { ch: 3, seg: 3, title: "O Outro no Direito", text: "Qual a importância da 'Alteridade' no julgamento de um conflito?", options: [
-                { t: "É essencial reconhecer o outro como sujeito de direitos.", s: 0.16, i: {leg: 95, seg: 60, lib: 90}, f: "Sem o outro, não há necessidade de Direito." },
-                { t: "Nenhuma, o juiz deve olhar apenas para o código.", s: 0, i: {leg: 20, seg: 100, lib: 10}, f: "O código é o mapa, mas o outro é o destino da justiça." }
+            { ch: 3, seg: 5, title: "Análise Crítica", text: "Movimentos denunciam normas que preservam desigualdades históricas mesmo sendo formalmente válidas. Como a Filosofia avalia?", options: [
+                { t: "A Filosofia do Direito admite análise crítica das normas quando produzem injustiças estruturais.", s: 0.5, i: {leg: 100, seg: 60, lib: 100}, f: "Muito bem! Você captou a função crítica e reflexiva do pensamento jurídico." },
+                { t: "A validade formal da norma elimina qualquer possibilidade de crítica jurídica ou ética.", s: 0, i: {leg: 60, seg: 100, lib: 10}, f: "Visão limitada. Isso é positivismo acrítico, que ignora a dimensão de valor." },
+                { t: "A crítica social deve considerar a estabilidade institucional e a transformação democrática.", s: 0.3, i: {leg: 80, seg: 80, lib: 80}, f: "Correto. Você equilibrou a tensão entre conservação e mudança no Direito." },
+                { t: "Toda desigualdade social decorre exclusivamente da incapacidade individual dos sujeitos.", s: 0.1, i: {leg: 20, seg: 40, lib: 50}, f: "Incorreto. A resposta ignora fatores estruturais envolvidos na injustiça social." }
             ]},
-            { ch: 3, seg: 4, title: "Vontade Corrompida", text: "Se um réu é coagido a confessar, como a Filosofia do Direito vê esse ato?", options: [
-                { t: "Inexistente como ato ético, pois falta liberdade.", s: 0.16, i: {leg: 90, seg: 40, lib: 100}, f: "Perfeito. O Direito protege a integridade da vontade." },
-                { t: "Válido, pois a ordem pública exige resultados.", s: 0, i: {leg: 10, seg: 90, lib: 0}, f: "Isso fere os direitos fundamentais e a ética jurídica." }
+            { ch: 3, seg: 6, title: "Justiça Equitativa", text: "Estado reserva vagas para estudantes vulneráveis. O debate questiona se isso viola a igualdade ou concretiza a justiça.", options: [
+                { t: "A justiça equitativa exige compensações para ampliar oportunidades aos menos favorecidos.", s: 0.5, i: {leg: 100, seg: 70, lib: 100}, f: "Excelente! Você aplicou a teoria de Rawls: igualdade formal não é justiça material." },
+                { t: "A verdadeira igualdade exige competição neutra, sem qualquer intervenção do Estado.", s: 0.1, i: {leg: 50, seg: 90, lib: 60}, f: "Cuidado. Essa visão ignora as desigualdades estruturais históricas." },
+                { t: "Políticas compensatórias violam necessariamente o mérito e a estabilidade democrática.", s: 0, i: {leg: 40, seg: 90, lib: 20}, f: "Incorreto. Isso desconsidera a função distributiva essencial da justiça." },
+                { t: "A justiça distributiva deve equilibrar igualdade de chances e legitimidade institucional.", s: 0.3, i: {leg: 90, seg: 80, lib: 80}, f: "Boa síntese entre a busca pela igualdade e a segurança do sistema." }
+            ]}
+        ];
+        // CAPÍTULO 4: DIREITO, LIBERDADE E PODER
+        const CAP_4_SEGMENTOS = [
+            { ch: 4, seg: 1, title: "Liberdade e Ordem", text: "Autoridades restringem manifestações para preservar a ordem. O debate foca nos limites entre a liberdade individual e a estabilidade social. Qual a visão correta?", options: [
+                { t: "O Direito deve compatibilizar liberdades individuais para permitir convivência social legítima.", s: 0.5, i: {leg: 100, seg: 70, lib: 90}, f: "Excelente! Você compreendeu a concepção kantiana de coexistência de arbítrios livres." },
+                { t: "A liberdade individual pode ser integralmente anulada sempre que houver interesse estatal.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "Incorreto. Isso transforma o poder político em fundamento absoluto, negando o Direito." },
+                { t: "A preservação da ordem pública pode justificar restrições proporcionais às liberdades.", s: 0.3, i: {leg: 80, seg: 90, lib: 60}, f: "Boa análise. Você reconheceu a tensão entre liberdade e segurança institucional." },
+                { t: "A liberdade jurídica depende exclusivamente da vontade subjetiva de cada indivíduo.", s: 0.1, i: {leg: 30, seg: 10, lib: 100}, f: "Cuidado. Isso ignora os limites recíprocos necessários à convivência social organizada." }
             ]},
-            { ch: 3, seg: 5, title: "Justiça Distributiva", text: "Ao decidir sobre recursos públicos, você aplica a regra de tratar desiguais na medida de sua desigualdade. Isso é:", options: [
-                { t: "Justiça Distributiva (Aristóteles/Bittar).", s: 0.16, i: {leg: 90, seg: 60, lib: 80}, f: "Correto! É a justiça que busca o equilíbrio social." },
-                { t: "Justiça Vingativa.", s: 0, i: {leg: 10, seg: 80, lib: 10}, f: "Longe disso. A vingança é o oposto da justiça jurídica." }
+            { ch: 4, seg: 2, title: "Legitimidade do Poder", text: "O governo amplia a vigilância alegando estabilidade. Quando o exercício do poder permanece legítimo dentro do Estado de Direito?", options: [
+                { t: "O poder jurídico somente preserva legitimidade quando orientado pela justiça e limitado por normas.", s: 0.5, i: {leg: 100, seg: 60, lib: 80}, f: "Perfeito! A força deve atuar como instrumento racional e controlado do Direito." },
+                { t: "Todo exercício de poder estatal é legítimo apenas por decorrer da autoridade governamental.", s: 0, i: {leg: 30, seg: 100, lib: 10}, f: "Errado. A resposta ignora critérios jurídicos e éticos indispensáveis à legitimidade." },
+                { t: "A estabilidade política pode exigir expansão excepcional dos mecanismos coercitivos do Estado.", s: 0.1, i: {leg: 50, seg: 90, lib: 30}, f: "Atenção. Você ampliou excessivamente o alcance da coerção estatal." },
+                { t: "O Direito transforma a força bruta em poder institucional racionalmente controlado.", s: 0.5, i: {leg: 90, seg: 80, lib: 70}, f: "Correto! Você demonstrou compreender a função organizadora do Direito sobre a força." }
             ]},
-            { ch: 3, seg: 6, title: "Síntese do Capítulo III", text: "Qual o papel do jurista frente à injustiça da lei?", options: [
-                { t: "Ser um crítico e buscar a justiça além da norma posta.", s: 0.20, i: {leg: 100, seg: 50, lib: 90}, f: "Excelente! Bittar propõe um jurista comprometido com a ética." },
-                { t: "Ser um escravo da lei, mesmo que ela seja injusta.", s: 0, i: {leg: 20, seg: 90, lib: 10}, f: "Isso é legalismo acrítico, perigoso para a democracia." }
+            { ch: 4, seg: 3, title: "Força e Repressão", text: "Setores políticos defendem que apenas o aumento da repressão estatal garante a paz coletiva. Como a filosofia jurídica avalia essa tese?", options: [
+                { t: "A força no Direito possui caráter instrumental e subordinado à realização da justiça.", s: 0.5, i: {leg: 100, seg: 50, lib: 90}, f: "Muito bem! O Direito não se reduz à mera violência institucional." },
+                { t: "O Direito corresponde essencialmente ao exercício da força do mais poderoso sobre os demais.", s: 0, i: {leg: 10, seg: 100, lib: 10}, f: "Incorreto. Essa visão reduz o fenômeno jurídico à dominação arbitrária." },
+                { t: "A coerção estatal pode atuar legitimamente desde que limitada por critérios jurídicos objetivos.", s: 0.4, i: {leg: 90, seg: 80, lib: 70}, f: "Boa resposta. Você reconheceu a necessidade de controle jurídico sobre a força." },
+                { t: "A ausência de repressão física imediata elimina automaticamente a eficácia do Direito.", s: 0.1, i: {leg: 40, seg: 60, lib: 40}, f: "Cuidado. Você ignorou as dimensões simbólicas e preventivas da norma." }
             ]},
-
-            // CAPÍTULO 4: LIBERDADE E RAZÃO (Kant e a Ação)
-            { ch: 4, seg: 1, title: "Imperativo Categórico", text: "Você deve criar uma regra para o tribunal. Kant diria: 'Aja de modo que sua regra possa virar...'", options: [
-                { t: "Uma Lei Universal.", s: 0.16, i: {leg: 100, seg: 80, lib: 80}, f: "Exato! Essa é a base da ética kantiana." },
-                { t: "Uma vantagem para o seu grupo.", s: 0, i: {leg: 10, seg: 50, lib: 20}, f: "Isso seria agir por interesse, não por dever." }
+            { ch: 4, seg: 4, title: "Estado de Direito", text: "Governante proíbe críticas e afirma que a soberania exige obediência integral para manter a estabilidade. Qual a natureza dessa medida?", options: [
+                { t: "A medida retoma o Estado Absoluto, incompatível com o Estado de Direito e a cidadania.", s: 0.5, i: {leg: 100, seg: 20, lib: 100}, f: "Exato! Você captou a transição do modelo absolutista para o constitucional." },
+                { t: "A soberania popular permite ao governante exercer poder ilimitado sem controles jurídicos.", s: 0.1, i: {leg: 40, seg: 70, lib: 50}, f: "Errado. A soberania popular no Estado de Direito exige limites constitucionais." },
+                { t: "A supressão de críticas é legítima para preservar a ordem e a unidade política estatal.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "Incorreto. Isso confunde autoridade com eliminação autoritária de liberdades." },
+                { t: "A concentração de poderes em uma única autoridade fortalece a liberdade política.", s: 0.3, i: {leg: 60, seg: 80, lib: 40}, f: "Atenção. Essa visão compromete o princípio da separação de poderes." }
             ]},
-            { ch: 4, seg: 2, title: "Autonomia vs Heteronomia", text: "A Moral é autônoma (vem de dentro). O Direito é o que para Kant?", options: [
-                { t: "Heterônomo (vem de uma autoridade externa).", s: 0.16, i: {leg: 70, seg: 90, lib: 60}, f: "Correto! O Estado dita a regra externa." },
-                { t: "Autônomo também.", s: 0, i: {leg: 40, seg: 40, lib: 90}, f: "Incorreto. O Direito exige obediência externa, independente do querer." }
+            { ch: 4, seg: 5, title: "Dignidade como Fim", text: "Autoridades propõem usar acusados como 'exemplo público' para intimidar criminosos. Como a dignidade humana (Kant) avalia isso?", options: [
+                { t: "O ser humano não pode ser tratado apenas como instrumento de intimidação coletiva.", s: 0.5, i: {leg: 100, seg: 30, lib: 100}, f: "Perfeito! Você aplicou a tese de que a pessoa é um fim em si mesma, nunca meio." },
+                { t: "A exposição degradante do indivíduo é legítima quando produz benefícios coletivos.", s: 0, i: {leg: 10, seg: 80, lib: 10}, f: "Incorreto. Isso viola limites éticos fundamentais do poder estatal." },
+                { t: "A proteção da dignidade humana restringe práticas abusivas de punição política.", s: 0.4, i: {leg: 90, seg: 50, lib: 90}, f: "Correto. Você reconheceu os limites humanistas aplicados ao Direito Penal." },
+                { t: "A dignidade humana é um valor meramente moral sem repercussões jurídicas concretas.", s: 0.1, i: {leg: 30, seg: 60, lib: 40}, f: "Cuidado. A dignidade é o centro normativo do constitucionalismo moderno." }
             ]},
-            { ch: 4, seg: 3, title: "O Fim em Si Mesmo", text: "Ao julgar, você pode usar um ser humano como 'exemplo' para assustar os outros?", options: [
-                { t: "Não. O ser humano é um fim em si mesmo.", s: 0.16, i: {leg: 100, seg: 40, lib: 100}, f: "Dignidade da Pessoa Humana! Kant ficaria orgulhoso." },
-                { t: "Sim, o importante é o medo na sociedade.", s: 0, i: {leg: 20, seg: 100, lib: 10}, f: "Isso viola a dignidade humana. Nunca use pessoas como meios." }
+            { ch: 4, seg: 6, title: "Vigilância Tecnológica", text: "Estado usa algoritmos para monitorar comportamentos e sugerir 'correções' automáticas. Qual o risco jurídico apontado por Foucault?", options: [
+                { t: "O uso disciplinar da tecnologia pode criar um controle permanente e invisível dos indivíduos.", s: 0.5, i: {leg: 80, seg: 100, lib: 40}, f: "Brilhante! Você captou a crítica aos mecanismos de vigilância e assujeitamento." },
+                { t: "A eliminação da decisão humana garante neutralidade e afasta riscos autoritários.", s: 0.1, i: {leg: 40, seg: 60, lib: 50}, f: "Cuidado. Algoritmos podem automatizar e ocultar o autoritarismo." },
+                { t: "A vigilância algorítmica é incompatível com qualquer forma de organização jurídica.", s: 0.3, i: {leg: 60, seg: 40, lib: 70}, f: "Uma visão forte, mas o Direito busca justamente regular e limitar o uso técnico." },
+                { t: "O monitoramento permanente é consequência necessária da liberdade política moderna.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "Incorreto. Isso ignora os limites democráticos sobre a esfera privada." }
+            ]}
+        ];
+        // CAPÍTULO 5: DIREITO, SANÇÃO E COAÇÃO (MIGUEL REALE)
+        const CAP_5_SEGMENTOS = [
+            { ch: 5, seg: 1, title: "Coação vs. Coercibilidade", text: "Empresário transfere bens sob ameaça de um rival. Ao mesmo tempo, a Justiça penhora seus bens por dívida tributária. O Tribunal pede a distinção técnica entre as duas pressões exercidas.", options: [
+                { t: "A ameaça anula o ato por coação inválida; a penhora é a coercibilidade organizada do Estado.", s: 0.5, i: {leg: 100, seg: 80, lib: 70}, f: "Excelente! Você distinguiu coação (vício) de coercibilidade (força institucional)." },
+                { t: "Ambas as situações anulam os atos, pois toda pressão externa viola a liberdade individual.", s: 0.1, i: {leg: 40, seg: 20, lib: 100}, f: "Cuidado. Você confundiu coerção ilícita com a execução legítima da norma jurídica." },
+                { t: "A penhora judicial possui natureza moral, pois depende do arrependimento do devedor.", s: 0, i: {leg: 10, seg: 10, lib: 40}, f: "Incorreto. A alternativa ignora a dimensão coercitiva e patrimonial da execução estatal." },
+                { t: "Toda coação jurídica decorre necessariamente de violência física direta contra o indivíduo.", s: 0.1, i: {leg: 50, seg: 90, lib: 20}, f: "Atenção. O Direito usa a força de forma organizada e nem sempre por violência física direta." }
             ]},
-            { ch: 4, seg: 4, title: "Liberdade Externa", text: "Para Kant, o Direito serve para compatibilizar a sua liberdade com a do outro?", options: [
-                { t: "Sim, é o limite da liberdade externa de todos.", s: 0.16, i: {leg: 90, seg: 80, lib: 90}, f: "Perfeito! Minha liberdade acaba onde começa a sua." },
-                { t: "Não, o Direito serve para anular a liberdade.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "O Direito sem liberdade é apenas opressão." }
+            { ch: 5, seg: 2, title: "Sanção Organizada", text: "Morador sofre reprovação pública em reunião e recebe multa prevista no regulamento por mau comportamento. Qual a análise correta sobre as naturezas dessas sanções?", options: [
+                { t: "A reprovação coletiva é moral e difusa; a multa é uma sanção jurídica organizada.", s: 0.5, i: {leg: 100, seg: 90, lib: 60}, f: "Perfeito! Você diferenciou sanções morais espontâneas de sanções institucionalizadas." },
+                { t: "A ridicularização pública constitui sanção jurídica equivalente à multa administrativa.", s: 0.1, i: {leg: 30, seg: 40, lib: 70}, f: "Errado. A resposta confunde sanção moral (difusa) com sanção jurídica (organizada)." },
+                { t: "Toda sanção válida depende exclusivamente da atuação direta e imediata do Estado.", s: 0, i: {leg: 50, seg: 100, lib: 10}, f: "Incorreto. Grupos sociais (como condomínios) possuem sanções institucionais reconhecidas." },
+                { t: "A multa condominial possui natureza exclusivamente ética e não produz efeitos jurídicos.", s: 0.1, i: {leg: 40, seg: 30, lib: 50}, f: "Cuidado. Regulamentos internos possuem força normativa e geram obrigações jurídicas." }
             ]},
-            { ch: 4, seg: 5, title: "O Dever de Agir", text: "Um juiz deve seguir a lei por medo da punição ou por respeito ao dever?", options: [
-                { t: "Por respeito ao dever racional.", s: 0.16, i: {leg: 100, seg: 70, lib: 70}, f: "Ética do Dever. A razão guia a vontade boa." },
-                { t: "Pelo salário no fim do mês.", s: 0, i: {leg: 30, seg: 50, lib: 30}, f: "Isso é pragmatismo, não é o agir ético kantiano." }
+            { ch: 5, seg: 3, title: "Sanção Moral e Jurídica", text: "Indivíduo pratica conduta imoral, mas lícita. Sem punição estatal, sofre isolamento e críticas da comunidade. Como a Filosofia classifica essa reação frente à sanção jurídica?", options: [
+                { t: "As sanções morais atuam socialmente mesmo sem organização coercitiva estatal.", s: 0.5, i: {leg: 80, seg: 50, lib: 90}, f: "Excelente. Você compreendeu que a Moral tem força mesmo sem o aparato de força do Estado." },
+                { t: "Somente sanções estatais possuem relevância efetiva na regulação das condutas humanas.", s: 0, i: {leg: 40, seg: 100, lib: 10}, f: "Incorreto. A resposta ignora a poderosa força social das sanções éticas e morais." },
+                { t: "A reprovação coletiva pode influenciar comportamentos independente de punição formal.", s: 0.5, i: {leg: 90, seg: 60, lib: 80}, f: "Correto! Você reconheceu a dimensão social e a eficácia das sanções morais." },
+                { t: "Toda violação moral deve necessariamente produzir sanção jurídica estatal correspondente.", s: 0.1, i: {leg: 50, seg: 90, lib: 20}, f: "Atenção. Direito e Moral são campos distintos; nem tudo que é imoral é ilícito." }
             ]},
-            { ch: 4, seg: 6, title: "Síntese do Capítulo IV", text: "O que define um ato jurídico justo em Kant?", options: [
-                { t: "Aquele que permite a coexistência de arbítrios livres.", s: 0.20, i: {leg: 100, seg: 90, lib: 100}, f: "Excelente! A paz jurídica é a harmonia das liberdades." },
-                { t: "Aquele que dá lucro ao Estado.", s: 0, i: {leg: 20, seg: 60, lib: 20}, f: "Visão econômica, não jurídica de Kant." }
+            { ch: 5, seg: 4, title: "Sanções Premiais", text: "Prefeitura dá descontos no IPTU para quem adota medidas sustentáveis, buscando incentivar condutas sem usar punições. Qual técnica jurídica está sendo aplicada?", options: [
+                { t: "Os incentivos fiscais representam sanções premiais voltadas à adesão espontânea.", s: 0.5, i: {leg: 100, seg: 40, lib: 100}, f: "Muito bem! Você captou a função promocional/premial do Direito contemporâneo." },
+                { t: "O benefício tributário descaracteriza a juridicidade da norma por não ser punitivo.", s: 0.1, i: {leg: 40, seg: 90, lib: 30}, f: "Errado. O Direito moderno usa tanto a punição quanto o prêmio para guiar condutas." },
+                { t: "Toda sanção jurídica exige ameaça de restrição patrimonial ou privação de liberdade.", s: 0, i: {leg: 30, seg: 100, lib: 10}, f: "Incorreto. Isso reduz o conceito de sanção, ignorando a técnica do incentivo." },
+                { t: "Os incentivos fiscais são econômicos e não se ligam a técnicas jurídicas de regulação.", s: 0.1, i: {leg: 50, seg: 50, lib: 50}, f: "Cuidado. O uso estratégico de benefícios é uma técnica jurídica de efetivação normativa." }
             ]},
-
-            // CAPÍTULO 5: TÉCNICA E COERÇÃO (Tércio Sampaio / Gusmão)
-            { ch: 5, seg: 1, title: "A Linguagem do Direito", text: "Tércio Sampaio diz que o Direito é um sistema de comunicação. Qual o seu objetivo?", options: [
-                { t: "Decidir conflitos e reduzir incertezas.", s: 0.16, i: {leg: 70, seg: 100, lib: 60}, f: "Exato! O Direito traz previsibilidade para a vida." },
-                { t: "Confundir as pessoas com palavras difíceis.", s: 0, i: {leg: 10, seg: 10, lib: 10}, f: "Isso é burocratismo patológico, não a função do Direito." }
+            { ch: 5, seg: 5, title: "Pluralidade de Ordens", text: "Atleta é suspenso por tribunal desportivo. A defesa alega que só o Estado pode aplicar sanções válidas. Como a teoria da pluralidade das ordens jurídicas responde?", options: [
+                { t: "Instituições podem ter ordens normativas próprias, mas o Estado mantém a soberania final.", s: 0.5, i: {leg: 100, seg: 80, lib: 70}, f: "Perfeito! Você compreendeu a convivência entre ordens jurídicas e a soberania estatal." },
+                { t: "Somente normas produzidas diretamente pelo Estado podem gerar sanções legítimas.", s: 0, i: {leg: 40, seg: 100, lib: 10}, f: "Incorreto. Organizações sociais autônomas possuem estruturas normativas válidas." },
+                { t: "Tribunais desportivos substituem integralmente o poder jurídico estatal nas relações.", s: 0.1, i: {leg: 60, seg: 30, lib: 90}, f: "Cuidado. A autonomia dessas ordens não exclui a supervisão soberana do Estado." },
+                { t: "Ordens normativas não estatais possuem soberania equivalente à do Estado.", s: 0.1, i: {leg: 30, seg: 50, lib: 80}, f: "Errado. Autonomia institucional não se confunde com a soberania absoluta do Estado." }
             ]},
-            { ch: 5, seg: 2, title: "Gusmão e a Sanção", text: "Paulo Dourado de Gusmão foca na sanção. O que acontece com a norma sem sanção?", options: [
-                { t: "Perde sua força de garantia social.", s: 0.16, i: {leg: 50, seg: 100, lib: 40}, f: "Correto. A sanção é a garantia da ordem." },
-                { t: "Fica mais bonita e poética.", s: 0, i: {leg: 20, seg: 10, lib: 80}, f: "Poesia não resolve conflitos de posse ou família." }
-            ]},
-            { ch: 5, seg: 3, title: "Zetética vs Dogmática", text: "Tércio diferencia o pensar (Zetética) do decidir (Dogmática). O juiz na hora da sentença atua na:", options: [
-                { t: "Dogmática (precisa decidir e pôr fim à dúvida).", s: 0.16, i: {leg: 80, seg: 100, lib: 50}, f: "Isso! O tribunal é lugar de decisão, não de dúvida infinita." },
-                { t: "Zetética (pode ficar apenas questionando sem decidir).", s: 0, i: {leg: 60, seg: 20, lib: 90}, f: "Se o juiz não decide, ele nega a jurisdição." }
-            ]},
-            { ch: 5, seg: 4, title: "A Coação Psicológica", text: "A lei funciona apenas quando o policial aparece ou ela já atua no pensamento?", options: [
-                { t: "Atua como coação psicológica e temor reverencial.", s: 0.16, i: {leg: 70, seg: 90, lib: 60}, f: "Sim! O Direito molda o comportamento pelo receio da sanção." },
-                { t: "Só funciona se houver agressão física.", s: 0, i: {leg: 10, seg: 100, lib: 10}, f: "Isso seria o estado de guerra, não de Direito." }
-            ]},
-            { ch: 5, seg: 5, title: "Justiça e Tecnologia", text: "O uso de I.A. no Direito deve seguir qual critério de Tércio Sampaio?", options: [
-                { t: "A técnica deve servir ao humano e à decidibilidade.", s: 0.16, i: {leg: 80, seg: 90, lib: 80}, f: "Correto. A técnica é meio, a justiça é o sentido." },
-                { t: "A I.A. deve substituir a moral humana totalmente.", s: 0, i: {leg: 0, seg: 100, lib: 0}, f: "Isso seria o fim da Filosofia do Direito." }
-            ]},
-            { ch: 5, seg: 6, title: "O Grande Final", text: "Para concluir sua jornada: O Direito é um sistema fechado ou aberto à vida?", options: [
-                { t: "Um sistema que se abre aos valores sociais para ser justo.", s: 0.20, i: {leg: 100, seg: 100, lib: 100}, f: "Perfeito! Você se formou com honras na Magistratura de Crise!" },
-                { t: "Um labirinto sem saída de papel e carimbos.", s: 0, i: {leg: 0, seg: 0, lib: 0}, f: "Infelizmente, você se perdeu na burocracia. Tente novamente." }
-            ]},
+            { ch: 5, seg: 6, title: "O Papel do Estado", text: "Teorias defendem o fim do Estado em favor de estruturas sociais autogeridas. O que define a centralidade do Estado na organização jurídica contemporânea?", options: [
+                { t: "O Estado permanece central por concentrar a sanção soberana e a organização da força.", s: 0.5, i: {leg: 100, seg: 100, lib: 40}, f: "Excelente! O monopólio da coação organizada é a marca do Estado moderno." },
+                { t: "A eliminação completa do Estado garante automaticamente liberdade e justiça sociais.", s: 0, i: {leg: 10, seg: 10, lib: 100}, f: "Incorreto. A história mostra riscos graves na ausência de organização institucional do poder." },
+                { t: "A relação equilibrada entre Estado e sociedade é essencial ao Estado de Direito.", s: 0.5, i: {leg: 100, seg: 80, lib: 90}, f: "Correto! Você reconheceu a complementaridade necessária entre o público e o social." },
+                { t: "A concentração absoluta do poder estatal é a única condição para proteger as liberdades.", s: 0.1, i: {leg: 40, seg: 100, lib: 0}, f: "Atenção. O poder absoluto costuma sufocar, em vez de proteger, as garantias democráticas." }
+            ]}
         ];
 
         function App() {
