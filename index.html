@@ -28,7 +28,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        const FORMSPREE_ID = "xzdoopyw"; 
+        const FORMSPREE_ID = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; 
         const PROFESSORA_IMAGE = "https://raw.githubusercontent.com/simscreiando/philosophy.prof_siomara/72cd32ed88c92ff78ec2785c4779aacd652d6230/professora.png";
 
         const CHAPTER_INTRO = {
@@ -275,8 +275,9 @@
                         liberdade: stateRef.current.metrics.lib.toFixed(0) + "%"
                     };
 
-                    fetch(`https://formspree.io/f/xzdoopyw`, {
+                    fetch(`https://api.web3forms.com/submit`, {
                         method: 'POST',
+                          <input type="hidden" name="access_key" value="8ebd68a7-0287-41da-83e8-72aa7fa521b8">
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload),
                         keepalive: true
@@ -354,8 +355,9 @@
                 setGameState('sending');
                 const finalGrade = (fScore / 30 * 5).toFixed(1);
                 try {
-                    await fetch(`https://formspree.io/f/xzdoopyw`, {
+                    await                     fetch(`https://api.web3forms.com/submit`, {
                         method: 'POST',
+                          <input type="hidden" name="access_key" value="8ebd68a7-0287-41da-83e8-72aa7fa521b8">
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({
                             estudante: user.name,
