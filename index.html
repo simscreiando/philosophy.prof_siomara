@@ -351,7 +351,15 @@
             };
 
             const finishGame = async (fScore, fMetrics, status = "Concluído") => {
-                if (hasSent.current) return;
+                // Se os dados de emergência já foram enviados (ex: aluno trocou de aba
+                // durante o feedback da última questão), ainda assim avança para a tela
+                // final em vez de travar o jogo.
+                if (hasSent.current) {
+                    setGameState('end');
+                    return;
+                }
+                // Marca como enviado ANTES do fetch para evitar race condition
+                hasSent.current = true;
                 setGameState('sending');
                 const finalGrade = (fScore / 30 * 5).toFixed(1);
                 try {
@@ -369,7 +377,6 @@
                             liberdade: fMetrics.lib.toFixed(0) + "%"
                         })
                     });
-                    hasSent.current = true;
                 } catch (e) { console.error(e); }
                 setGameState('end');
             };
