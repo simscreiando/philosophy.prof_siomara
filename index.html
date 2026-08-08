@@ -1,568 +1,852 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultoria de Crise: O Legado</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background-color: #020617; color: #e2e8f0; overflow-x: hidden; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        .glass { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08); }
-        .prof-avatar { width: 140px; height: 140px; border-radius: 50%; border: 4px solid #06b6d4; object-fit: cover; background: #1e293b; }
-        .speech-bubble { background: white; color: #1e293b; border-radius: 20px; padding: 15px; position: relative; max-width: 280px; font-size: 0.85rem; font-weight: 700; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 2px solid #06b6d4; }
-        .speech-bubble::after { content: ''; position: absolute; bottom: -12px; left: 50%; width: 0; height: 0; border: 12px solid transparent; border-top-color: white; transform: translateX(-50%); }
-        .no-select { user-select: none; -webkit-user-select: none; }
-        .bar-transition { transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-fade { animation: fadeIn 0.4s ease-out forwards; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atividades Interativas</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
+  body { font-family:'Inter',sans-serif; background:#020617; color:#e2e8f0; overflow-x:hidden; }
+  .mono { font-family:'JetBrains Mono',monospace; }
+  .glass { background:rgba(15,23,42,.85); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.08); }
+  .prof-avatar { width:140px; height:140px; border-radius:50%; border:4px solid #06b6d4; object-fit:cover; background:#1e293b; }
+  .speech-bubble { background:#fff; color:#1e293b; border-radius:20px; padding:15px; position:relative; max-width:280px; font-size:.85rem; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,.5); border:2px solid #06b6d4; }
+  .speech-bubble::after { content:''; position:absolute; bottom:-12px; left:50%; width:0; height:0; border:12px solid transparent; border-top-color:#fff; transform:translateX(-50%); }
+  .bar-transition { transition:width .8s cubic-bezier(.4,0,.2,1); }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  .animate-fade { animation:fadeIn .4s ease-out forwards; }
+  .inp { width:100%; background:#0f172a; border:1px solid #334155; border-radius:12px; padding:10px 14px; color:#e2e8f0; font-size:.9rem; }
+  .btn { border-radius:14px; padding:10px 18px; font-weight:800; font-size:.8rem; letter-spacing:.05em; transition:all .2s; }
+  .no-select { user-select:none; -webkit-user-select:none; }
+</style>
 </head>
-<body class="no-select" oncontextmenu="return false;" oncopy="return false;">
-    <div id="root"></div>
+<body oncontextmenu="return false;">
+<div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+<script type="text/babel">
+/* =========================================================================
+   CONFIGURAÇÃO — preencha estas 4 linhas depois de publicar o Apps Script
+   ========================================================================= */
+const BACKEND_URL     = "";  // URL do App da Web do Apps Script
+const GOOGLE_CLIENT_ID= "";  // Client ID OAuth do Google
+const ALLOWED_DOMAIN  = "";  // ex: "suaescola.edu.br" (vazio = qualquer Google)
+const WEB3FORMS_KEY   = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; // e-mail de aviso (opcional)
+/* ========================================================================= */
 
-        const WEB3FORMS_KEY = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; 
-        const PROFESSORA_IMAGE = "https://raw.githubusercontent.com/simscreiando/philosophy.prof_siomara/72cd32ed88c92ff78ec2785c4779aacd652d6230/professora.png";
+const { useState, useEffect, useRef, useCallback } = React;
 
-        const CHAPTER_INTRO = {
-            1: { title: "O Direito como Objeto Cultural", context: "Você assume o seu gabinete em um momento de transição social. Lembre-se: o Direito não é um fenômeno da natureza, mas uma obra humana. Ele é cultura, valor e história." },
-            2: { title: "Moral e Ética no Judiciário", context: "A lei nem sempre caminha ao lado da consciência individual. Agora, você enfrentará dilemas onde a frieza do código encontra o calor dos valores éticos." },
-            3: { title: "A Busca pela Justiça Real", context: "O Tribunal exige segurança jurídica, mas o povo clama por Justiça. Seu desafio é equilibrar a estabilidade das instituições com a equidade." },
-            4: { title: "Poder, Liberdade e Resistência", context: "O Estado é um gigante que pode proteger ou esmagar. Como consultor(a), você é o limite que garante a liberdade jurídica." },
-            5: { title: "Direito, Sanção e Coação", context: "A norma que não se impõe é letra morta. Entramos no campo da coação legítima e organizada necessária para a existência do Direito." }
-        };
+async function api(action, data) {
+  if (!BACKEND_URL) throw new Error("BACKEND_URL não configurada no index.html");
+  const res = await fetch(BACKEND_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(Object.assign({ action }, data || {})),
+    redirect: "follow"
+  });
+  const out = await res.json();
+  if (!out.ok) throw new Error(out.error || "Erro no servidor");
+  return out;
+}
 
-        const RAW_SCENARIOS = [
-            // CAPÍTULO 1
-            { ch: 1, title: "Conceito de Direito e Ordenamento Jurídico", text: "Após conflitos sociais sucessivos, grupos políticos passaram a defender que o Direito apenas limita impulsos naturais humanos e que a sociedade deveria organizar-se pela lógica espontânea da força e da sobrevivência. O Tribunal solicita parecer filosófico.", options: [
-                { t: "O Direito existe para transformar impulsos naturais em convivência social orientada por valores éticos.", s: 1, i: {leg: 100, seg: 90, lib: 80}, f: "A alternativa compreende corretamente o Direito como objeto cultural destinado à organização racional da convivência humana." },
-                { t: "A prevalência natural dos mais fortes constitui fundamento legítimo da ordem jurídica.", s: 0, i: {leg: 20, seg: 30, lib: 10}, f: "A resposta aproxima o Direito de relações puramente biológicas de dominação, afastando sua dimensão ética." },
-                { t: "O Direito deve apenas registrar práticas sociais já existentes, sem transformá-las.", s: 0, i: {leg: 40, seg: 70, lib: 40}, f: "A alternativa reconhece a influência social sobre o Direito, mas reduz excessivamente sua função normativa." },
-                { t: "Toda forma de regulamentação jurídica compromete necessariamente a liberdade humana.", s: 0, i: {leg: 30, seg: 20, lib: 70}, f: "A resposta ignora que a ausência de normatividade tende a ampliar arbitrariedades e instabilidade social." }
-            ]},
-            { ch: 1, title: "Legitimidade e Cultura", text: "O governo instituiu normas inspiradas em modelos estrangeiros sem considerar costumes locais historicamente consolidados. Em pouco tempo, cresceram resistência social e descumprimento coletivo das regras impostas.", options: [
-                { t: "A eficácia jurídica decorre exclusivamente da capacidade estatal de aplicar sanções.", s: 0, i: {leg: 20, seg: 80, lib: 10}, f: "A resposta reduz o Direito à coerção, ignorando fatores sociais de legitimidade normativa." },
-                { t: "A legitimidade do Direito também depende de diálogo com valores culturais compartilhados.", s: 1, i: {leg: 100, seg: 80, lib: 90}, f: "A alternativa reconhece adequadamente a dimensão histórica e cultural da experiência jurídica." },
-                { t: "O Direito pode promover mudanças sociais, mas não pode ignorar completamente os valores coletivos.", s: 0.8, i: {leg: 60, seg: 70, lib: 60}, f: "A resposta demonstra compreensão razoável do caráter dinâmico da ordem jurídica, mas não é a mais precisa sobre a essência cultural." },
-                { t: "A cultura popular deve ser ignorada sempre que dificultar reformas institucionais modernas.", s: 0, i: {leg: 10, seg: 50, lib: 20}, f: "A alternativa compromete a legitimidade democrática e despreza a historicidade do Direito." }
-            ]},
-            { ch: 1, title: "Validade da Norma vs. Lei da Natureza", text: "Se uma lei jurídica é violada, ela perde sua validade? Como Nader caracteriza essa situação frente às leis da natureza?", options: [
-                { t: "Sim, pois no 'Dever-Ser' a validade da norma depende do seu cumprimento absoluto por todos.", s: 0, i: {leg: 40, seg: 20, lib: 60}, f: "Incorreto. A validade da norma jurídica é independente da sua violação eventual." },
-                { t: "Não. A violação apenas aciona a sanção, pois o Direito opera no campo da liberdade e do valor.", s: 1, i: {leg: 100, seg: 100, lib: 80}, f: "Brilhante! Diferente da lei física, a norma jurídica admite ser violada sem deixar de existir." },
-                { t: "A lei jurídica, se violada, torna-se uma lei física de causa e efeito imediato.", s: 0, i: {leg: 30, seg: 90, lib: 30}, f: "A sanção não é um efeito físico mecânico, mas uma consequência jurídica prescrita." },
-                { t: "A lei jurídica perde a validade se um único indivíduo decidir não obedecê-la.", s: 0, i: {leg: 10, seg: 10, lib: 100}, f: "Isso anularia o Direito. A norma é imperativa e resiste à transgressão." }
-            ]},
-            { ch: 1, title: "Causalidade vs. Normatividade", text: "Durante audiência pública, um representante afirmou que normas jurídicas funcionam exatamente como leis físicas da natureza, operando de modo automático e inevitável, independentemente de escolhas humanas.", options: [
-                { t: "Normas jurídicas e leis naturais possuem a mesma estrutura mecânica e inevitável.", s: 0, i: {leg: 20, seg: 90, lib: 10}, f: "A resposta elimina a dimensão ética e volitiva própria do fenômeno jurídico." },
-                { t: "As normas jurídicas pertencem ao campo do dever-ser e pressupõem liberdade e valoração ética.", s: 1, i: {leg: 100, seg: 80, lib: 90}, f: "Correção cirúrgica! A alternativa distingue corretamente causalidade natural e normatividade jurídica." },
-                { t: "Embora influenciado pela realidade social, o Direito não se reduz a relações automáticas de causa e efeito.", s: 1, i: {leg: 60, seg: 70, lib: 50}, f: "A alternativa apresenta compreensão da diferença entre natureza e normatividade." },
-                { t: "A função do Direito consiste apenas em prever comportamentos humanos recorrentes.", s: 0, i: {leg: 30, seg: 80, lib: 20}, f: "A resposta aproxima o Direito de uma leitura puramente sociológica e desprovida de axiologia." }
-            ]},
-            { ch: 1, title: "Direito Natural e Positivo", text: "Durante reforma legislativa, surge debate sobre a inclusão de princípios éticos universais no texto constitucional. O Parlamento discute se o Direito deve refletir apenas vontades sociais momentâneas ou também fundamentos permanentes ligados à dignidade e à liberdade humana.", options: [
-                { t: "O Direito Natural constitui sistema absoluto e imutável de regras religiosas que impede adaptação histórica do Positivo.", s: 0, i: {leg: 50, seg: 80, lib: 10}, f: "Reconhece a ideia de permanência, mas reduz o Direito Natural a um modelo rígido e dogmático." },
-                { t: "Direito Natural e Positivo constituem ordens idênticas, inexistindo margem interpretativa ou função criadora.", s: 0, i: {leg: 40, seg: 70, lib: 20}, f: "Reconhece a aproximação, mas elimina indevidamente a dimensão histórica e técnica da atividade legislativa." },
-                { t: "Princípios como liberdade e preservação da vida dependem exclusivamente da vontade política de cada época histórica.", s: 0, i: {leg: 30, seg: 20, lib: 90}, f: "A resposta ignora o caráter universal atribuído aos princípios fundamentais do Direito Natural." },
-                { t: "A ordem jurídica deve articular realidade social e princípios universais do Direito Natural, como vida e liberdade.", s: 1, i: {leg: 100, seg: 80, lib: 90}, f: "Compreensão perfeita. O Direito Natural atua como fundamento axiológico orientador da produção normativa positiva." }
-            ]},
-            { ch: 1, title: "Segurança e Previsibilidade", text: "Um cidadão é processado por conduta moralmente reprovável, mas sem previsão legal clara de sanção. A defesa sustenta que o Direito exige previsibilidade normativa e tipificação objetiva para legitimar o exercício do poder estatal.", options: [
-                { t: "O Direito exige predeterminação formal mínima, tipificação e previsibilidade normativa das consequências.", s: 1, i: {leg: 100, seg: 100, lib: 80}, f: "A alternativa compreende corretamente a relação entre bilateralidade atributiva, certeza jurídica e predeterminação formal na teoria de Miguel Reale." },
-                { t: "A lei deve refletir os valores da sociedade para ter eficácia e cumprir seu papel adaptativo.", s: 0.5, i: {leg: 70, seg: 50, lib: 60}, f: "A coerência com os valores sociais garante a vida do Direito, mas a defesa exige foco na segurança normativa formal no caso concreto." },
-                { t: "A certeza jurídica impede qualquer atividade interpretativa do Poder Judiciário além da literalidade da norma.", s: 0, i: {leg: 40, seg: 90, lib: 10}, f: "Reconhece a importância da previsibilidade, mas reduz excessivamente a função interpretativa da jurisdição." },
-                { t: "Sistemas jurídicos baseados em costumes não possuem segurança normativa nem critérios formais de juridicidade.", s: 0, i: {leg: 20, seg: 30, lib: 30}, f: "A resposta ignora que diferentes tradições jurídicas desenvolvem mecanismos próprios de estabilidade." }
-            ]},
+function beacon(action, data) {
+  if (!BACKEND_URL) return;
+  try {
+    fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign({ action }, data || {})),
+      keepalive: true
+    }).catch(() => {});
+  } catch (e) {}
+}
 
-            // CAPÍTULO 2
-            { ch: 2, title: "Foro Íntimo vs. Exterioridade", text: "Na crise, muitos cumprem normas por receio de punição, embora discordem delas. O Tribunal pede análise sobre a relação entre Direito e Moral.", options: [
-                { t: "O Direito pode exigir comportamentos externos independente da adesão moral interna do indivíduo.", s: 1, i: {leg: 100, seg: 90, lib: 60}, f: "Excelente! Você compreendeu a coercibilidade e a distinção entre foro íntimo e comportamento exigível." },
-                { t: "Normas jurídicas somente são legítimas quando coincidem integralmente com convicções morais individuais.", s: 0, i: {leg: 30, seg: 20, lib: 100}, f: "Cuidado. Isso reduziria a autonomia do Direito diante da pluralidade moral da sociedade." },
-                { t: "Direito e Moral possuem exatamente a mesma estrutura coercitiva e mecanismos de imposição.", s: 0, i: {leg: 10, seg: 30, lib: 20}, f: "Incorreto. A alternativa ignora a diferença entre coerção estatal e adesão moral espontânea." },
-                { t: "O Direito atua prioritariamente sobre relações externas, enquanto a Moral foca na consciência.", s: 0.5, i: {leg: 70, seg: 60, lib: 60}, f: "Boa análise, embora menos profunda sobre as diferenças estruturais entre as normas de coação. Não é prioritariamente, mas sim direcionado às relações externas" }
-            ]},
-            { ch: 2, title: "Coercibilidade", text: "Políticos defendem que normas sem aplicação imediata da força não são jurídicas. Qual o parecer correto sobre a coercibilidade do Direito?", options: [
-                { t: "A coercibilidade jurídica depende necessariamente da aplicação física imediata da força estatal.", s: 0, i: {leg: 30, seg: 80, lib: 10}, f: "Não. Isso reduz o Direito à violência material, ignorando sua dimensão institucional potencial." },
-                { t: "A coercibilidade é a possibilidade legítima de imposição pela força, ainda que não usada concretamente.", s: 1, i: {leg: 100, seg: 100, lib: 80}, f: "Perfeito! A coercibilidade é um elemento potencial e estruturante da juridicidade." },
-                { t: "A existência de sanções transforma automaticamente qualquer regra moral em norma jurídica.", s: 0, i: {leg: 20, seg: 40, lib: 30}, f: "Errado. A juridicidade exige institucionalização normativa e reconhecimento pelo Estado." },
-                { t: "A força estatal é importante, mas insuficiente para explicar integralmente a experiência jurídica.", s: 0.5, i: {leg: 60, seg: 50, lib: 70}, f: "Correto em essência, mas não responde à natureza específica da coercibilidade jurídica pedida no enunciado." }
-            ]},
-            { ch: 2, title: "Ética vs. Moral", text: "Debate: Ética seria o social e Moral a reflexão. O Direito seria extensão da Moral. Qual a distinção correta segundo Bittar e Mascaro?", options: [
-                { t: "A Moral corresponde às práticas sociais vividas, enquanto a Ética realiza a reflexão crítica.", s: 1, i: {leg: 100, seg: 70, lib: 90}, f: "Exato! Você captou a distinção filosófica clássica trabalhada por Bittar e Mascaro." },
-                { t: "Ética e Moral são expressões rigorosamente idênticas, sem qualquer distinção conceitual.", s: 0, i: {leg: 40, seg: 40, lib: 40}, f: "Atenção. A resposta ignora a distinção entre a prática moral e a reflexão ética crítica." },
-                { t: "O Direito constitui simples subcategoria da Moral, sem autonomia histórica ou institucional.", s: 0, i: {leg: 20, seg: 30, lib: 20}, f: "Incorreto. Isso elimina a especificidade política e institucional do fenômeno jurídico." },
-                { t: "O Direito mantém diálogo com a Moral, mas possui estruturas próprias de normatividade e coação.", s: 1, i: {leg: 80, seg: 80, lib: 70}, f: "Correto conceitualmente, mas a primeira alternativa define melhor a relação Ética vs Moral." }
-            ]},
-            { ch: 2, title: "Ética Profissional", text: "Um jurista justifica atos abusivos alegando apenas cumprir ordens e preceitos técnicos da lei. Como a ética de Bittar avalia essa postura?", options: [
-                { t: "O exercício profissional do Direito exige responsabilidade ética pelos impactos sociais das decisões.", s: 1, i: {leg: 100, seg: 70, lib: 100}, f: "Muito bem! Bittar destaca o compromisso ético-social inafastável do operador jurídico." },
-                { t: "O jurista deve preocupar-se exclusivamente com resultados técnicos e estratégicos do sistema.", s: 0, i: {leg: 20, seg: 90, lib: 10}, f: "Péssimo. Essa visão ignora a dimensão humana e ética inerente à atuação jurídica." },
-                { t: "A responsabilidade ética existe apenas quando houver violação explícita da legislação positiva.", s: 0, i: {leg: 40, seg: 80, lib: 30}, f: "Cuidado. Isso reduz a ética profissional ao mero cumprimento formal da legalidade cega." },
-                { t: "Decisões jurídicas interferem diretamente na vida social, política e axiológica da coletividade.", s: 0.8, i: {leg: 80, seg: 60, lib: 70}, f: "Verdadeiro, mas não é a crítica filosófica direta à postura de obediência cega exigida na questão." }
-            ]},
-            { ch: 2, title: "Teoria do Mínimo Ético", text: "Empresa demite funcionário por ato imoral, mas juridicamente lícito. Qual a relação entre os campos segundo Miguel Reale?", options: [
-                { t: "A teoria do mínimo ético diz que toda regra moral relevante vira automaticamente obrigação jurídica.", s: 0.3, i: {leg: 30, seg: 60, lib: 30}, f: "Incompleto. Isso elimina indevidamente a autonomia estrutural do fenômeno jurídico." },
-                { t: "O Direito absorve a moralidade social, não havendo distinção entre ilícito jurídico e reprovação ética.", s: 0, i: {leg: 20, seg: 40, lib: 20}, f: "Errado. Reale defende que são campos distintos com estruturas de sanção diversas." },
-                { t: "Nem toda reprovação moral produz consequência jurídica, pois os campos possuem autonomia relativa.", s: 1, i: {leg: 100, seg: 80, lib: 80}, f: "Perfeito! Você compreendeu a crítica ao mínimo ético e a autonomia na teoria de Reale." },
-                { t: "A empresa pode impor qualquer dever de foro íntimo se houver previsão em regulamento interno.", s: 0.2, i: {leg: 30, seg: 60, lib: 10}, f: "Parcialmente correto, mas amplia demais o alcance do poder regulamentar sobre a esfera íntima." }
-            ]},
-            { ch: 2, title: "Função Transformadora", text: "Movimentos defendem o Direito como arma de cidadania. Qual a função transformadora destacada por Bittar e Mascaro?", options: [
-                { t: "O Direito pode atuar como instrumento de transformação social comprometido com a justiça.", s: 1, i: {leg: 100, seg: 60, lib: 100}, f: "Excelente! Você captou a função social e democrática defendida pelos autores críticos." },
-                { t: "O Direito deve limitar-se à preservação técnica da ordem vigente, sem preocupações sociais.", s: 0, i: {leg: 20, seg: 90, lib: 10}, f: "Incorreto. Isso reduz o Direito à mera manutenção formal do poder instituído." },
-                { t: "Questões éticas e sociais pertencem exclusivamente à política, não ao campo jurídico.", s: 0, i: {leg: 30, seg: 50, lib: 30}, f: "Não. A teoria contemporânea reconhece a intensa interação entre esses campos indissociáveis." },
-                { t: "A experiência jurídica envolve permanente diálogo entre normas, valores e história.", s: 1, i: {leg: 80, seg: 70, lib: 80}, f: "Correto na teoria tridimensional de Reale, mas a resposta A reflete diretamente a crítica social dos autores." }
-            ]},
+function sendEmail(payload) {
+  if (!WEB3FORMS_KEY) return;
+  try {
+    fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(Object.assign({ access_key: WEB3FORMS_KEY }, payload)),
+      keepalive: true
+    }).catch(() => {});
+  } catch (e) {}
+}
 
-            // CAPÍTULO 3
-            { ch: 3, title: "Justiça Material vs. Formal", text: "Uma decisão legal causou grave desigualdade social. O debate questiona se a conformidade à lei basta para caracterizar a verdadeira justiça.", options: [
-                { t: "A legalidade somente preserva legitimidade quando compatível com critérios materiais de justiça.", s: 1, i: {leg: 100, seg: 60, lib: 90}, f: "Excelente! Você compreendeu a tensão entre validade formal e justiça material (conteúdo)." },
-                { t: "A Justiça corresponde exclusivamente ao cumprimento literal da legislação positiva.", s: 0, i: {leg: 30, seg: 100, lib: 10}, f: "Incorreto. Isso reduz o Direito ao formalismo puro, ignorando sua dimensão axiológica e humana." },
-                { t: "A estabilidade institucional justifica limitações excepcionais à justiça social.", s: 0.2, i: {leg: 60, seg: 80, lib: 30}, f: "Atenção. Você valorizou demais a ordem conservadora em detrimento da realização do justo." },
-                { t: "A interpretação exige equilíbrio entre segurança normativa e realização da justiça.", s: 0.8, i: {leg: 80, seg: 70, lib: 80}, f: "Boa resposta. Demonstra compreensão da complexidade contemporânea, mas a letra A ataca o cerne do enunciado." }
-            ]},
-            { ch: 3, title: "Justiça Distributiva", text: "Em crise econômica, o governo debate como dividir recursos escassos entre grupos desiguais. Qual o critério da justiça distributiva?", options: [
-                { t: "A justiça distributiva exige tratar desigualmente os desiguais na medida de suas diferenças.", s: 1, i: {leg: 100, seg: 70, lib: 90}, f: "Perfeito! Você aplicou corretamente a tradição proporcional aristotélica retomada por Bittar." },
-                { t: "A igualdade jurídica exige distribuição idêntica de recursos para todos os grupos, ignorando necessidades.", s: 0, i: {leg: 40, seg: 60, lib: 40}, f: "Cuidado. Você confundiu igualdade aritmética ou formal com a verdadeira justiça material." },
-                { t: "A distribuição deve obedecer exclusivamente aos interesses econômicos imediatos do Estado.", s: 0, i: {leg: 10, seg: 80, lib: 10}, f: "Errado. A alternativa ignora a finalidade ética e garantista das políticas públicas sociais." },
-                { t: "A justiça social depende da consideração das desigualdades historicamente produzidas.", s: 0.8, i: {leg: 80, seg: 60, lib: 80}, f: "Correto, mas a máxima aristotélica exata pedida para a justiça distributiva está na alternativa A." }
-            ]},
-            { ch: 3, title: "Segurança Jurídica", text: "Mudanças jurisprudenciais contraditórias geram insegurança entre os contribuintes. O que os cidadãos podem exigir do sistema judiciário?", options: [
-                { t: "A segurança jurídica exige estabilidade interpretativa mínima e previsibilidade das normas.", s: 1, i: {leg: 100, seg: 100, lib: 80}, f: "Exato! A segurança jurídica preserva a confiança social nas instituições e permite o planejamento." },
-                { t: "A busca pela justiça autoriza alterações imprevisíveis e constantes das decisões.", s: 0, i: {leg: 30, seg: 20, lib: 70}, f: "Risco alto. Isso sacrifica a estabilidade institucional e a vida cidadã em nome de um ideal volátil." },
-                { t: "A segurança jurídica impede qualquer atualização interpretativa das normas pelo juiz.", s: 0.2, i: {leg: 40, seg: 90, lib: 10}, f: "Parcialmente correto, mas o Direito precisa de uma dinâmica mínima para evoluir socialmente." },
-                { t: "A previsibilidade jurídica possui relevância secundária diante dos interesses de arrecadação do Estado.", s: 0, i: {leg: 10, seg: 80, lib: 10}, f: "Incorreto. Isso compromete a confiança necessária à ordem democrática e beira a arbitrariedade." }
-            ]},
-            { ch: 3, title: "Dignidade Humana e Sistema Punitivo", text: "Corte de gastos em presídios impede assistência médica básica. O debate questiona os limites da pena e da dignidade humana.", options: [
-                { t: "A dignidade impede que a pena produza condições degradantes além da privação de liberdade.", s: 1, i: {leg: 100, seg: 60, lib: 100}, f: "Perfeito! A dignidade humana é o limite intransponível e ético do poder punitivo estatal." },
-                { t: "A estabilidade financeira do Estado justifica restrições aos direitos fundamentais de presos.", s: 0, i: {leg: 20, seg: 80, lib: 10}, f: "Errado. Direitos fundamentais intrínsecos à vida não podem ser subordinados a planilhas de corte econômico." },
-                { t: "O sofrimento adicional nas prisões integra legitimamente a finalidade pedagógica da pena.", s: 0, i: {leg: 10, seg: 90, lib: 0}, f: "Inaceitável. Isso viola os limites constitucionais e humanitários básicos do exercício de poder." },
-                { t: "A proteção da dignidade depende de critérios morais e não de deveres jurídicos objetivos constitucionais.", s: 0, i: {leg: 50, seg: 40, lib: 50}, f: "Atenção. Embora tenha base ética profunda, a dignidade impõe um dever jurídico impositivo e concreto." }
-            ]},
-            { ch: 3, title: "Análise Crítica", text: "Movimentos denunciam normas que preservam desigualdades históricas mesmo sendo formalmente válidas e votadas. Como a Filosofia avalia essa tensão?", options: [
-                { t: "A Filosofia do Direito admite análise crítica das normas quando produzem injustiças estruturais.", s: 1, i: {leg: 100, seg: 70, lib: 90}, f: "Muito bem! Você captou a função crítica e reflexiva inerente ao pensamento filosófico-jurídico." },
-                { t: "A validade formal da norma elimina qualquer possibilidade de crítica jurídica ou ética.", s: 0, i: {leg: 30, seg: 90, lib: 20}, f: "Visão limitada. Isso reflete um positivismo acrítico que ignora totalmente a dimensão de valor na lei." },
-                { t: "A crítica social deve considerar a estabilidade institucional e a transformação democrática progressiva.", s: 1, i: {leg: 80, seg: 80, lib: 70}, f: "Correto. É uma visão equilibrada da tensão conservação-mudança, mas menos direta que a alternativa A." },
-                { t: "Toda desigualdade social decorre exclusivamente da incapacidade individual dos sujeitos.", s: 0, i: {leg: 10, seg: 40, lib: 30}, f: "Incorreto. A resposta ignora dezenas de fatores sistêmicos e estruturais presentes na injustiça social." }
-            ]},
-            { ch: 3, title: "Justiça Equitativa (Rawls)", text: "Estado reserva vagas para estudantes vulneráveis. O debate questiona se isso viola o princípio da igualdade ou concretiza a justiça social.", options: [
-                { t: "A justiça equitativa exige compensações para ampliar oportunidades aos menos favorecidos.", s: 1, i: {leg: 100, seg: 70, lib: 100}, f: "Excelente! Você aplicou a teoria de Rawls: garantir que a igualdade não seja apenas de fachada (formal)." },
-                { t: "A verdadeira igualdade exige competição neutra, sem qualquer intervenção do Estado.", s: 0, i: {leg: 40, seg: 60, lib: 80}, f: "Cuidado. Essa visão liberal clássica ignora que a largada da corrida já contém desigualdades históricas." },
-                { t: "Políticas compensatórias violam necessariamente o mérito e a estabilidade democrática.", s: 0, i: {leg: 20, seg: 80, lib: 30}, f: "Incorreto. Isso desconsidera a função distributiva do Estado para construir uma coesão real e não fictícia." },
-                { t: "A justiça distributiva deve equilibrar igualdade de chances e a manutenção estrita da legitimidade do lucro.", s: 0.8, i: {leg: 60, seg: 70, lib: 50}, f: "Uma síntese curiosa, mas se desvia do foco principal de Rawls sobre beneficiar as classes mais vulneráveis." }
-            ]},
+const shuffle = (arr) => {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+};
+const store = {
+  get(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+};
 
-            // CAPÍTULO 4
-            { ch: 4, title: "Liberdade e Ordem (Kant)", text: "Autoridades restringem severamente manifestações para preservar a ordem do trânsito. O debate foca nos limites entre a liberdade individual e a estabilidade social. Qual a visão correta?", options: [
-                { t: "O Direito deve compatibilizar liberdades individuais para permitir convivência social legítima.", s: 1, i: {leg: 100, seg: 80, lib: 90}, f: "Excelente! Você compreendeu a concepção kantiana: limitar as vontades unicamente para viabilizar a coexistência pacífica." },
-                { t: "A liberdade individual pode ser integralmente anulada sempre que houver qualquer interesse estatal.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "Incorreto. Isso transforma o poder político em fundamento absoluto de supressão, negando o Estado de Direito." },
-                { t: "A preservação da ordem pública pode justificar restrições proporcionais às liberdades.", s: 1, i: {leg: 70, seg: 90, lib: 60}, f: "Boa análise constitucional. Você reconheceu a tensão e a proporcionalidade, mas faltou o cerne kantiano do enunciado." },
-                { t: "A liberdade jurídica depende exclusivamente da vontade subjetiva isolada de cada indivíduo na rua.", s: 0, i: {leg: 20, seg: 10, lib: 100}, f: "Cuidado. Isso ignora os limites recíprocos civilizatórios necessários à convivência social organizada." }
-            ]},
-            { ch: 4, title: "Legitimidade do Poder", text: "O governo amplia a vigilância domiciliar alegando buscar estabilidade política total. Quando o exercício do poder permanece legítimo dentro do Estado de Direito?", options: [
-                { t: "O poder jurídico somente preserva legitimidade quando orientado pela justiça e limitado por normas formais.", s: 1, i: {leg: 100, seg: 80, lib: 90}, f: "Perfeito! A força bruta deve atuar apenas como instrumento racional, ético e legalmente controlado do Direito." },
-                { t: "Todo exercício de poder estatal é legítimo apenas por decorrer intrinsecamente da autoridade do cargo governamental.", s: 0, i: {leg: 20, seg: 90, lib: 10}, f: "Errado. A resposta ignora a necessidade dos limites constitucionais, jurídicos e éticos indispensáveis à legitimidade moderna." },
-                { t: "A estabilidade política interna pode exigir expansão excepcional sem limites dos mecanismos coercitivos.", s: 0, i: {leg: 30, seg: 100, lib: 0}, f: "Atenção. Você ampliou perigosamente o alcance e a discricionariedade da coerção estatal para um modelo tirânico." },
-                { t: "O Direito tem o poder místico de transformar qualquer força bruta em poder institucional inquestionável.", s: 0, i: {leg: 40, seg: 70, lib: 30}, f: "O Direito estrutura a força, mas ele próprio é passível de questionamentos de justiça, não sendo um avalizador de barbáries legais." }
-            ]},
-            { ch: 4, title: "Força e Repressão", text: "Setores políticos reacionários defendem que apenas o aumento bruto da repressão estatal imediata garante a verdadeira paz coletiva. Como a filosofia jurídica avalia essa tese?", options: [
-                { t: "A força no Direito possui caráter meramente instrumental e sempre subordinado à realização da justiça.", s: 1, i: {leg: 100, seg: 60, lib: 90}, f: "Muito bem! O Direito não se reduz à mera violência institucional, a força é apenas a 'armadura' da justiça estrutural." },
-                { t: "O Direito corresponde essencialmente ao exercício irrestrito da força do grupo mais poderoso sobre os mais fracos.", s: 0, i: {leg: 20, seg: 80, lib: 10}, f: "Incorreto. Essa visão puramente de 'realpolitik' reduz a beleza e a função garantista do fenômeno jurídico à dominação arbitrária." },
-                { t: "A coerção estatal pode atuar legitimamente desde que limitada por critérios jurídicos objetivos e processuais.", s: 1, i: {leg: 80, seg: 90, lib: 70}, f: "Boa resposta analítica. Você reconheceu a necessidade de processo legal sobre a força." },
-                { t: "A ausência de repressão física armada imediata nas ruas elimina automaticamente a eficácia e validade do Direito civil.", s: 0, i: {leg: 30, seg: 40, lib: 40}, f: "Cuidado. Você ignorou a vasta rede de sanções premiais, patrimoniais e simbólicas que garantem a eficácia e obediência da norma." }
-            ]},
-            { ch: 4, title: "Estado de Direito vs. Absolutismo", text: "Governante baixa um decreto proibindo críticas públicas ao seu gabinete, afirmando que a soberania máxima exige obediência integral para manter a unidade. Qual a natureza dessa medida?", options: [
-                { t: "A medida retoma a lógica do Estado Absoluto, incompatível com o Estado de Direito e a essência da cidadania.", s: 1, i: {leg: 100, seg: 50, lib: 100}, f: "Exato! Você captou a ofensa à transição histórica: no Estado Democrático, o próprio poder se submete aos limites legais e aos direitos civis." },
-                { t: "A eleição e a soberania popular permitem ao governante exercer poder ilimitado sem os controles jurídicos constitucionais.", s: 0, i: {leg: 10, seg: 80, lib: 0}, f: "Errado. A soberania no Estado de Direito não confere um 'cheque em branco'; as garantias fundamentais e o parlamento não são opcionais." },
-                { t: "A supressão de críticas é uma ferramenta legítima para preservar a ordem política estatal em anos difíceis.", s: 0, i: {leg: 30, seg: 90, lib: 20}, f: "Incorreto. Isso confunde o conceito legítimo de autoridade democrática com a eliminação autoritária das sagradas liberdades de expressão." },
-                { t: "A concentração de poderes decisórios em uma única autoridade fortalece a liberdade política.", s: 0, i: {leg: 20, seg: 70, lib: 10}, f: "Atenção. Essa visão compromete o princípio da separação de poderes." }
-            ]},
-            { ch: 4, title: "Dignidade como Fim (Kant)", text: "Autoridades propõem usar acusados como 'exemplo público' para intimidar criminosos. Como a dignidade humana (Kant) avalia isso?", options: [
-                { t: "O ser humano tem valor absoluto e não pode ser tratado apenas como instrumento ou coisa de intimidação para fins coletivos.", s: 1, i: {leg: 100, seg: 40, lib: 100}, f: "Perfeito! Você aplicou o imperativo categórico da dignidade: a pessoa é um fim em si mesma, não um meio para atingir a paz." },
-                { t: "A exposição degradante do indivíduo é válida, lógica e legítima quando produz inegáveis benefícios para o governante.", s: 0, i: {leg: 20, seg: 80, lib: 10}, f: "Incorreto. Essa visão utilitarista cega viola limites humanitários inegociáveis. O Estado não pode torturar nem para salvar o governante." },
-                { t: "A proteção da dignidade humana restringe o catálogo de práticas abusivas e medievais de punição política.", s: 0.8, i: {leg: 80, seg: 70, lib: 80}, f: "Correto historicamente. Você reconheceu o papel freio do garantismo no Direito Penal, mas o enunciado pedia Kant." },
-                { t: "A dignidade humana é um valor meramente moral sem repercussões jurídicas concretas.", s: 0, i: {leg: 10, seg: 40, lib: 20}, f: "Cuidado. A dignidade não é conselho; ela é o alicerce irradiante e centro gravitacional normativo do direito constitucional contemporâneo." }
-            ]},
-            { ch: 4, title: "Vigilância Tecnológica", text: "Estado adquire tecnologias que usam algoritmos de reconhecimento de emoções nas ruas para prever comportamentos e sugerir prisões ou correções sociais preventivas. Qual o alerta jurídico na ótica de Foucault?", options: [
-                { t: "O uso disciplinar da tecnologia pode arquitetar um controle social permanente e invisível de normalização dos corpos e indivíduos.", s: 1, i: {leg: 100, seg: 90, lib: 90}, f: "Brilhante magistrada! Você captou exatamente a crítica estrutural do panoptismo digital e da microfísica do poder de normalização disciplinar." },
-                { t: "A transferência total da decisão ética para a frieza das máquinas garante uma pureza técnica infalível e neutraliza preconceitos humanos.", s: 0, i: {leg: 30, seg: 80, lib: 20}, f: "Muito perigoso. Foucault avisaria: os algoritmos foram programados por humanos em uma estrutura de poder e podem automatizar/acelerar o autoritarismo de forma asséptica." },
-                { t: "A vigilância algorítmica é incompatível com qualquer forma de organização jurídica.", s: 0, i: {leg: 10, seg: 90, lib: 0}, f: "Uma projeção irreal (minority report). O Direito existe justamente para frear, ponderar e civilizar até mesmo o abuso da prova algorítmica." },
-                { t: "O monitoramento permanente é consequência necessária da liberdade política moderna.", s: 0, i: {leg: 10, seg: 100, lib: 0}, f: "Incorreto. Foucault alertaria que isso beira os regimes totalitários puros. Reduz o cidadão vigiado em massa a uma ameaça ambulante suspeita desde que acorda." }
-            ]},
+/* ============================== APP DO ALUNO ============================== */
 
-            // CAPÍTULO 5
-            { ch: 5, title: "Coação vs. Coercibilidade", text: "Empresário transfere bens sob ameaça de um rival. Ao mesmo tempo, a Justiça penhora seus bens por dívida tributária. O Tribunal pede a distinção técnica entre as duas pressões exercidas.", options: [
-                { t: "A ameaça anula o ato por coação inválida; a penhora é a coercibilidade organizada do Estado.", s: 1, i: {leg: 100, seg: 100, lib: 80}, f: "Excelente diferenciação técnica! O vício moral ilegal (coação do rival) anula direitos, enquanto a pressão institucional do Estado os garante legalmente." },
-                { t: "Ambas as situações anulam os atos, pois toda pressão externa viola a liberdade individual.", s: 0, i: {leg: 30, seg: 40, lib: 80}, f: "Não se perca no humanismo abstrato. Você confundiu o uso ilícito da coerção mafiosa contra a ordem constitucional da execução da norma válida pela procuradoria." },
-                { t: "A penhora nas contas da empresa tem essência meramente moral, pois depende do arrependimento do devedor.", s: 0, i: {leg: 10, seg: 20, lib: 40}, f: "Incorreto e romântico. O direito de penhorar e exarcar a propriedade do Estado não liga para a consciência do sonegador, foca puramente no saldo material dele para satisfação judicial forçada." },
-                { t: "Toda coação jurídica decorre necessariamente de violência física direta contra o indivíduo.", s: 0, i: {leg: 20, seg: 60, lib: 10}, f: "Falso histórico macabro. Graças à evolução iluminista citada pelos autores, o Direito mudou o foco das punições para a privação de bens (patrimônio) e da liberdade em prisões com celas regulamentadas, não masmorras de suplício carnal." }
-            ]},
-            { ch: 5, title: "Sanção Organizada", text: "Morador sofre reprovação pública em reunião e recebe multa prevista no regulamento por mau comportamento. Qual a análise correta sobre as naturezas dessas sanções?", options: [
-                { t: "A reprovação coletiva é moral e difusa; a multa é uma sanção jurídica organizada.", s: 1, i: {leg: 100, seg: 90, lib: 80}, f: "Perfeito! Você diferenciou sanções morais espontâneas de sanções institucionalizadas." },
-                { t: "A ridicularização pública constitui sanção jurídica equivalente à multa administrativa.", s: 0, i: {leg: 20, seg: 30, lib: 40}, f: "Errado. A resposta confunde sanção moral (difusa) com sanção jurídica (organizada)." },
-                { t: "Toda sanção válida depende exclusivamente da atuação direta e imediata do Estado.", s: 0, i: {leg: 30, seg: 40, lib: 50}, f: "Incorreto. Grupos sociais (como condomínios) possuem sanções institucionais reconhecidas." },
-                { t: "A multa condominial possui natureza exclusivamente ética e não produz efeitos jurídicos.", s: 0, i: {leg: 10, seg: 20, lib: 80}, f: "Cuidado. Regulamentos internos possuem força normativa e geram obrigações jurídicas." }
-            ]},
-            { ch: 5, title: "Sanção Moral e Jurídica", text: "Indivíduo pratica conduta imoral, mas lícita. Sem punição estatal, sofre isolamento e críticas da comunidade. Como a Filosofia classifica essa reação frente à sanção jurídica?", options: [
-                { t: "As sanções morais atuam socialmente mesmo sem organização coercitiva estatal.", s: 1, i: {leg: 70, seg: 70, lib: 70}, f: "Excelente. Você compreendeu que a Moral tem força mesmo sem o aparato de força do Estado." },
-                { t: "Somente sanções estatais possuem relevância efetiva na regulação das condutas humanas.", s: 0, i: {leg: 30, seg: 40, lib: 20}, f: "Incorreto. A resposta ignora a poderosa força social das sanções éticas e morais." },
-                { t: "A reprovação coletiva pode influenciar comportamentos independente de punição formal.", s: 1, i: {leg: 100, seg: 80, lib: 80}, f: "Correto! Você reconheceu a dimensão social e a eficácia das sanções morais." },
-                { t: "Toda violação moral deve necessariamente produzir sanção jurídica estatal correspondente.", s: 0, i: {leg: 10, seg: 20, lib: 10}, f: "Atenção. Direito e Moral são campos distintos; nem tudo que é imoral é ilícito." }
-            ]},
-            { ch: 5, title: "Sanções Premiais", text: "Prefeitura dá descontos no IPTU para quem adota medidas sustentáveis, buscando incentivar condutas sem usar punições. Qual técnica jurídica está sendo aplicada?", options: [
-                { t: "Os incentivos fiscais representam sanções premiais voltadas à adesão espontânea.", s: 1, i: {leg: 100, seg: 100, lib: 90}, f: "Muito bem! Você captou a função promocional/premial do Direito contemporâneo." },
-                { t: "O benefício tributário descaracteriza a juridicidade da norma por não ser punitivo.", s: 0, i: {leg: 30, seg: 40, lib: 20}, f: "Errado. O Direito moderno usa tanto a punição quanto o prêmio para guiar condutas." },
-                { t: "Toda sanção jurídica exige ameaça de restrição patrimonial ou privação de liberdade.", s: 0, i: {leg: 20, seg: 60, lib: 10}, f: "Incorreto. Isso reduz o conceito de sanção, ignorando a técnica do incentivo." },
-                { t: "Os incentivos fiscais são econômicos e não se ligam a técnicas jurídicas de regulação.", s: 0, i: {leg: 10, seg: 30, lib: 50}, f: "Cuidado. O uso estratégico de benefícios é uma técnica jurídica de efetivação normativa." }
-            ]},
-            { ch: 5, title: "Pluralidade de Ordens", text: "Atleta é suspenso por tribunal desportivo. A defesa alega que só o Estado pode aplicar sanções válidas. Como a teoria da pluralidade das ordens jurídicas responde?", options: [
-                { t: "Somente normas produzidas diretamente pelo Estado podem gerar sanções legítimas.", s: 0, i: {leg: 20, seg: 60, lib: 20}, f: "Incorreto. Organizações sociais autônomas possuem estruturas normativas válidas." },
-                { t: "Tribunais desportivos substituem integralmente o poder jurídico estatal nas relações.", s: 0, i: {leg: 40, seg: 80, lib: 10}, f: "Cuidado. A autonomia dessas ordens não exclui a supervisão soberana do Estado." },
-                { t: "Instituições podem ter ordens normativas próprias, mas o Estado mantém a soberania final.", s: 1, i: {leg: 100, seg: 90, lib: 100}, f: "Perfeito! Você compreendeu a convivência entre ordens jurídicas e a soberania estatal." },
-                { t: "Ordens normativas não estatais possuem soberania equivalente à do Estado.", s: 0, i: {leg: 10, seg: 20, lib: 10}, f: "Errado. Autonomia institucional não se confunde com a soberania absoluta do Estado." }
-            ]},
-            { ch: 5, title: "O Papel do Estado", text: "Teorias defendem o fim do Estado em favor de estruturas sociais autogeridas. O que define a centralidade do Estado na organização jurídica contemporânea?", options: [
-                { t: "O Estado permanece central por concentrar a sanção soberana e a organização da força.", s: 1, i: {leg: 100, seg: 100, lib: 80}, f: "Excelente! O monopólio da coação organizada é a marca do Estado moderno." },
-                { t: "A eliminação completa do Estado garante automaticamente liberdade e justiça sociais.", s: 0, i: {leg: 10, seg: 10, lib: 50}, f: "Incorreto. A história mostra riscos graves na ausência de organização institucional do poder." },
-                { t: "A relação equilibrada entre Estado e sociedade é essencial ao Estado de Direito.", s: 1, i: {leg: 100, seg: 90, lib: 100}, f: "Correto! Você reconheceu a complementaridade necessária entre o público e o social." },
-                { t: "A concentração absoluta do poder estatal é a única condição para proteger as liberdades.", s: 0, i: {leg: 20, seg: 60, lib: 10}, f: "Atenção. O poder absoluto costuma sufocar, em vez de proteger, as garantias democráticas." }
-            ]}
-        ];
+function App() {
+  const isAdmin = new URLSearchParams(location.search).has("admin");
+  if (isAdmin) return <Admin />;
+  if (!BACKEND_URL) return <SetupNeeded />;
+  return <Student />;
+}
 
-        const shuffle = (array) => {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex != 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        };
+function SetupNeeded() {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="glass p-10 rounded-3xl max-w-xl border-t-4 border-yellow-500">
+        <h1 className="text-2xl font-black mb-4">Configuração pendente</h1>
+        <p className="text-slate-300 text-sm leading-relaxed">
+          Abra o arquivo <span className="mono text-cyan-400">index.html</span> e preencha
+          <span className="mono text-cyan-400"> BACKEND_URL</span> e
+          <span className="mono text-cyan-400"> GOOGLE_CLIENT_ID</span>. O passo a passo está no
+          arquivo <span className="mono text-cyan-400">LEIA-ME.md</span>.
+        </p>
+      </div>
+    </div>
+  );
+}
 
-        function App() {
-            const [gameState, setGameState] = useState('intro-summary');
-            const [introTimer, setIntroTimer] = useState(0);
-            const [user, setUser] = useState({ name: '', class: '' });
-            const [scenarios, setScenarios] = useState([]);
-            const [currentIdx, setCurrentIdx] = useState(0);
-            const [score, setScore] = useState(0);
-            const [metrics, setMetrics] = useState({ leg: 50, seg: 50, lib: 50 });
-            const [feedback, setFeedback] = useState(null);
-            const [timer, setTimer] = useState(60);
-            const [chapterPopup, setChapterPopup] = useState(null);
-            
-            const hasSent = useRef(false);
-            const stateRef = useRef({ score, metrics, user, gameState });
+function Student() {
+  const [screen, setScreen] = useState("login");      // login|choose|summary|rules|playing|blocked|end|sending
+  const [auth, setAuth] = useState(store.get("auth"));
+  const [error, setError] = useState("");
+  const [activities, setActivities] = useState([]);
+  const [activity, setActivity] = useState(null);
+  const [turma, setTurma] = useState("");
+  const [code, setCode] = useState("");
 
-            useEffect(() => { 
-                stateRef.current = { score, metrics, user, gameState }; 
-            }, [score, metrics, user, gameState]);
+  const [order, setOrder] = useState([]);             // perguntas embaralhadas
+  const [idx, setIdx] = useState(0);
+  const [score, setScore] = useState(0);
+  const [bars, setBars] = useState({});
+  const [answers, setAnswers] = useState([]);
+  const [feedback, setFeedback] = useState(null);
+  const [timer, setTimer] = useState(60);
+  const [chapterPopup, setChapterPopup] = useState(null);
+  const [blockedMsg, setBlockedMsg] = useState("");
+  const [grade, setGrade] = useState(null);
+  const [introTimer, setIntroTimer] = useState(0);
 
-            useEffect(() => {
-                const sendEmergencyData = () => {
-                    if (hasSent.current || stateRef.current.gameState !== 'playing' || !stateRef.current.user.name) return;
-                    
-                    const finalGrade = (stateRef.current.score / 30 * 5).toFixed(1);
-                    const payload = {
-                        access_key: "8ebd68a7-0287-41da-83e8-72aa7fa521b8",
-                        estudante: stateRef.current.user.name + " (FECHOU ABA/SAIU)",
-                        turma: stateRef.current.user.class,
-                        nota_final: finalGrade,
-                        status: "Interrompido",
-                        legitimidade: stateRef.current.metrics.leg.toFixed(0) + "%",
-                        seguranca: stateRef.current.metrics.seg.toFixed(0) + "%",
-                        liberdade: stateRef.current.metrics.lib.toFixed(0) + "%"
-                    };
+  const ref = useRef({});
+  useEffect(() => { ref.current = { screen, auth, activity, idx, score, bars, answers, turma }; });
 
-                    fetch(`https://api.web3forms.com/submit`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify(payload),
-                        keepalive: true
-                    }).catch(console.error);
+  useEffect(() => { if (auth) store.set("auth", auth); }, [auth]);
 
-                    hasSent.current = true;
-                };
+  /* ---- lista de atividades ---- */
+  useEffect(() => {
+    if (!auth) return;
+    api("activities").then((r) => setActivities(r.activities)).catch((e) => setError(e.message));
+    if (screen === "login") setScreen("choose");
+  }, [auth]);
 
-                window.addEventListener('pagehide', sendEmergencyData);
-                window.addEventListener('visibilitychange', () => {
-                    if (document.visibilityState === 'hidden') sendEmergencyData();
-                });
+  /* ---- botão Google ---- */
+  useEffect(() => {
+    if (auth || screen !== "login" || !GOOGLE_CLIENT_ID) return;
+    let tries = 0;
+    const t = setInterval(() => {
+      if (window.google && window.google.accounts && document.getElementById("gbtn")) {
+        clearInterval(t);
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          hd: ALLOWED_DOMAIN || undefined,
+          callback: async (resp) => {
+            try {
+              const r = await api("loginGoogle", { credential: resp.credential });
+              setError("");
+              setAuth({ token: r.token, email: r.email, nome: r.nome });
+            } catch (e) { setError(e.message); }
+          }
+        });
+        window.google.accounts.id.renderButton(document.getElementById("gbtn"), {
+          theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
+        });
+      } else if (++tries > 60) clearInterval(t);
+    }, 200);
+    return () => clearInterval(t);
+  }, [auth, screen]);
 
-                return () => {
-                    window.removeEventListener('pagehide', sendEmergencyData);
-                };
-            }, []);
-
-            useEffect(() => {
-                let interval;
-                if (gameState === 'intro-summary' || gameState === 'intro-rules') {
-                    setIntroTimer(0);
-                    interval = setInterval(() => setIntroTimer(v => v + 1), 1000);
-                }
-                return () => clearInterval(interval);
-            }, [gameState]);
-
-            const initScenarios = () => {
-                let finalSet = [];
-                for (let c = 1; c <= 5; c++) {
-                    let chapterQuestions = RAW_SCENARIOS.filter(s => s.ch === c);
-                    shuffle(chapterQuestions);
-                    chapterQuestions = chapterQuestions.map(q => ({
-                        ...q,
-                        options: shuffle([...q.options])
-                    }));
-                    finalSet = [...finalSet, ...chapterQuestions];
-                }
-                setScenarios(finalSet);
-                setGameState('playing');
-                setChapterPopup(1);
-            };
-
-            useEffect(() => {
-                if (gameState === 'playing' && !feedback && !chapterPopup) {
-                    if (timer <= 0) { handleSelection(0, {leg:40, seg:40, lib:40}, "O tempo esgotou!"); return; }
-                    const t = setInterval(() => setTimer(v => v - 1), 1000);
-                    return () => clearInterval(t);
-                }
-            }, [gameState, timer, feedback, chapterPopup]);
-
-            const handleSelection = (points, impacts, feedbackText) => {
-                const newScore = score + points;
-                const newMetrics = {
-                    leg: Math.min(100, Math.max(0, metrics.leg + (impacts.leg - 50) / 4)),
-                    seg: Math.min(100, Math.max(0, metrics.seg + (impacts.seg - 50) / 4)),
-                    lib: Math.min(100, Math.max(0, metrics.lib + (impacts.lib - 50) / 4)),
-                };
-                setScore(newScore);
-                setMetrics(newMetrics);
-                setFeedback(feedbackText);
-                setTimeout(() => {
-                    setFeedback(null);
-                    setTimer(60);
-                    if (currentIdx < scenarios.length - 1) {
-                        const nextIdx = currentIdx + 1;
-                        if (scenarios[nextIdx].ch !== scenarios[currentIdx].ch) setChapterPopup(scenarios[nextIdx].ch);
-                        setCurrentIdx(nextIdx);
-                    } else { finishGame(newScore, newMetrics); }
-                }, 4000);
-            };
-
-            const finishGame = async (fScore, fMetrics, status = "Concluído") => {
-                // Se os dados de emergência já foram enviados (ex: aluno trocou de aba
-                // durante o feedback da última questão), ainda assim avança para a tela
-                // final em vez de travar o jogo.
-                if (hasSent.current) {
-                    setGameState('end');
-                    return;
-                }
-                // Marca como enviado ANTES do fetch para evitar race condition
-                hasSent.current = true;
-                setGameState('sending');
-                const finalGrade = (fScore / 30 * 5).toFixed(1);
-                try {
-                    await fetch(`https://api.web3forms.com/submit`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify({
-                            access_key: "8ebd68a7-0287-41da-83e8-72aa7fa521b8",
-                            estudante: user.name,
-                            turma: user.class,
-                            nota_final: finalGrade,
-                            status: status,
-                            legitimidade: fMetrics.leg.toFixed(0) + "%",
-                            seguranca: fMetrics.seg.toFixed(0) + "%",
-                            liberdade: fMetrics.lib.toFixed(0) + "%"
-                        })
-                    });
-                } catch (e) { console.error(e); }
-                setGameState('end');
-            };
-
-            if (gameState === 'intro-summary') return (
-                <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
-                    <div className="glass p-10 rounded-[40px] max-w-2xl w-full border-t-4 border-cyan-500 animate-fade text-center">
-                        <h1 className="text-3xl font-black mb-6 text-white uppercase tracking-tighter">Resumo da Missão</h1>
-                        <p className="text-lg text-slate-300 leading-relaxed mb-10 font-light">
-                            Bem-vindo ao Simulador de Dilemas Jurídicos. Neste desafio, você é um(a) <strong>consultor(a) jurídico</strong> diante de situações reais e dilemas filosóficos que moldam a nossa sociedade. Ao longo de 5 capítulos, você enfrentará crises políticas, conflitos éticos e decisões judiciais complexas. Sua missão é aplicar o que foi estudado para encontrar a resposta que melhor equilibra a técnica jurídica, a justiça e a dignidade humana. Cada escolha define o peso da sua balança. Você está pronto para sustentar o Direito?
-                        </p>
-                        {introTimer >= 3 ? (
-                            <button onClick={() => setGameState('intro-rules')} className="bg-cyan-600 hover:bg-cyan-500 px-12 py-5 rounded-2xl font-black text-sm tracking-widest shadow-xl transition-all">AVANÇAR</button>
-                        ) : (
-                            <div className="text-cyan-500 mono text-xs animate-pulse">AGUARDE... {3 - introTimer}s</div>
-                        )}
-                    </div>
-                </div>
-            );
-
-            if (gameState === 'intro-rules') return (
-                <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
-                    <div className="glass p-10 rounded-[40px] max-w-3xl w-full border-t-4 border-yellow-500 animate-fade overflow-y-auto max-h-[90vh]">
-                        <h2 className="text-2xl font-black mb-6 text-white uppercase text-center">Regras do Jogo</h2>
-                        <ul className="text-sm text-slate-300 space-y-4 font-light list-disc pl-6 mb-10">
-                            <li>Antes de começar, insira seu nome completo e turma. Sem isso, sua participação não poderá ser computada.</li>
-                            <li>Você terá apenas uma tentativa. Caso o sistema registre mais de um acesso com o mesmo nome, será validada apenas a primeira pontuação.</li>
-                            <li>Separe pelo menos 30 minutos para a realização da atividade.</li>                            
-                            <li>O jogo percorre os temas da 2ª etapa (Conceito de Direito, Moral, Ética, Justiça, Segurança, Liberdade, Poder e Sanção).</li>
-                            <li>Você tem exatamente 60 segundos para responder a cada pergunta.</li>
-                            <li>Se o tempo acabar, a pergunta ficará em branco (zero pontos) e o jogo passará automaticamente para a próxima.</li>
-                            <li>Certifique-se de estar em local estável. Quedas de sinal podem prejudicar seu tempo.</li>
-                            <li>A atividade só é considerada "concluída" quando você chegar ao final do último capítulo.</li>
-                            <li>Se você fechar o navegador ou desistir no meio, sua nota será proporcional ao seu desempenho até aquele momento.</li>
-                            <li>Leia as justificativas (feedbacks) após cada resposta! Elas ajudam a fixar o conteúdo.</li>
-                        </ul>
-                        <div className="text-center">
-                            {introTimer >= 10 ? (
-                                <button onClick={() => setGameState('registration')} className="bg-yellow-600 hover:bg-yellow-500 px-12 py-5 rounded-2xl font-black text-sm tracking-widest shadow-xl transition-all">ENTENDI AS REGRAS</button>
-                            ) : (
-                                <div className="text-yellow-500 mono text-xs animate-pulse">LEIA ATENTAMENTE... {10 - introTimer}s</div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            );
-
-            if (gameState === 'registration') return (
-                <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
-                    <div className="glass p-12 rounded-[40px] max-w-md w-full shadow-2xl text-center border-t-4 border-cyan-500 animate-fade">
-                        <div className="w-20 h-20 bg-cyan-900/30 rounded-full mx-auto mb-6 flex items-center justify-center border-2 border-cyan-500">
-                            <span className="text-3xl text-cyan-400">⚖️</span>
-                        </div>
-                        <h1 className="text-2xl font-black mb-8 tracking-tighter text-white uppercase">Identificação do(a) Consultor(a) Jurídico</h1>
-                        <div className="space-y-3">
-                            <input placeholder="NOME COMPLETO" className="w-full bg-black/40 p-4 rounded-2xl border border-white/10 outline-none focus:border-cyan-500 text-sm uppercase mono" onChange={e=>setUser({...user, name: e.target.value})} />
-                            <input placeholder="TURMA" className="w-full bg-black/40 p-4 rounded-2xl border border-white/10 outline-none focus:border-cyan-500 text-sm uppercase mono" onChange={e=>setUser({...user, class: e.target.value})} />
-                            <button onClick={()=>user.name && user.class && initScenarios()} className="w-full bg-cyan-600 hover:bg-cyan-500 p-5 rounded-2xl font-bold text-sm tracking-widest shadow-xl transition-all">INICIAR CONSULTORIA</button>
-                        </div>
-                    </div>
-                </div>
-            );
-
-            if (gameState === 'sending') return (
-                <div className="h-screen flex items-center justify-center flex-col gap-6 bg-slate-950">
-                    <div className="w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full animate-spin"></div>
-                    <div className="mono text-cyan-400 text-xs tracking-[0.4em] animate-pulse">PROTOCOLANDO RESULTADOS...</div>
-                </div>
-            );
-
-            if (gameState === 'end') return (
-                <div className="min-h-screen flex items-center justify-center p-6 bg-slate-950">
-                    <div className="glass p-12 rounded-[50px] max-w-xl text-center border-t-8 border-green-500 animate-fade">
-                        <h2 className="text-4xl font-black mb-6 text-white tracking-tighter uppercase">Laudo Final</h2>
-                        <div className="grid grid-cols-3 gap-3 mb-8">
-                            <StatCard label="Legitimidade" val={metrics.leg} color="text-blue-400" />
-                            <StatCard label="Segurança" val={metrics.seg} color="text-yellow-400" />
-                            <StatCard label="Liberdade" val={metrics.lib} color="text-green-400" />
-                        </div>
-                        <div className="p-10 bg-cyan-500/10 rounded-[40px] border border-cyan-500/30">
-                            <div className="text-[10px] text-cyan-500 uppercase font-black tracking-widest mb-2">Nota Final</div>
-                            <div className="text-8xl font-black text-white">{(score / 30 * 5).toFixed(1)}<span className="text-2xl opacity-20">/5.0</span></div>
-                        </div>
-                        <p className="mt-8 text-[10px] text-slate-500 mono uppercase tracking-widest">Consultor(a) {user.name} - Turma {user.class}</p>
-                    </div>
-                </div>
-            );
-
-            return (
-                <div className="min-h-screen p-4 md:p-8 flex flex-col max-w-6xl mx-auto relative">
-                    {chapterPopup && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl">
-                            <div className="glass p-10 rounded-[45px] max-w-2xl w-full border-b-4 border-cyan-500 animate-fade text-center">
-                                <span className="text-cyan-500 mono text-[10px] font-black tracking-widest uppercase mb-4 block">Capítulo {chapterPopup}</span>
-                                <h2 className="text-3xl font-black text-white mb-6 uppercase">{CHAPTER_INTRO[chapterPopup].title}</h2>
-                                <p className="text-lg text-slate-300 leading-relaxed mb-10 italic">"{CHAPTER_INTRO[chapterPopup].context}"</p>
-                                <button onClick={() => setChapterPopup(null)} className="bg-white text-black px-10 py-5 rounded-2xl font-black text-sm tracking-widest hover:bg-cyan-400 transition-all uppercase">Acessar Gabinete</button>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="grid grid-cols-3 gap-3 mb-8">
-                        <MetricBar label="Legitimidade" val={metrics.leg} color="bg-blue-500" />
-                        <MetricBar label="Segurança" val={metrics.seg} color="bg-yellow-500" />
-                        <MetricBar label="Liberdade" val={metrics.lib} color="bg-green-500" />
-                    </div>
-
-                    {scenarios[currentIdx] && (
-                        <div className="flex-1 grid lg:grid-cols-12 gap-8 items-stretch">
-                            <div className="glass p-8 md:p-12 rounded-[40px] lg:col-span-8 flex flex-col shadow-2xl relative overflow-hidden">
-                                <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6">
-                                    <div>
-                                        <span className="bg-cyan-500 text-black text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest mr-2">Capítulo {scenarios[currentIdx].ch}</span>
-                                        <span className="text-white/40 text-[9px] uppercase mono">Dilema {currentIdx + 1}/{scenarios.length}</span>
-                                        <h3 className="text-xl font-black text-white mt-2 tracking-tight uppercase italic">{scenarios[currentIdx].title}</h3>
-                                    </div>
-                                    <div className={`text-4xl font-black mono ${timer < 10 ? 'text-red-500 animate-pulse' : 'text-slate-800'}`}>{timer}s</div>
-                                </div>
-                                <p className="text-lg text-slate-300 leading-relaxed mb-12 font-light">{scenarios[currentIdx].text}</p>
-                                <div className="grid gap-3 mt-auto">
-                                    {scenarios[currentIdx].options.map((opt, i) => (
-                                        <button 
-                                            key={`${currentIdx}-${i}`} 
-                                            disabled={!!feedback || !!chapterPopup} 
-                                            onClick={(e) => { e.currentTarget.blur(); handleSelection(opt.s, opt.i, opt.f); }}
-                                            className="text-left p-5 rounded-2xl border border-white/10 bg-white/5 hover:bg-cyan-500/10 hover:border-cyan-500 transition-all group flex items-center disabled:opacity-50">
-                                            <span className="w-10 h-10 rounded-xl bg-black flex items-center justify-center mr-6 text-cyan-500 font-black group-hover:bg-cyan-500 group-hover:text-white transition-all">{String.fromCharCode(65+i)}</span>
-                                            <span className="flex-1 text-sm font-bold text-slate-200">{opt.t}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="lg:col-span-4 flex flex-col items-center justify-center gap-6">
-                                <div className="w-full glass p-6 rounded-[35px] border-l-4 border-cyan-500">
-                                    <p className="text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest">Gabinete de Consultoria</p>
-                                    <p className="text-sm font-bold text-white uppercase truncate">{user.name}</p>
-                                    <div className="mt-4 h-1 bg-white/10 rounded-full overflow-hidden">
-                                        <div className="h-full bg-cyan-500 rounded-full transition-all" style={{width: `${(currentIdx/30)*100}%`}}></div>
-                                    </div>
-                                    <button 
-                                        onClick={() => confirm("Deseja emitir o laudo parcial agora e encerrar?") && finishGame(score, metrics, "Desistência")}
-                                        className="mt-6 w-full py-2 rounded-xl text-[10px] font-black tracking-widest border border-red-500/30 text-red-500 hover:bg-red-500 hover:text-white transition-all uppercase"
-                                    >
-                                        Desistir / Sair
-                                    </button>
-                                </div>
-                                <div className="flex flex-col items-center min-h-[300px] justify-end">
-                                    {feedback && <div className="speech-bubble mb-6 animate-fade">{feedback}</div>}
-                                    <div className="relative">
-                                        <img src={PROFESSORA_IMAGE} className="prof-avatar shadow-[0_0_40px_rgba(6,182,212,0.3)]" />
-                                        <div className="absolute bottom-0 right-0 w-6 h-6 bg-green-500 border-4 border-slate-900 rounded-full"></div>
-                                    </div>
-                                    <p className="mt-4 text-[10px] font-black text-cyan-500 uppercase tracking-[0.3em]">Prof. Siomara</p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
+  /* ---- detecção de saída da tela ---- */
+  const exitLock = useRef(0);
+  useEffect(() => {
+    const onExit = async () => {
+      const s = ref.current;
+      if (s.screen !== "playing" || !s.activity || !s.auth) return;
+      const nowTs = Date.now();
+      if (nowTs - exitLock.current < 1500) return;
+      exitLock.current = nowTs;
+      beacon("reportExit", { token: s.auth.token, activityId: s.activity.id });
+      try {
+        const r = await api("reportExit", { token: s.auth.token, activityId: s.activity.id });
+        if (r.blocked) {
+          setBlockedMsg(r.motivo || "Você saiu da tela durante a atividade.");
+          setScreen("blocked");
+          sendEmail({
+            estudante: s.auth.nome + " (BLOQUEADO)", turma: s.turma,
+            atividade: s.activity.title, status: "Bloqueado", motivo: r.motivo || "Saiu da tela"
+          });
         }
+      } catch (e) {}
+    };
+    const onVis = () => { if (document.visibilityState === "hidden") onExit(); };
+    window.addEventListener("visibilitychange", onVis);
+    document.addEventListener("visibilitychange", onVis);
+    window.addEventListener("blur", onExit);
+    window.addEventListener("pagehide", onExit);
+    return () => {
+      window.removeEventListener("visibilitychange", onVis);
+      document.removeEventListener("visibilitychange", onVis);
+      window.removeEventListener("blur", onExit);
+      window.removeEventListener("pagehide", onExit);
+    };
+  }, []);
 
-        function MetricBar({ label, val, color }) {
-            return (
-                <div className="glass p-5 rounded-[25px]">
-                    <div className="flex justify-between text-[9px] uppercase font-black tracking-widest mb-3 opacity-50">
-                        <span>{label}</span>
-                        <span className="mono">{val.toFixed(0)}%</span>
-                    </div>
-                    <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                        <div className={`h-full ${color} bar-transition`} style={{ width: `${val}%` }}></div>
-                    </div>
+  /* ---- cronômetros ---- */
+  useEffect(() => {
+    if (screen !== "summary" && screen !== "rules") return;
+    setIntroTimer(0);
+    const t = setInterval(() => setIntroTimer((v) => v + 1), 1000);
+    return () => clearInterval(t);
+  }, [screen]);
+
+  useEffect(() => {
+    if (screen !== "playing" || feedback || chapterPopup) return;
+    if (timer <= 0) { pick({ s: 0, i: {}, f: "O tempo esgotou!" }); return; }
+    const t = setInterval(() => setTimer((v) => v - 1), 1000);
+    return () => clearInterval(t);
+  }, [screen, timer, feedback, chapterPopup]);
+
+  /* ---- entrar na atividade ---- */
+  const enter = async (act) => {
+    setError("");
+    try {
+      const r = await api("start", { token: auth.token, activityId: act.id, code, turma });
+      if (r.blocked) {
+        setActivity(r.activity); setBlockedMsg(r.motivo || ""); setScreen("blocked"); return;
+      }
+      const a = r.activity;
+      setActivity(a);
+      setTurma(r.aluno.turma || turma);
+      const chapters = [...new Set(a.questions.map((q) => q.ch))].sort((x, y) => x - y);
+      let list = [];
+      chapters.forEach((c) => {
+        shuffle(a.questions.filter((q) => q.ch === c)).forEach((q) =>
+          list.push(Object.assign({}, q, { options: shuffle(q.options) }))
+        );
+      });
+      setOrder(list);
+      setIdx(r.progress.idx || 0);
+      setScore(r.progress.score || 0);
+      setBars(r.progress.bars || {});
+      setAnswers(r.progress.answers || []);
+      setTimer(Number(a.secondsPerQuestion) || 60);
+      if ((r.progress.idx || 0) > 0) { setScreen("playing"); setChapterPopup(list[r.progress.idx] ? list[r.progress.idx].ch : null); }
+      else setScreen("summary");
+    } catch (e) { setError(e.message); }
+  };
+
+  const startGame = () => {
+    setChapterPopup(order[0] ? order[0].ch : null);
+    setScreen("playing");
+  };
+
+  /* ---- responder ---- */
+  const pick = (opt) => {
+    const newScore = score + (Number(opt.s) || 0);
+    const newBars = Object.assign({}, bars);
+    (activity.bars || []).forEach((b) => {
+      const impact = opt.i && opt.i[b.key] !== undefined ? Number(opt.i[b.key]) : 50;
+      newBars[b.key] = Math.min(100, Math.max(0, (newBars[b.key] === undefined ? 50 : newBars[b.key]) + (impact - 50) / 4));
+    });
+    const newAnswers = answers.concat([{ q: order[idx] ? order[idx].id : idx, s: Number(opt.s) || 0 }]);
+    setScore(newScore); setBars(newBars); setAnswers(newAnswers); setFeedback(opt.f || "");
+
+    const nextIdx = idx + 1;
+    api("answer", {
+      token: auth.token, activityId: activity.id, idx: nextIdx, score: newScore,
+      bars: newBars, answers: newAnswers
+    }).then((r) => {
+      if (r.blocked) { setBlockedMsg(r.motivo || ""); setScreen("blocked"); }
+    }).catch(() => {});
+
+    setTimeout(() => {
+      setFeedback(null);
+      setTimer(Number(activity.secondsPerQuestion) || 60);
+      if (nextIdx < order.length) {
+        if (order[nextIdx].ch !== order[idx].ch) setChapterPopup(order[nextIdx].ch);
+        setIdx(nextIdx);
+      } else finish(newScore, newBars, newAnswers);
+    }, 4000);
+  };
+
+  const finish = async (fScore, fBars, fAnswers) => {
+    setScreen("sending");
+    try {
+      const r = await api("finish", { token: auth.token, activityId: activity.id, score: fScore, bars: fBars, answers: fAnswers });
+      setGrade(r.nota);
+      sendEmail({
+        estudante: auth.nome, email: auth.email, turma,
+        atividade: activity.title, nota_final: r.nota, status: "Concluído",
+        barras: (activity.bars || []).map((b) => b.label + ": " + Math.round(fBars[b.key] || 0) + "%").join(" | ")
+      });
+    } catch (e) { setError(e.message); }
+    setScreen("end");
+  };
+
+  /* ------------------------------ telas ------------------------------ */
+  const Wrap = ({ children, border }) => (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className={"glass p-8 sm:p-10 rounded-[32px] max-w-2xl w-full animate-fade border-t-4 " + (border || "border-cyan-500")}>
+        {children}
+      </div>
+    </div>
+  );
+
+  if (screen === "login") return (
+    <Wrap>
+      <h1 className="text-3xl font-black uppercase tracking-tighter mb-3 text-center">Atividades</h1>
+      <p className="text-slate-400 text-sm text-center mb-8">
+        Entre com seu e-mail institucional {ALLOWED_DOMAIN ? "(@" + ALLOWED_DOMAIN + ")" : ""} para começar.
+      </p>
+      <div className="flex justify-center mb-6"><div id="gbtn"></div></div>
+      {!GOOGLE_CLIENT_ID && <p className="text-center text-xs text-yellow-500 mb-6">GOOGLE_CLIENT_ID não configurado.</p>}
+      <details className="text-xs text-slate-400">
+        <summary className="cursor-pointer mono">Não consegui entrar com o Google</summary>
+        <div className="mt-4 space-y-3">
+          <p>Peça à professora um <strong>código de liberação</strong> e digite abaixo.</p>
+          <input className="inp" placeholder="CÓDIGO DE LIBERAÇÃO" value={code} onChange={(e) => setCode(e.target.value)} />
+          <button className="btn bg-slate-700 hover:bg-slate-600 w-full" onClick={async () => {
+            try {
+              const r = await api("loginManual", { code });
+              setError(""); setTurma(r.turma || ""); setCode("");
+              setAuth({ token: r.token, email: r.email, nome: r.nome });
+            } catch (e) { setError(e.message); }
+          }}>ENTRAR COM CÓDIGO</button>
+        </div>
+      </details>
+      {error && <p className="mt-6 text-center text-red-400 text-sm">{error}</p>}
+    </Wrap>
+  );
+
+  if (screen === "choose") return (
+    <Wrap>
+      <p className="text-xs mono text-cyan-400 mb-1">Olá, {auth.nome}</p>
+      <h1 className="text-2xl font-black uppercase mb-6">Escolha a atividade</h1>
+      <input className="inp mb-3" placeholder="Sua turma" value={turma} onChange={(e) => setTurma(e.target.value)} />
+      <input className="inp mb-6" placeholder="Código da atividade (se houver)" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} />
+      <div className="space-y-3">
+        {activities.length === 0 && <p className="text-slate-500 text-sm">Nenhuma atividade disponível no momento.</p>}
+        {activities.map((a) => (
+          <button key={a.id} onClick={() => turma.trim() ? enter(a) : setError("Informe sua turma.")}
+            className="w-full text-left glass hover:border-cyan-500 p-5 rounded-2xl transition-all">
+            <div className="font-black">{a.title}</div>
+            {a.subtitle && <div className="text-xs text-slate-400 mt-1">{a.subtitle}</div>}
+          </button>
+        ))}
+      </div>
+      {error && <p className="mt-6 text-red-400 text-sm">{error}</p>}
+      <button className="mt-8 text-xs mono text-slate-500 hover:text-slate-300" onClick={() => { store.del("auth"); setAuth(null); setScreen("login"); }}>SAIR</button>
+    </Wrap>
+  );
+
+  if (screen === "blocked") return (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="glass p-10 rounded-[32px] max-w-xl w-full border-t-4 border-red-600 text-center animate-fade">
+        <div className="text-6xl mb-4">⛔</div>
+        <h1 className="text-2xl font-black uppercase text-red-400 mb-4">Acesso bloqueado</h1>
+        <p className="text-slate-300 text-sm leading-relaxed mb-6">
+          Você saiu da tela durante a atividade, e por isso seu acesso foi bloqueado.
+          <br /><strong>Procure a professora / administrador para liberar o seu acesso.</strong>
+        </p>
+        {blockedMsg && <p className="mono text-xs text-slate-500 mb-6">{blockedMsg}</p>}
+        <p className="mono text-xs text-slate-500">{auth && auth.nome} — {turma}</p>
+        <button className="btn bg-slate-700 hover:bg-slate-600 mt-8" onClick={() => location.reload()}>TENTAR NOVAMENTE</button>
+      </div>
+    </div>
+  );
+
+  if (screen === "summary") return (
+    <Wrap>
+      <h1 className="text-3xl font-black mb-6 uppercase tracking-tighter text-center">{activity.title}</h1>
+      <p className="text-base text-slate-300 leading-relaxed mb-10 font-light text-center">{activity.summary}</p>
+      <div className="text-center">
+        {introTimer >= 3
+          ? <button onClick={() => setScreen("rules")} className="btn bg-cyan-600 hover:bg-cyan-500 px-12 py-4">AVANÇAR</button>
+          : <div className="text-cyan-500 mono text-xs animate-pulse">AGUARDE... {3 - introTimer}s</div>}
+      </div>
+    </Wrap>
+  );
+
+  if (screen === "rules") return (
+    <Wrap border="border-yellow-500">
+      <h2 className="text-2xl font-black mb-6 uppercase text-center">Regras do jogo</h2>
+      <ul className="text-sm text-slate-300 space-y-3 font-light list-disc pl-6 mb-10">
+        {(activity.rules || []).map((r, i) => <li key={i}>{r}</li>)}
+      </ul>
+      <div className="text-center">
+        {introTimer >= 3
+          ? <button onClick={startGame} className="btn bg-yellow-600 hover:bg-yellow-500 px-12 py-4">COMEÇAR</button>
+          : <div className="text-yellow-500 mono text-xs animate-pulse">AGUARDE... {3 - introTimer}s</div>}
+      </div>
+    </Wrap>
+  );
+
+  if (screen === "sending") return (
+    <div className="min-h-screen flex items-center justify-center"><p className="mono text-cyan-400 animate-pulse">ENVIANDO RESULTADO...</p></div>
+  );
+
+  if (screen === "end") return (
+    <Wrap border="border-green-500">
+      <div className="text-center">
+        <h1 className="text-2xl font-black uppercase mb-2">Atividade concluída</h1>
+        <p className="text-slate-400 text-sm mb-8">{auth.nome} — {turma}</p>
+        <div className="text-7xl font-black text-green-400 mb-2">{grade}</div>
+        <p className="mono text-xs text-slate-500 mb-8">NOTA FINAL (de {activity.maxGrade})</p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {(activity.bars || []).map((b) => (
+            <div key={b.key} className="glass rounded-2xl p-4">
+              <div className="text-xs mono text-slate-400">{b.label}</div>
+              <div className="text-2xl font-black" style={{ color: b.color }}>{Math.round(bars[b.key] || 0)}%</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Wrap>
+  );
+
+  /* ------------------------------ jogo ------------------------------ */
+  const q = order[idx];
+  if (!q) return null;
+  const chapter = (activity.chapters || []).find((c) => Number(c.n) === Number(chapterPopup));
+
+  return (
+    <div className="min-h-screen p-4 sm:p-8 no-select">
+      {chapterPopup && chapter && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl">
+          <div className="max-w-xl text-center animate-fade">
+            <p className="mono text-cyan-500 text-xs mb-3">CAPÍTULO {chapter.n}</p>
+            <h2 className="text-3xl font-black uppercase mb-6">{chapter.title}</h2>
+            <p className="text-slate-300 font-light leading-relaxed mb-10">{chapter.context}</p>
+            <button className="btn bg-cyan-600 hover:bg-cyan-500 px-10 py-4" onClick={() => { setChapterPopup(null); setTimer(Number(activity.secondsPerQuestion) || 60); }}>INICIAR CAPÍTULO</button>
+          </div>
+        </div>
+      )}
+
+      <div className="max-w-5xl mx-auto">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+          <div className="mono text-xs text-slate-400">QUESTÃO {idx + 1}/{order.length} · CAP. {q.ch}</div>
+          <div className={"mono text-xl font-black " + (timer <= 10 ? "text-red-500 animate-pulse" : "text-cyan-400")}>{Math.max(0, timer)}s</div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+          {(activity.bars || []).map((b) => (
+            <div key={b.key} className="glass rounded-2xl p-3">
+              <div className="flex justify-between text-[11px] mono mb-2"><span>{b.label}</span><span>{Math.round(bars[b.key] || 0)}%</span></div>
+              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bar-transition rounded-full" style={{ width: (bars[b.key] || 0) + "%", background: b.color }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="glass rounded-[28px] p-6 sm:p-8 mb-6">
+          <h3 className="text-lg font-black mb-3 text-cyan-400">{q.title}</h3>
+          <p className="text-slate-200 font-light leading-relaxed">{q.text}</p>
+        </div>
+
+        {feedback ? (
+          <div className="flex flex-col items-center gap-4 animate-fade">
+            <div className="speech-bubble">{feedback}</div>
+            {activity.avatar && <img src={activity.avatar} className="prof-avatar" alt="Professora" />}
+          </div>
+        ) : (
+          <div className="grid gap-3">
+            {q.options.map((opt, i) => (
+              <button key={i} onClick={(e) => { e.currentTarget.blur(); pick(opt); }}
+                className="text-left glass hover:border-cyan-500 rounded-2xl p-5 text-sm text-slate-200 transition-all">
+                {opt.t}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============================ PAINEL DA PROFESSORA ======================== */
+
+function Admin() {
+  const [token, setToken] = useState(store.get("admin"));
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState("");
+  const [tab, setTab] = useState("atividades");
+
+  const login = async () => {
+    try { const r = await api("adminLogin", { password: pass }); store.set("admin", r.token); setToken(r.token); setError(""); }
+    catch (e) { setError(e.message); }
+  };
+
+  if (!BACKEND_URL) return <SetupNeeded />;
+  if (!token) return (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="glass p-10 rounded-3xl max-w-sm w-full border-t-4 border-cyan-500">
+        <h1 className="text-xl font-black uppercase mb-6">Painel da professora</h1>
+        <input type="password" className="inp mb-4" placeholder="Senha" value={pass}
+          onChange={(e) => setPass(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} />
+        <button className="btn bg-cyan-600 hover:bg-cyan-500 w-full" onClick={login}>ENTRAR</button>
+        {error && <p className="text-red-400 text-xs mt-4">{error}</p>}
+      </div>
+    </div>
+  );
+
+  const tabs = [["atividades", "Atividades"], ["bloqueios", "Bloqueios"], ["resultados", "Resultados"], ["acessos", "Códigos de liberação"]];
+  return (
+    <div className="min-h-screen p-4 sm:p-8">
+      <div className="max-w-6xl mx-auto">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <h1 className="text-2xl font-black uppercase">Painel da professora</h1>
+          <button className="text-xs mono text-slate-500 hover:text-slate-300" onClick={() => { store.del("admin"); setToken(null); }}>SAIR</button>
+        </div>
+        <div className="flex flex-wrap gap-2 mb-8">
+          {tabs.map(([k, l]) => (
+            <button key={k} onClick={() => setTab(k)}
+              className={"btn " + (tab === k ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700")}>{l.toUpperCase()}</button>
+          ))}
+        </div>
+        {tab === "atividades" && <AdminActivities token={token} />}
+        {tab === "bloqueios" && <AdminBlocks token={token} />}
+        {tab === "resultados" && <AdminResults token={token} />}
+        {tab === "acessos" && <AdminManual token={token} />}
+      </div>
+    </div>
+  );
+}
+
+const blank = () => ({
+  id: "atividade-" + Date.now(), code: "", active: true, title: "Nova atividade", subtitle: "",
+  summary: "", rules: ["Não saia da tela durante a atividade."], avatar: "",
+  secondsPerQuestion: 60, maxGrade: 10, exitTolerance: 0,
+  bars: [{ key: "b1", label: "Barra 1", color: "#06b6d4" }],
+  chapters: [{ n: 1, title: "Capítulo 1", context: "" }],
+  questions: []
+});
+
+function AdminActivities({ token }) {
+  const [list, setList] = useState([]);
+  const [sel, setSel] = useState(null);
+  const [msg, setMsg] = useState("");
+
+  const load = useCallback(() => {
+    api("adminActivities", { token }).then((r) => setList(r.activities)).catch((e) => setMsg(e.message));
+  }, [token]);
+  useEffect(load, [load]);
+
+  const save = async () => {
+    try { await api("adminSave", { token, activity: sel }); setMsg("Atividade salva."); load(); }
+    catch (e) { setMsg(e.message); }
+  };
+  const remove = async (id) => {
+    if (!confirm("Excluir esta atividade? Os resultados já registrados continuam na planilha.")) return;
+    await api("adminDelete", { token, id }); setSel(null); load();
+  };
+  const importFile = (file) => {
+    const fr = new FileReader();
+    fr.onload = () => { try { setSel(JSON.parse(fr.result)); setMsg("Arquivo carregado. Clique em Salvar."); } catch (e) { setMsg("Arquivo inválido."); } };
+    fr.readAsText(file);
+  };
+  const exportJson = () => {
+    const blob = new Blob([JSON.stringify(sel, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = sel.id + ".json"; a.click();
+  };
+  const up = (patch) => setSel(Object.assign({}, sel, patch));
+
+  return (
+    <div className="grid lg:grid-cols-[280px_1fr] gap-6">
+      <div className="glass rounded-3xl p-5 h-fit">
+        <div className="space-y-2 mb-5">
+          {list.map((a) => (
+            <button key={a.id} onClick={() => setSel(JSON.parse(JSON.stringify(a)))}
+              className={"w-full text-left text-sm p-3 rounded-xl " + (sel && sel.id === a.id ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700")}>
+              <div className="font-bold">{a.title}</div>
+              <div className="text-[11px] mono opacity-70">{a.questions ? a.questions.length : 0} questões {a.active === false ? "· arquivada" : ""}</div>
+            </button>
+          ))}
+        </div>
+        <button className="btn bg-slate-800 hover:bg-slate-700 w-full mb-2" onClick={() => setSel(blank())}>+ NOVA</button>
+        {sel && <button className="btn bg-slate-800 hover:bg-slate-700 w-full mb-2" onClick={() => setSel(Object.assign({}, sel, { id: sel.id + "-copia", title: sel.title + " (cópia)" }))}>DUPLICAR</button>}
+        <label className="btn bg-slate-800 hover:bg-slate-700 w-full block text-center cursor-pointer">
+          IMPORTAR JSON
+          <input type="file" accept="application/json" className="hidden" onChange={(e) => e.target.files[0] && importFile(e.target.files[0])} />
+        </label>
+        <p className="text-[11px] text-slate-500 mt-4 leading-relaxed">
+          Para carregar a atividade original de Filosofia do Direito, importe o arquivo
+          <span className="mono"> atividade-filosofia-do-direito.json</span>.
+        </p>
+      </div>
+
+      <div className="glass rounded-3xl p-6">
+        {!sel && <p className="text-slate-500 text-sm">Selecione ou crie uma atividade.</p>}
+        {sel && (
+          <div className="space-y-8">
+            <div className="flex flex-wrap gap-2 justify-end">
+              <button className="btn bg-slate-800 hover:bg-slate-700" onClick={exportJson}>EXPORTAR</button>
+              <button className="btn bg-red-800 hover:bg-red-700" onClick={() => remove(sel.id)}>EXCLUIR</button>
+              <button className="btn bg-cyan-600 hover:bg-cyan-500" onClick={save}>SALVAR</button>
+            </div>
+            {msg && <p className="text-xs mono text-cyan-400">{msg}</p>}
+
+            <Section title="Informações gerais">
+              <Field label="Identificador (sem espaços)"><input className="inp" value={sel.id} onChange={(e) => up({ id: e.target.value.trim() })} /></Field>
+              <Field label="Título"><input className="inp" value={sel.title} onChange={(e) => up({ title: e.target.value })} /></Field>
+              <Field label="Subtítulo"><input className="inp" value={sel.subtitle || ""} onChange={(e) => up({ subtitle: e.target.value })} /></Field>
+              <Field label="Código de acesso (opcional)"><input className="inp" value={sel.code || ""} onChange={(e) => up({ code: e.target.value.toUpperCase() })} /></Field>
+              <Field label="Segundos por questão"><input type="number" className="inp" value={sel.secondsPerQuestion} onChange={(e) => up({ secondsPerQuestion: Number(e.target.value) })} /></Field>
+              <Field label="Nota máxima"><input type="number" className="inp" value={sel.maxGrade} onChange={(e) => up({ maxGrade: Number(e.target.value) })} /></Field>
+              <Field label="Saídas toleradas antes de bloquear"><input type="number" className="inp" value={sel.exitTolerance} onChange={(e) => up({ exitTolerance: Number(e.target.value) })} /></Field>
+              <Field label="Imagem da professora (URL)"><input className="inp" value={sel.avatar || ""} onChange={(e) => up({ avatar: e.target.value })} /></Field>
+              <Field label="Visível para os alunos">
+                <select className="inp" value={sel.active === false ? "n" : "s"} onChange={(e) => up({ active: e.target.value === "s" })}>
+                  <option value="s">Sim</option><option value="n">Não (arquivada)</option>
+                </select>
+              </Field>
+              <Field label="Texto de abertura" full><textarea className="inp h-28" value={sel.summary || ""} onChange={(e) => up({ summary: e.target.value })} /></Field>
+              <Field label="Regras (uma por linha)" full>
+                <textarea className="inp h-28" value={(sel.rules || []).join("\n")} onChange={(e) => up({ rules: e.target.value.split("\n").filter((x) => x.trim()) })} />
+              </Field>
+            </Section>
+
+            <Section title="Barras de indicadores">
+              {(sel.bars || []).map((b, i) => (
+                <div key={i} className="flex gap-2 items-center sm:col-span-2">
+                  <input className="inp" placeholder="chave" value={b.key} onChange={(e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { key: e.target.value.trim() }); up({ bars: bs }); }} />
+                  <input className="inp" placeholder="nome" value={b.label} onChange={(e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { label: e.target.value }); up({ bars: bs }); }} />
+                  <input type="color" className="h-10 w-14 bg-transparent" value={b.color} onChange={(e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { color: e.target.value }); up({ bars: bs }); }} />
+                  <button className="btn bg-slate-800" onClick={() => up({ bars: sel.bars.filter((_, j) => j !== i) })}>×</button>
                 </div>
-            );
-        }
+              ))}
+              <button className="btn bg-slate-800 hover:bg-slate-700 sm:col-span-2" onClick={() => up({ bars: (sel.bars || []).concat([{ key: "b" + ((sel.bars || []).length + 1), label: "Nova barra", color: "#06b6d4" }]) })}>+ BARRA</button>
+            </Section>
 
-        function StatCard({ label, val, color }) {
-            return (
-                <div className="p-4 bg-white/5 rounded-3xl border border-white/5">
-                    <div className="text-[9px] text-slate-500 uppercase mb-1 font-bold">{label}</div>
-                    <div className={`text-2xl font-black ${color}`}>{val.toFixed(0)}%</div>
+            <Section title="Capítulos">
+              {(sel.chapters || []).map((c, i) => (
+                <div key={i} className="sm:col-span-2 glass rounded-2xl p-4 space-y-2">
+                  <div className="flex gap-2">
+                    <input type="number" className="inp w-20" value={c.n} onChange={(e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { n: Number(e.target.value) }); up({ chapters: cs }); }} />
+                    <input className="inp" value={c.title} onChange={(e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { title: e.target.value }); up({ chapters: cs }); }} />
+                    <button className="btn bg-slate-800" onClick={() => up({ chapters: sel.chapters.filter((_, j) => j !== i) })}>×</button>
+                  </div>
+                  <textarea className="inp h-20" placeholder="Contexto do capítulo" value={c.context || ""} onChange={(e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { context: e.target.value }); up({ chapters: cs }); }} />
                 </div>
-            );
-        }
+              ))}
+              <button className="btn bg-slate-800 hover:bg-slate-700 sm:col-span-2" onClick={() => up({ chapters: (sel.chapters || []).concat([{ n: (sel.chapters || []).length + 1, title: "Novo capítulo", context: "" }]) })}>+ CAPÍTULO</button>
+            </Section>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+            <Questions sel={sel} up={up} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function Section({ title, children }) {
+  return (
+    <div>
+      <h3 className="text-sm font-black uppercase text-cyan-400 mb-4">{title}</h3>
+      <div className="grid sm:grid-cols-2 gap-4">{children}</div>
+    </div>
+  );
+}
+function Field({ label, children, full }) {
+  return (
+    <label className={"block " + (full ? "sm:col-span-2" : "")}>
+      <span className="text-[11px] mono text-slate-400 block mb-1">{label}</span>
+      {children}
+    </label>
+  );
+}
+
+function Questions({ sel, up }) {
+  const [open, setOpen] = useState(null);
+  const qs = sel.questions || [];
+  const setQ = (i, patch) => { const arr = [...qs]; arr[i] = Object.assign({}, arr[i], patch); up({ questions: arr }); };
+  const addQ = () => up({
+    questions: qs.concat([{
+      id: "q" + (qs.length + 1), ch: 1, title: "Nova questão", text: "",
+      options: [1, 2, 3, 4].map((n) => ({ t: "Alternativa " + n, s: n === 1 ? 1 : 0, i: {}, f: "" }))
+    }])
+  });
+
+  return (
+    <div>
+      <h3 className="text-sm font-black uppercase text-cyan-400 mb-4">Questões ({qs.length})</h3>
+      <div className="space-y-2">
+        {qs.map((q, i) => (
+          <div key={i} className="glass rounded-2xl">
+            <button className="w-full text-left p-4 flex justify-between gap-3" onClick={() => setOpen(open === i ? null : i)}>
+              <span className="text-sm"><span className="mono text-cyan-500">C{q.ch}</span> {q.title}</span>
+              <span className="mono text-xs text-slate-500">{open === i ? "−" : "+"}</span>
+            </button>
+            {open === i && (
+              <div className="p-4 pt-0 space-y-3">
+                <div className="flex gap-2">
+                  <input type="number" className="inp w-24" value={q.ch} onChange={(e) => setQ(i, { ch: Number(e.target.value) })} />
+                  <input className="inp" value={q.title} onChange={(e) => setQ(i, { title: e.target.value })} />
+                  <button className="btn bg-red-900 hover:bg-red-800" onClick={() => up({ questions: qs.filter((_, j) => j !== i) })}>EXCLUIR</button>
+                </div>
+                <textarea className="inp h-24" placeholder="Enunciado" value={q.text} onChange={(e) => setQ(i, { text: e.target.value })} />
+                {(q.options || []).map((o, oi) => (
+                  <div key={oi} className="glass rounded-xl p-3 space-y-2">
+                    <textarea className="inp h-16" placeholder="Alternativa" value={o.t} onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { t: e.target.value }); setQ(i, { options: os }); }} />
+                    <div className="flex flex-wrap gap-2 items-center">
+                      <span className="text-[11px] mono text-slate-400">Pontos</span>
+                      <input type="number" step="0.1" className="inp w-24" value={o.s} onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { s: Number(e.target.value) }); setQ(i, { options: os }); }} />
+                      {(sel.bars || []).map((b) => (
+                        <span key={b.key} className="flex items-center gap-1">
+                          <span className="text-[11px] mono" style={{ color: b.color }}>{b.label}</span>
+                          <input type="number" className="inp w-20" value={o.i && o.i[b.key] !== undefined ? o.i[b.key] : 50}
+                            onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { i: Object.assign({}, o.i, { [b.key]: Number(e.target.value) }) }); setQ(i, { options: os }); }} />
+                        </span>
+                      ))}
+                      <button className="btn bg-slate-800" onClick={() => { const os = q.options.filter((_, j) => j !== oi); setQ(i, { options: os }); }}>×</button>
+                    </div>
+                    <textarea className="inp h-16" placeholder="Feedback da professora" value={o.f || ""} onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { f: e.target.value }); setQ(i, { options: os }); }} />
+                  </div>
+                ))}
+                <button className="btn bg-slate-800 hover:bg-slate-700" onClick={() => setQ(i, { options: (q.options || []).concat([{ t: "Nova alternativa", s: 0, i: {}, f: "" }]) })}>+ ALTERNATIVA</button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <button className="btn bg-slate-800 hover:bg-slate-700 mt-4" onClick={addQ}>+ QUESTÃO</button>
+      <p className="text-[11px] text-slate-500 mt-3">
+        Impacto nas barras: 50 é neutro, acima de 50 sobe a barra, abaixo desce. A nota final é proporcional
+        aos pontos máximos possíveis.
+      </p>
+    </div>
+  );
+}
+
+function AdminBlocks({ token }) {
+  const [rows, setRows] = useState([]);
+  const [msg, setMsg] = useState("");
+  const load = useCallback(() => api("adminBlocks", { token }).then((r) => setRows(r.rows)).catch((e) => setMsg(e.message)), [token]);
+  useEffect(() => { load(); const t = setInterval(load, 20000); return () => clearInterval(t); }, [load]);
+
+  const unblock = async (id, reset) => {
+    await api("adminUnblock", { token, id, reset }); setMsg("Aluno liberado."); load();
+  };
+
+  return (
+    <div className="glass rounded-3xl p-6">
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-sm font-black uppercase text-red-400">Alunos bloqueados ({rows.length})</h3>
+        <button className="btn bg-slate-800 hover:bg-slate-700" onClick={load}>ATUALIZAR</button>
+      </div>
+      {msg && <p className="text-xs mono text-cyan-400 mb-4">{msg}</p>}
+      {rows.length === 0 && <p className="text-slate-500 text-sm">Ninguém bloqueado no momento.</p>}
+      <div className="space-y-3">
+        {rows.map((r) => (
+          <div key={r.id} className="glass rounded-2xl p-4 flex flex-wrap gap-3 items-center justify-between">
+            <div>
+              <div className="font-bold text-sm">{r.nome} <span className="text-slate-500 font-normal">— {r.turma}</span></div>
+              <div className="text-[11px] mono text-slate-500">{r.email} · {r.atividade} · questão {Number(r.idx) + 1} · {r.motivo}</div>
+            </div>
+            <div className="flex gap-2">
+              <button className="btn bg-green-700 hover:bg-green-600" onClick={() => unblock(r.id, false)}>LIBERAR (CONTINUAR)</button>
+              <button className="btn bg-slate-700 hover:bg-slate-600" onClick={() => unblock(r.id, true)}>LIBERAR (REINICIAR)</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AdminResults({ token }) {
+  const [rows, setRows] = useState([]);
+  useEffect(() => { api("adminResults", { token }).then((r) => setRows(r.rows)).catch(() => {}); }, [token]);
+
+  const csv = () => {
+    const head = ["nome", "email", "turma", "atividade", "status", "nota", "saidas", "inicio", "fim"];
+    const body = rows.map((r) => head.map((h) => '"' + String(r[h] === undefined ? "" : r[h]).replace(/"/g, '""') + '"').join(","));
+    const blob = new Blob([head.join(",") + "\n" + body.join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "resultados.csv"; a.click();
+  };
+
+  return (
+    <div className="glass rounded-3xl p-6 overflow-x-auto">
+      <div className="flex justify-between items-center mb-5">
+        <h3 className="text-sm font-black uppercase text-cyan-400">Resultados ({rows.length})</h3>
+        <button className="btn bg-slate-800 hover:bg-slate-700" onClick={csv}>EXPORTAR CSV</button>
+      </div>
+      <table className="w-full text-sm">
+        <thead><tr className="mono text-[11px] text-slate-500 text-left">
+          <th className="p-2">Aluno</th><th className="p-2">Turma</th><th className="p-2">Atividade</th>
+          <th className="p-2">Status</th><th className="p-2">Nota</th><th className="p-2">Saídas</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.id} className="border-t border-slate-800">
+              <td className="p-2">{r.nome}<div className="text-[11px] text-slate-500">{r.email}</div></td>
+              <td className="p-2">{r.turma}</td>
+              <td className="p-2">{r.atividade}</td>
+              <td className="p-2">{r.status}</td>
+              <td className="p-2 font-black">{r.nota}</td>
+              <td className="p-2">{r.saidas}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function AdminManual({ token }) {
+  const [rows, setRows] = useState([]);
+  const [form, setForm] = useState({ nome: "", turma: "", atividade: "", code: "" });
+  const [msg, setMsg] = useState("");
+  const load = useCallback(() => api("adminManualList", { token }).then((r) => setRows(r.rows)).catch(() => {}), [token]);
+  useEffect(load, [load]);
+
+  return (
+    <div className="glass rounded-3xl p-6">
+      <h3 className="text-sm font-black uppercase text-cyan-400 mb-2">Códigos de liberação</h3>
+      <p className="text-xs text-slate-500 mb-5">Use quando um aluno não conseguir entrar com o e-mail institucional.</p>
+      <div className="grid sm:grid-cols-4 gap-3 mb-4">
+        <input className="inp" placeholder="Nome do aluno" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
+        <input className="inp" placeholder="Turma" value={form.turma} onChange={(e) => setForm({ ...form, turma: e.target.value })} />
+        <input className="inp" placeholder="Id da atividade" value={form.atividade} onChange={(e) => setForm({ ...form, atividade: e.target.value })} />
+        <input className="inp" placeholder="Código (opcional)" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} />
+      </div>
+      <button className="btn bg-cyan-600 hover:bg-cyan-500" onClick={async () => {
+        const r = await api("adminManual", { token, ...form });
+        setMsg("Código criado: " + r.code); setForm({ nome: "", turma: "", atividade: "", code: "" }); load();
+      }}>GERAR CÓDIGO</button>
+      {msg && <p className="mono text-sm text-green-400 mt-4">{msg}</p>}
+      <div className="mt-6 space-y-2">
+        {rows.map((r, i) => (
+          <div key={i} className="text-xs mono flex justify-between border-t border-slate-800 py-2">
+            <span className="text-cyan-400">{r.codigo}</span>
+            <span>{r.nome} · {r.turma} · {r.atividade}</span>
+            <span className={r.usado === "sim" ? "text-slate-600" : "text-green-400"}>{r.usado === "sim" ? "usado" : "disponível"}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
 </body>
 </html>
