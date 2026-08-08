@@ -40,18 +40,52 @@ const WEB3FORMS_KEY   = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; // e-mail de avi
 
 const { useState, useEffect, useRef, useCallback } = React;
 
+const FETCH_HELP =
+  "Não foi possível falar com a sua Planilha Google. Verifique, nesta ordem:\n" +
+  "1) o endereço do Apps Script está colado em BACKEND_URL no index.html;\n" +
+  "2) na implantação, 'Quem tem acesso' está como 'Qualquer pessoa';\n" +
+  "3) o endereço termina em /exec (o /dev não funciona no site);\n" +
+  "4) você autorizou a implantação quando o Google pediu permissão.";
+
 async function api(action, data) {
-  if (!BACKEND_URL) throw new Error("BACKEND_URL não configurada no index.html");
-  const res = await fetch(BACKEND_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(Object.assign({ action }, data || {})),
-    redirect: "follow"
-  });
-  const out = await res.json();
+  if (!BACKEND_URL) throw new Error("BACKEND_URL não configurada no index.html. " + FETCH_HELP);
+  let res;
+  try {
+    res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(Object.assign({ action }, data || {})),
+      redirect: "follow"
+    });
+  } catch (e) {
+    throw new Error(FETCH_HELP);
+  }
+  let out;
+  try { out = await res.json(); }
+  catch (e) {
+    throw new Error(
+      "O endereço respondeu, mas não como esperado (código " + res.status + "). " + FETCH_HELP
+    );
+  }
   if (!out.ok) throw new Error(out.error || "Erro no servidor");
   return out;
 }
+
+async function testConnection() {
+  if (!BACKEND_URL) return "BACKEND_URL está vazia no index.html — cole ali o endereço /exec do Apps Script.";
+  if (!/\/exec$/.test(BACKEND_URL.trim())) return "O endereço em BACKEND_URL não termina em /exec. Use o link final da implantação.";
+  try {
+    const res = await fetch(BACKEND_URL, { method: "GET", redirect: "follow" });
+    const txt = await res.text();
+    if (txt.indexOf('"service"') >= 0) return "Conexão OK! O servidor da planilha respondeu normalmente.";
+    if (txt.toLowerCase().indexOf("sign in") >= 0 || txt.toLowerCase().indexOf("fazer login") >= 0)
+      return "A implantação está privada. Refaça: Implantar > Gerenciar implantações > Quem tem acesso: Qualquer pessoa.";
+    return "O endereço respondeu (código " + res.status + "), mas não é o servidor das atividades. Confira se colou a URL certa.";
+  } catch (e) {
+    return FETCH_HELP;
+  }
+}
+
 
 function beacon(action, data) {
   if (!BACKEND_URL) return;
@@ -486,6 +520,7 @@ function Admin() {
   const [token, setToken] = useState(store.get("admin"));
   const [pass, setPass] = useState("");
   const [error, setError] = useState("");
+  const [diag, setDiag] = useState("");
   const [tab, setTab] = useState("atividades");
 
   const login = async () => {
@@ -493,18 +528,62 @@ function Admin() {
     catch (e) { setError(e.message); }
   };
 
+  /* ---- botão Google da professora ---- */
+  useEffect(() => {
+    if (token || !GOOGLE_CLIENT_ID) return;
+    let tries = 0;
+    const t = setInterval(() => {
+      if (window.google && window.google.accounts && document.getElementById("gbtn-admin")) {
+        clearInterval(t);
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: async (resp) => {
+            try {
+              const r = await api("adminLoginGoogle", { credential: resp.credential });
+              store.set("admin", r.token);
+              setToken(r.token);
+              setError("");
+            } catch (e) { setError(e.message); }
+          }
+        });
+        window.google.accounts.id.renderButton(document.getElementById("gbtn-admin"), {
+          theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
+        });
+      } else if (++tries > 60) clearInterval(t);
+    }, 200);
+    return () => clearInterval(t);
+  }, [token]);
+
   if (!BACKEND_URL) return <SetupNeeded />;
   if (!token) return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <div className="glass p-10 rounded-3xl max-w-sm w-full border-t-4 border-cyan-500">
         <h1 className="text-xl font-black uppercase mb-6">Painel da professora</h1>
+
+        <div id="gbtn-admin" className="flex justify-center mb-2"></div>
+        {!GOOGLE_CLIENT_ID && (
+          <p className="text-yellow-500 text-xs mb-2 text-center">
+            GOOGLE_CLIENT_ID não configurado — use a senha.
+          </p>
+        )}
+        <p className="text-slate-500 text-[11px] mb-6 text-center">
+          Entre com a sua conta Google (cadastrada em ADMIN_EMAILS) ou com a senha.
+        </p>
+
         <input type="password" className="inp mb-4" placeholder="Senha" value={pass}
           onChange={(e) => setPass(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} />
-        <button className="btn bg-cyan-600 hover:bg-cyan-500 w-full" onClick={login}>ENTRAR</button>
-        {error && <p className="text-red-400 text-xs mt-4">{error}</p>}
+        <button className="btn bg-cyan-600 hover:bg-cyan-500 w-full" onClick={login}>ENTRAR COM SENHA</button>
+        {error && <p className="text-red-400 text-xs mt-4 whitespace-pre-line">{error}</p>}
+
+        <button className="text-xs mono text-slate-500 hover:text-cyan-400 mt-6 w-full"
+          onClick={async () => { setDiag("Testando..."); setDiag(await testConnection()); }}>
+          TESTAR CONEXÃO COM A PLANILHA
+        </button>
+        {diag && <p className="text-slate-300 text-xs mt-3 whitespace-pre-line leading-relaxed">{diag}</p>}
       </div>
     </div>
   );
+
 
   const tabs = [["atividades", "Atividades"], ["bloqueios", "Bloqueios"], ["resultados", "Resultados"], ["acessos", "Códigos de liberação"]];
   return (
