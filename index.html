@@ -43,9 +43,15 @@ const { useState, useEffect, useRef, useCallback } = React;
 const FETCH_HELP =
   "Não foi possível falar com a sua Planilha Google. Verifique, nesta ordem:\n" +
   "1) o endereço do Apps Script está colado em BACKEND_URL no index.html;\n" +
-  "2) na implantação, 'Quem tem acesso' está como 'Qualquer pessoa';\n" +
-  "3) o endereço termina em /exec (o /dev não funciona no site);\n" +
-  "4) você autorizou a implantação quando o Google pediu permissão.";
+  "2) na implantação, 'Executar como' está como 'Eu' (a proprietária do script);\n" +
+  "3) 'Quem pode acessar' está como 'Qualquer pessoa' — e NÃO 'Qualquer pessoa com uma Conta do Google';\n" +
+  "4) o endereço termina em /exec (o /dev não funciona no site);\n" +
+  "5) você autorizou a implantação quando o Google pediu permissão.";
+
+const FIX_DEPLOY =
+  "Corrija assim: Implantar > Gerenciar implantações > editar (lápis) > " +
+  "Executar como: Eu | Quem pode acessar: Qualquer pessoa (sem 'com uma Conta do Google') " +
+  "> Implantar nova versão.";
 
 async function api(action, data) {
   if (!BACKEND_URL) throw new Error("BACKEND_URL não configurada no index.html. " + FETCH_HELP);
@@ -77,12 +83,23 @@ async function testConnection() {
   try {
     const res = await fetch(BACKEND_URL, { method: "GET", redirect: "follow" });
     const txt = await res.text();
+    const low = (txt || "").toLowerCase();
+    const finalUrl = (res.url || "").toLowerCase();
     if (txt.indexOf('"service"') >= 0) return "Conexão OK! O servidor da planilha respondeu normalmente.";
-    if (txt.toLowerCase().indexOf("sign in") >= 0 || txt.toLowerCase().indexOf("fazer login") >= 0)
-      return "A implantação está privada. Refaça: Implantar > Gerenciar implantações > Quem tem acesso: Qualquer pessoa.";
+    if (finalUrl.indexOf("accounts.google.com") >= 0)
+      return "O endereço está pedindo login do Google (foi redirecionado para accounts.google.com). " +
+        "Isso acontece quando a implantação está como 'Executar como: Usuário com acesso ao app da Web' " +
+        "e/ou 'Quem pode acessar: Qualquer pessoa com uma Conta do Google'. " + FIX_DEPLOY;
+    if (low.indexOf("sign in") >= 0 || low.indexOf("fazer login") >= 0 || low.indexOf("faça login") >= 0 ||
+        low.indexOf("choose an account") >= 0 || low.indexOf("escolha uma conta") >= 0)
+      return "O servidor devolveu uma tela de login em vez do JSON da atividade. " +
+        "A implantação está executando como 'Usuário com acesso' ou exigindo Conta do Google. " + FIX_DEPLOY;
+    if (res.status === 401 || res.status === 403)
+      return "Acesso negado (código " + res.status + "). A implantação não está pública. " + FIX_DEPLOY;
     return "O endereço respondeu (código " + res.status + "), mas não é o servidor das atividades. Confira se colou a URL certa.";
   } catch (e) {
-    return FETCH_HELP;
+    return "A chamada foi bloqueada pelo navegador (típico de implantação que redireciona para o login do Google). " +
+      FIX_DEPLOY + "\n\n" + FETCH_HELP;
   }
 }
 
