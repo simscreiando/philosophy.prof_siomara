@@ -52,6 +52,11 @@
   .inp { width:100%; background:var(--inp-bg); border:1px solid var(--inp-border); border-radius:12px; padding:10px 14px; color:var(--fg); font-size:.9rem; }
   .btn { border-radius:14px; padding:10px 18px; font-weight:800; font-size:.8rem; letter-spacing:.05em; transition:all .2s; }
   .no-select { user-select:none; -webkit-user-select:none; }
+  /* Bloqueio de cópia — aplicado SOMENTE na área do estudante */
+  .no-copy, .no-copy * { user-select:none; -webkit-user-select:none; -ms-user-select:none;
+    -webkit-touch-callout:none; }
+  /* campos de digitação continuam funcionando normalmente */
+  .no-copy input, .no-copy textarea { user-select:text; -webkit-user-select:text; }
 </style>
 <script>
   (function () {
@@ -64,8 +69,45 @@
   })();
 </script>
 </head>
-<body oncontextmenu="return false;">
+<body>
 <div id="root"></div>
+<script>
+  /* ---- Bloqueio do botão direito e de atalhos de código-fonte / devtools ---- */
+  (function () {
+    var isAdmin = new URLSearchParams(location.search).has("admin");
+    document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+    document.addEventListener("dragstart", function (e) {
+      if (!isAdmin) e.preventDefault();
+    });
+    ["copy", "cut"].forEach(function (evt) {
+      document.addEventListener(evt, function (e) {
+        if (isAdmin) return;                       // painel da professora liberado
+        var t = e.target;
+        var tag = t && t.tagName ? t.tagName.toLowerCase() : "";
+        if (tag === "input" || tag === "textarea") return;
+        e.preventDefault();
+      });
+    });
+    document.addEventListener("keydown", function (e) {
+      var k = (e.key || "").toLowerCase();
+      // F12 e atalhos de inspecionar / ver código-fonte / salvar / imprimir
+      if (k === "f12"
+        || ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i", "j", "c"].indexOf(k) !== -1)
+        || ((e.ctrlKey || e.metaKey) && ["u", "s", "p"].indexOf(k) !== -1)) {
+        e.preventDefault();
+        return;
+      }
+      if (isAdmin) return;
+      var t = e.target;
+      var tag = t && t.tagName ? t.tagName.toLowerCase() : "";
+      var typing = tag === "input" || tag === "textarea";
+      // Ctrl+C / Ctrl+X / Ctrl+A fora dos campos de digitação
+      if ((e.ctrlKey || e.metaKey) && !typing && ["c", "x", "a"].indexOf(k) !== -1) {
+        e.preventDefault();
+      }
+    });
+  })();
+</script>
 
 <script type="text/babel">
 /* =========================================================================
@@ -74,7 +116,7 @@
 const BACKEND_URL     = "https://script.google.com/macros/s/AKfycbxQ7lGFc8mPZv2JBz_KgxSg7KUaT76jYl1KvTWUDFnaHdTZnFrs_OEZ8W3IUkZqybs3/exec";  // URL do App da Web do Apps Script
 const GOOGLE_CLIENT_ID= "958631731368-3k90ou7s3r01fi4b1f79tnl4i5aqbabd.apps.googleusercontent.com";  // Client ID OAuth do Google
 const ALLOWED_DOMAIN  = "uniriosead.com";  // ex: "suaescola.edu.br" (vazio = qualquer Google)
-const WEB3FORMS_KEY   = ""; // e-mail de aviso (opcional)
+const WEB3FORMS_KEY   = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; // e-mail de aviso (opcional)
 /* ========================================================================= */
 
 const { useState, useEffect, useRef, useCallback } = React;
@@ -272,7 +314,9 @@ function App() {
   return (
     <React.Fragment>
       <ThemeToggle />
-      {isAdmin ? <Admin /> : !BACKEND_URL ? <SetupNeeded /> : <Student />}
+      {isAdmin
+        ? <Admin />
+        : <div className="no-copy">{!BACKEND_URL ? <SetupNeeded /> : <Student />}</div>}
     </React.Fragment>
   );
 }
