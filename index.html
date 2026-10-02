@@ -11,103 +11,22 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
-  :root {
-    --bg:#020617; --fg:#e2e8f0; --glass:rgba(15,23,42,.85); --glass-border:rgba(255,255,255,.08);
-    --inp-bg:#0f172a; --inp-border:#334155; --muted:#94a3b8; --soft:#64748b; --strong:#f1f5f9;
-    --track:#1e293b; --bubble-bg:#ffffff; --bubble-fg:#1e293b; --btn-neutral:#334155; --btn-neutral-hover:#475569;
-  }
-  html.light {
-    --bg:#f1f5f9; --fg:#0f172a; --glass:rgba(255,255,255,.9); --glass-border:rgba(15,23,42,.1);
-    --inp-bg:#ffffff; --inp-border:#cbd5e1; --muted:#475569; --soft:#64748b; --strong:#0f172a;
-    --track:#e2e8f0; --bubble-bg:#0f172a; --bubble-fg:#f8fafc; --btn-neutral:#cbd5e1; --btn-neutral-hover:#94a3b8;
-  }
-  body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--fg); overflow-x:hidden; transition:background .25s ease,color .25s ease; }
+  body { font-family:'Inter',sans-serif; background:#020617; color:#e2e8f0; overflow-x:hidden; }
   .mono { font-family:'JetBrains Mono',monospace; }
-  .glass { background:var(--glass); backdrop-filter:blur(16px); border:1px solid var(--glass-border); }
-  /* mapeia as cores utilitárias fixas para o tema ativo */
-  .text-slate-200, .text-slate-300 { color:var(--strong) !important; }
-  .text-slate-400 { color:var(--muted) !important; }
-  .text-slate-500 { color:var(--soft) !important; }
-  .bg-slate-700 { background-color:var(--btn-neutral) !important; }
-  .bg-slate-700:hover, .hover\:bg-slate-600:hover { background-color:var(--btn-neutral-hover) !important; }
-  .bg-slate-800 { background-color:var(--track) !important; }
-  html.light .text-cyan-400 { color:#0e7490 !important; }
-  html.light .text-cyan-500 { color:#0891b2 !important; }
-  html.light .text-yellow-500 { color:#a16207 !important; }
-  html.light .text-red-400 { color:#b91c1c !important; }
-  html.light .text-green-400 { color:#15803d !important; }
-  .theme-toggle { position:fixed; top:14px; right:14px; z-index:60; width:44px; height:44px; border-radius:14px;
-    display:flex; align-items:center; justify-content:center; background:var(--glass); color:var(--fg);
-    border:1px solid var(--glass-border); backdrop-filter:blur(16px); cursor:pointer; transition:all .2s; }
-  .theme-toggle:hover { border-color:#06b6d4; }
-  .eye-btn { position:absolute; top:50%; right:10px; transform:translateY(-50%); background:none; border:0;
-    color:var(--muted); cursor:pointer; padding:4px; display:flex; }
-  .eye-btn:hover { color:#06b6d4; }
+  .glass { background:rgba(15,23,42,.85); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.08); }
   .prof-avatar { width:140px; height:140px; border-radius:50%; border:4px solid #06b6d4; object-fit:cover; background:#1e293b; }
-  .speech-bubble { background:var(--bubble-bg); color:var(--bubble-fg); border-radius:20px; padding:15px; position:relative; max-width:280px; font-size:.85rem; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,.5); border:2px solid #06b6d4; }
-  .speech-bubble::after { content:''; position:absolute; bottom:-12px; left:50%; width:0; height:0; border:12px solid transparent; border-top-color:var(--bubble-bg); transform:translateX(-50%); }
+  .speech-bubble { background:#fff; color:#1ae293b; border-radius:20px; padding:15px; position:relative; max-width:280px; font-size:.85rem; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,.5); border:2px solid #06b6d4; }
+  .speech-bubble::after { content:''; position:absolute; bottom:-12px; left:50%; width:0; height:0; border:12px solid transparent; border-top-color:#fff; transform:translateX(-50%); }
   .bar-transition { transition:width .8s cubic-bezier(.4,0,.2,1); }
   @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
   .animate-fade { animation:fadeIn .4s ease-out forwards; }
-  .inp { width:100%; background:var(--inp-bg); border:1px solid var(--inp-border); border-radius:12px; padding:10px 14px; color:var(--fg); font-size:.9rem; }
+  .inp { width:100%; background:#0f172a; border:1px solid #334155; border-radius:12px; padding:10px 14px; color:#e2e8f0; font-size:.9rem; }
   .btn { border-radius:14px; padding:10px 18px; font-weight:800; font-size:.8rem; letter-spacing:.05em; transition:all .2s; }
   .no-select { user-select:none; -webkit-user-select:none; }
-  /* Bloqueio de cópia — aplicado SOMENTE na área do estudante */
-  .no-copy, .no-copy * { user-select:none; -webkit-user-select:none; -ms-user-select:none;
-    -webkit-touch-callout:none; }
-  /* campos de digitação continuam funcionando normalmente */
-  .no-copy input, .no-copy textarea { user-select:text; -webkit-user-select:text; }
 </style>
-<script>
-  (function () {
-    try {
-      var saved = localStorage.getItem("theme");
-      var light = saved ? saved === "light"
-        : (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
-      if (light) document.documentElement.classList.add("light");
-    } catch (e) {}
-  })();
-</script>
 </head>
-<body>
+<body oncontextmenu="return false;">
 <div id="root"></div>
-<script>
-  /* ---- Bloqueio do botão direito e de atalhos de código-fonte / devtools ---- */
-  (function () {
-    var isAdmin = new URLSearchParams(location.search).has("admin");
-    document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-    document.addEventListener("dragstart", function (e) {
-      if (!isAdmin) e.preventDefault();
-    });
-    ["copy", "cut"].forEach(function (evt) {
-      document.addEventListener(evt, function (e) {
-        if (isAdmin) return;                       // painel da professora liberado
-        var t = e.target;
-        var tag = t && t.tagName ? t.tagName.toLowerCase() : "";
-        if (tag === "input" || tag === "textarea") return;
-        e.preventDefault();
-      });
-    });
-    document.addEventListener("keydown", function (e) {
-      var k = (e.key || "").toLowerCase();
-      // F12 e atalhos de inspecionar / ver código-fonte / salvar / imprimir
-      if (k === "f12"
-        || ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i", "j", "c"].indexOf(k) !== -1)
-        || ((e.ctrlKey || e.metaKey) && ["u", "s", "p"].indexOf(k) !== -1)) {
-        e.preventDefault();
-        return;
-      }
-      if (isAdmin) return;
-      var t = e.target;
-      var tag = t && t.tagName ? t.tagName.toLowerCase() : "";
-      var typing = tag === "input" || tag === "textarea";
-      // Ctrl+C / Ctrl+X / Ctrl+A fora dos campos de digitação
-      if ((e.ctrlKey || e.metaKey) && !typing && ["c", "x", "a"].indexOf(k) !== -1) {
-        e.preventDefault();
-      }
-    });
-  })();
-</script>
 
 <script type="text/babel">
 /* =========================================================================
@@ -220,105 +139,13 @@ const store = {
   del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
 };
 
-/* ======================= COMPONENTES REUTILIZÁVEIS ======================= */
-/* IMPORTANTE: Wrap fica FORA dos componentes de tela. Se for declarado dentro,
-   o React remonta a tela inteira a cada tecla/segundo (input perde o foco e a
-   tela "pisca"). Os cronômetros continuam funcionando normalmente. */
-function Wrap({ children, border }) {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className={"glass p-8 sm:p-10 rounded-[32px] max-w-2xl w-full animate-fade border-t-4 " + (border || "border-cyan-500")}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function EyeIcon({ open }) {
-  return open ? (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
-      <circle cx="12" cy="12" r="3" />
-    </svg>
-  ) : (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-6.5 0-10-8-10-8a18.45 18.45 0 0 1 5.06-5.94" />
-      <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c6.5 0 10 8 10 8a18.5 18.5 0 0 1-2.16 3.19" />
-      <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24" />
-      <line x1="2" y1="2" x2="22" y2="22" />
-    </svg>
-  );
-}
-
-function PasswordInput({ value, onChange, placeholder, className, onKeyDown }) {
-  const [show, setShow] = useState(false);
-  return (
-    <div className={"relative " + (className || "")}>
-      <input
-        type={show ? "text" : "password"}
-        className="inp"
-        style={{ paddingRight: "44px" }}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        onKeyDown={onKeyDown}
-      />
-      <button type="button" className="eye-btn" onClick={() => setShow((v) => !v)}
-        aria-label={show ? "Ocultar senha" : "Mostrar senha"} title={show ? "Ocultar senha" : "Mostrar senha"}>
-        <EyeIcon open={show} />
-      </button>
-    </div>
-  );
-}
-
-function isLightTheme() {
-  return document.documentElement.classList.contains("light");
-}
-
-function ThemeToggle() {
-  const [light, setLight] = useState(isLightTheme());
-  const apply = (nextLight) => {
-    document.documentElement.classList.toggle("light", nextLight);
-    try { localStorage.setItem("theme", nextLight ? "light" : "dark"); } catch (e) {}
-    setLight(nextLight);
-  };
-  return (
-    <button className="theme-toggle no-select" onClick={() => apply(!light)}
-      aria-label={light ? "Ativar tema escuro" : "Ativar tema claro"}
-      title={light ? "Tema escuro" : "Tema claro"}>
-      {light ? (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
-      ) : (
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
-          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="4" />
-          <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-          <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-        </svg>
-      )}
-    </button>
-  );
-}
-
 /* ============================== APP DO ALUNO ============================== */
 
 function App() {
   const isAdmin = new URLSearchParams(location.search).has("admin");
-  return (
-    <React.Fragment>
-      <ThemeToggle />
-      {isAdmin
-        ? <Admin />
-        : <div className="no-copy">{!BACKEND_URL ? <SetupNeeded /> : <Student />}</div>}
-    </React.Fragment>
-  );
+  if (isAdmin) return <Admin />;
+  if (!BACKEND_URL) return <SetupNeeded />;
+  return <Student />;
 }
 
 function SetupNeeded() {
@@ -332,6 +159,16 @@ function SetupNeeded() {
           <span className="mono text-cyan-400"> GOOGLE_CLIENT_ID</span>. O passo a passo está no
           arquivo <span className="mono text-cyan-400">LEIA-ME.md</span>.
         </p>
+      </div>
+    </div>
+  );
+}
+
+function Wrap({ children, border }) {
+  return (
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className={"glass p-8 sm:p-10 rounded-[32px] max-w-2xl w-full animate-fade border-t-4 " + (border || "border-cyan-500")}>
+        {children}
       </div>
     </div>
   );
@@ -357,6 +194,27 @@ function Student() {
   const [blockedMsg, setBlockedMsg] = useState("");
   const [grade, setGrade] = useState(null);
   const [introTimer, setIntroTimer] = useState(0);
+  const [granted, setGranted] = useState(store.get("granted") || []);   // atividades liberadas por código
+  const [notice, setNotice] = useState("");
+
+  const addGranted = (act, grantCode) => {
+    setGranted((prev) => {
+      const next = prev.filter((g) => g.id !== act.id).concat([Object.assign({}, act, { grantCode: grantCode || "" })]);
+      store.set("granted", next);
+      return next;
+    });
+  };
+
+  const redeemCode = async () => {
+    setError(""); setNotice("");
+    const c = code.trim();
+    if (!c) { setError("Digite o código da atividade."); return; }
+    try {
+      const r = await api("activityByCode", { token: auth.token, code: c });
+      addGranted(r.activity, c.toUpperCase());
+      setNotice("Atividade liberada: " + r.activity.title);
+    } catch (e) { setError(e.message); }
+  };
 
   const ref = useRef({});
   useEffect(() => { ref.current = { screen, auth, activity, idx, score, bars, answers, turma }; });
@@ -389,7 +247,7 @@ function Student() {
           }
         });
         window.google.accounts.id.renderButton(document.getElementById("gbtn"), {
-          theme: isLightTheme() ? "outline" : "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
+          theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
         });
       } else if (++tries > 60) clearInterval(t);
     }, 200);
@@ -450,7 +308,7 @@ function Student() {
   const enter = async (act) => {
     setError("");
     try {
-      const r = await api("start", { token: auth.token, activityId: act.id, code, turma });
+      const r = await api("start", { token: auth.token, activityId: act.id, code: act.grantCode || code, turma });
       if (r.blocked) {
         setActivity(r.activity); setBlockedMsg(r.motivo || ""); setScreen("blocked"); return;
       }
@@ -524,6 +382,10 @@ function Student() {
   };
 
   /* ------------------------------ telas ------------------------------ */
+  const visibleList = granted
+    .filter((g) => !activities.some((a) => a.id === g.id))
+    .map((g) => Object.assign({}, g, { _granted: true }))
+    .concat(activities);
 
   if (screen === "login") return (
     <Wrap>
@@ -542,6 +404,7 @@ function Student() {
             try {
               const r = await api("loginManual", { code });
               setError(""); setTurma(r.turma || ""); setCode("");
+              if (r.activity) addGranted(r.activity, "");
               setAuth({ token: r.token, email: r.email, nome: r.nome });
             } catch (e) { setError(e.message); }
           }}>ENTRAR COM CÓDIGO</button>
@@ -556,19 +419,26 @@ function Student() {
       <p className="text-xs mono text-cyan-400 mb-1">Olá, {auth.nome}</p>
       <h1 className="text-2xl font-black uppercase mb-6">Escolha a atividade</h1>
       <input className="inp mb-3" placeholder="Sua turma" value={turma} onChange={(e) => setTurma(e.target.value)} />
-      <input className="inp mb-6" placeholder="Código da atividade (se houver)" value={code} onChange={(e) => setCode(e.target.value.toUpperCase())} />
-      <div className="space-y-3">
-        {activities.length === 0 && <p className="text-slate-500 text-sm">Nenhuma atividade disponível no momento.</p>}
-        {activities.map((a) => (
+      <div className="flex gap-2 mb-3">
+        <input className="inp" placeholder="Código da atividade (se houver)" value={code}
+          onChange={(e) => setCode(e.target.value.toUpperCase())}
+          onKeyDown={(e) => e.key === "Enter" && redeemCode()} />
+        <button className="btn bg-cyan-600 hover:bg-cyan-500 whitespace-nowrap" onClick={redeemCode}>LIBERAR</button>
+      </div>
+      {notice && <p className="text-green-400 text-xs mono mb-3">{notice}</p>}
+      <div className="space-y-3 mt-3">
+        {visibleList.length === 0 && <p className="text-slate-500 text-sm">Nenhuma atividade disponível no momento. Se você recebeu um código, digite-o acima e clique em LIBERAR.</p>}
+        {visibleList.map((a) => (
           <button key={a.id} onClick={() => turma.trim() ? enter(a) : setError("Informe sua turma.")}
             className="w-full text-left glass hover:border-cyan-500 p-5 rounded-2xl transition-all">
+            {a._granted && <div className="text-[10px] mono text-green-400 mb-1">LIBERADA PARA VOCÊ</div>}
             <div className="font-black">{a.title}</div>
             {a.subtitle && <div className="text-xs text-slate-400 mt-1">{a.subtitle}</div>}
           </button>
         ))}
       </div>
       {error && <p className="mt-6 text-red-400 text-sm">{error}</p>}
-      <button className="mt-8 text-xs mono text-slate-500 hover:text-slate-300" onClick={() => { store.del("auth"); setAuth(null); setScreen("login"); }}>SAIR</button>
+      <button className="mt-8 text-xs mono text-slate-500 hover:text-slate-300" onClick={() => { store.del("auth"); store.del("granted"); setGranted([]); setNotice(""); setAuth(null); setScreen("login"); }}>SAIR</button>
     </Wrap>
   );
 
@@ -730,7 +600,7 @@ function Admin() {
           }
         });
         window.google.accounts.id.renderButton(document.getElementById("gbtn-admin"), {
-          theme: isLightTheme() ? "outline" : "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
+          theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
         });
       } else if (++tries > 60) clearInterval(t);
     }, 200);
@@ -750,10 +620,10 @@ function Admin() {
           </p>
         )}
         <p className="text-slate-500 text-[11px] mb-6 text-center">
-          Entre com a sua conta Google ou com a senha.
+          Entre com a sua conta Google (cadastrada em ADMIN_EMAILS) ou com a senha.
         </p>
 
-        <PasswordInput className="mb-4" placeholder="Senha" value={pass}
+        <input type="password" className="inp mb-4" placeholder="Senha" value={pass}
           onChange={(e) => setPass(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} />
         <button className="btn bg-cyan-600 hover:bg-cyan-500 w-full" onClick={login}>ENTRAR COM SENHA</button>
         {error && <p className="text-red-400 text-xs mt-4 whitespace-pre-line">{error}</p>}
@@ -792,7 +662,7 @@ function Admin() {
 }
 
 const blank = () => ({
-  id: "atividade-" + Date.now(), code: "", active: true, title: "Nova atividade", subtitle: "",
+  id: "atividade-" + Date.now(), code: "", active: true, hidden: false, title: "Nova atividade", subtitle: "",
   summary: "", rules: ["Não saia da tela durante a atividade."], avatar: "",
   secondsPerQuestion: 60, maxGrade: 10, exitTolerance: 0,
   bars: [{ key: "b1", label: "Barra 1", color: "#06b6d4" }],
@@ -830,16 +700,34 @@ function AdminActivities({ token }) {
   };
   const up = (patch) => setSel(Object.assign({}, sel, patch));
 
+  const toggleHidden = async (a) => {
+    const next = !a.hidden;
+    try {
+      await api("adminSave", { token, activity: Object.assign({}, a, { hidden: next }) });
+      setSel((s) => (s && s.id === a.id ? Object.assign({}, s, { hidden: next }) : s));
+      setMsg(next ? "Atividade oculta: não aparece mais na lista dos alunos." : "Atividade visível: voltou para a lista dos alunos.");
+      load();
+    } catch (e) { setMsg(e.message); }
+  };
+
   return (
     <div className="grid lg:grid-cols-[280px_1fr] gap-6">
       <div className="glass rounded-3xl p-5 h-fit">
         <div className="space-y-2 mb-5">
           {list.map((a) => (
-            <button key={a.id} onClick={() => setSel(JSON.parse(JSON.stringify(a)))}
-              className={"w-full text-left text-sm p-3 rounded-xl " + (sel && sel.id === a.id ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700")}>
-              <div className="font-bold">{a.title}</div>
-              <div className="text-[11px] mono opacity-70">{a.questions ? a.questions.length : 0} questões {a.active === false ? "· arquivada" : ""}</div>
-            </button>
+            <div key={a.id} className="flex gap-1">
+              <button onClick={() => setSel(JSON.parse(JSON.stringify(a)))}
+                className={"flex-1 text-left text-sm p-3 rounded-xl " + (sel && sel.id === a.id ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700")}>
+                <div className="font-bold">{a.title}</div>
+                <div className="text-[11px] mono opacity-70">{a.questions ? a.questions.length : 0} questões {a.active === false ? "· arquivada" : ""}{a.hidden ? " · oculta" : ""}</div>
+              </button>
+              <button onClick={() => toggleHidden(a)}
+                title={a.hidden ? "Oculta para os alunos — clique para mostrar na lista" : "Visível para os alunos — clique para ocultar da lista"}
+                className={"w-16 rounded-xl flex flex-col items-center justify-center " + (a.hidden ? "bg-yellow-700 hover:bg-yellow-600" : "bg-slate-800 hover:bg-slate-700")}>
+                <span className="text-base">{a.hidden ? "🙈" : "👁"}</span>
+                <span className="text-[9px] mono">{a.hidden ? "MOSTRAR" : "OCULTAR"}</span>
+              </button>
+            </div>
           ))}
         </div>
         <button className="btn bg-slate-800 hover:bg-slate-700 w-full mb-2" onClick={() => setSel(blank())}>+ NOVA</button>
@@ -874,11 +762,21 @@ function AdminActivities({ token }) {
               <Field label="Nota máxima"><input type="number" className="inp" value={sel.maxGrade} onChange={(e) => up({ maxGrade: Number(e.target.value) })} /></Field>
               <Field label="Saídas toleradas antes de bloquear"><input type="number" className="inp" value={sel.exitTolerance} onChange={(e) => up({ exitTolerance: Number(e.target.value) })} /></Field>
               <Field label="Imagem da professora (URL)"><input className="inp" value={sel.avatar || ""} onChange={(e) => up({ avatar: e.target.value })} /></Field>
-              <Field label="Visível para os alunos">
+              <Field label="Atividade ativa">
                 <select className="inp" value={sel.active === false ? "n" : "s"} onChange={(e) => up({ active: e.target.value === "s" })}>
-                  <option value="s">Sim</option><option value="n">Não (arquivada)</option>
+                  <option value="s">Sim</option><option value="n">Não (arquivada — ninguém acessa)</option>
                 </select>
               </Field>
+              <Field label="Aparece na lista dos alunos">
+                <select className="inp" value={sel.hidden ? "n" : "s"} onChange={(e) => up({ hidden: e.target.value === "n" })}>
+                  <option value="s">Sim — todos veem</option><option value="n">Não (oculta) — só com código</option>
+                </select>
+              </Field>
+              {sel.hidden && !sel.code && (
+                <p className="text-[11px] text-yellow-500 sm:col-span-2">
+                  Atividade oculta sem código de acesso: ela só abrirá para alunos que tiverem um código de liberação gerado na aba "Códigos de liberação".
+                </p>
+              )}
               <Field label="Texto de abertura" full><textarea className="inp h-28" value={sel.summary || ""} onChange={(e) => up({ summary: e.target.value })} /></Field>
               <Field label="Regras (uma por linha)" full>
                 <textarea className="inp h-28" value={(sel.rules || []).join("\n")} onChange={(e) => up({ rules: e.target.value.split("\n").filter((x) => x.trim()) })} />
