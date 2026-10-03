@@ -257,6 +257,7 @@ function Student() {
     const [granted, setGranted] = useState(store.get("granted") || []); // atividades liberadas por código
     const [notice, setNotice] = useState("");
     const [loadingActs, setLoadingActs] = useState(false);
+    const [opening, setOpening] = useState(false);
     const addGranted = (act, grantCode) => {
         setGranted((prev) => {
             const next = prev.filter((g) => g.id !== act.id).concat([Object.assign({}, act, { grantCode: grantCode || "" })]);
@@ -384,6 +385,12 @@ function Student() {
     /* ---- entrar na atividade ---- */
     const enter = async (act) => {
         setError("");
+        setNotice("");
+        if (act.requiresCode && !act.grantCode && !code.trim()) {
+            setError("Esta atividade pede um código. Digite o código acima e clique em LIBERAR.");
+            return;
+        }
+        setOpening(act.id);
         try {
             const r = await api("start", { token: auth.token, activityId: act.id, code: act.grantCode || code, turma });
             if (r.blocked) {
@@ -416,6 +423,7 @@ function Student() {
         catch (e) {
             setError(e.message);
         }
+        setOpening(false);
     };
     const startGame = () => {
         setChapterPopup(order[0] ? order[0].ch : null);
@@ -521,14 +529,15 @@ function Student() {
                 React.createElement("input", { className: "inp", placeholder: "C\u00F3digo da atividade (se houver)", value: code, onChange: (e) => setCode(e.target.value.toUpperCase()), onKeyDown: (e) => e.key === "Enter" && redeemCode() }),
                 React.createElement("button", { className: "btn bg-cyan-600 hover:bg-cyan-500 whitespace-nowrap", onClick: redeemCode }, "LIBERAR")),
             notice && React.createElement("p", { className: "text-green-400 text-xs mono mb-3" }, notice),
+            error && React.createElement("p", { className: "text-red-400 text-sm mb-3 font-bold" }, error),
+            opening && React.createElement("p", { className: "text-cyan-400 text-sm mono mb-3" }, "Abrindo a atividade\u2026 aguarde alguns segundos."),
             React.createElement("div", { className: "space-y-3 mt-3" },
                 loadingActs && React.createElement("p", { className: "text-slate-500 text-sm mono" }, "Carregando atividades\u2026"),
                 !loadingActs && visibleList.length === 0 && React.createElement("p", { className: "text-slate-500 text-sm" }, "Nenhuma atividade dispon\u00EDvel no momento. Se voc\u00EA recebeu um c\u00F3digo, digite-o acima e clique em LIBERAR."),
-                visibleList.map((a) => (React.createElement("button", { key: a.id, onClick: () => turma.trim() ? enter(a) : setError("Informe sua turma."), className: "w-full text-left glass hover:border-cyan-500 p-5 rounded-2xl transition-all" },
+                visibleList.map((a) => (React.createElement("button", { key: a.id, onClick: () => opening ? null : (turma.trim() ? enter(a) : setError("Informe sua turma.")), className: "w-full text-left glass hover:border-cyan-500 p-5 rounded-2xl transition-all" },
                     a._granted && React.createElement("div", { className: "text-[10px] mono text-green-400 mb-1" }, "LIBERADA PARA VOC\u00CA"),
                     React.createElement("div", { className: "font-black" }, a.title),
                     a.subtitle && React.createElement("div", { className: "text-xs text-slate-400 mt-1" }, a.subtitle))))),
-            error && React.createElement("p", { className: "mt-6 text-red-400 text-sm" }, error),
             React.createElement("button", { className: "mt-8 text-xs mono text-slate-500 hover:text-slate-300", onClick: () => { store.del("auth"); store.del("granted"); setGranted([]); setNotice(""); setAuth(null); setScreen("login"); } }, "SAIR")));
     if (screen === "blocked")
         return (React.createElement("div", { className: "min-h-screen flex items-center justify-center p-6" },
