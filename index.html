@@ -4,1009 +4,1057 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Atividades Interativas</title>
-<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("theme")||"dark")}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;700;900&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;700;900&display=swap');
   body { font-family:'Inter',sans-serif; background:#020617; color:#e2e8f0; overflow-x:hidden; }
   .mono { font-family:'JetBrains Mono',monospace; }
   .glass { background:rgba(15,23,42,.85); backdrop-filter:blur(16px); border:1px solid rgba(255,255,255,.08); }
   .prof-avatar { width:140px; height:140px; border-radius:50%; border:4px solid #06b6d4; object-fit:cover; background:#1e293b; }
-  .speech-bubble { background:#fff; color:#1ae293b; border-radius:20px; padding:15px; position:relative; max-width:280px; font-size:.85rem; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,.5); border:2px solid #06b6d4; }
+  .speech-bubble { background:#fff; color:#1e293b; border-radius:20px; padding:15px; position:relative; max-width:280px; font-size:.85rem; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,.5); border:2px solid #06b6d4; }
   .speech-bubble::after { content:''; position:absolute; bottom:-12px; left:50%; width:0; height:0; border:12px solid transparent; border-top-color:#fff; transform:translateX(-50%); }
   .bar-transition { transition:width .8s cubic-bezier(.4,0,.2,1); }
   @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
   .animate-fade { animation:fadeIn .4s ease-out forwards; }
   .inp { width:100%; background:#0f172a; border:1px solid #334155; border-radius:12px; padding:10px 14px; color:#e2e8f0; font-size:.9rem; }
   .btn { border-radius:14px; padding:10px 18px; font-weight:800; font-size:.8rem; letter-spacing:.05em; transition:all .2s; }
+  html { color-scheme:dark; } html[data-theme=light] { color-scheme:light; }
+  #boot { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; font:700 .8rem 'JetBrains Mono',monospace; letter-spacing:.12em; opacity:.75; text-align:center; }
+  .theme-btn { position:fixed; right:12px; bottom:12px; z-index:60; border-radius:999px; padding:8px 14px; font-size:.72rem; font-weight:800; background:#0f172a; color:#e2e8f0; border:1px solid rgba(148,163,184,.45); box-shadow:0 4px 14px rgba(0,0,0,.3); cursor:pointer; }
+  option { background:#0f172a; color:#e2e8f0; }
+  /* ---- tema claro ---- */
+  html[data-theme=light] body { background:#f1f5f9; color:#0f172a; }
+  html[data-theme=light] .glass { background:rgba(255,255,255,.95); border:1px solid rgba(15,23,42,.14); }
+  html[data-theme=light] .inp { background:#fff; border-color:#94a3b8; color:#0f172a; }
+  html[data-theme=light] option { background:#fff; color:#0f172a; }
+  html[data-theme=light] .theme-btn { background:#fff; color:#0f172a; border-color:#94a3b8; }
+  html[data-theme=light] .text-slate-200, html[data-theme=light] .text-slate-300 { color:#1e293b; }
+  html[data-theme=light] .text-slate-400 { color:#475569; }
+  html[data-theme=light] .text-slate-500, html[data-theme=light] .text-slate-600 { color:#64748b; }
+  html[data-theme=light] .bg-slate-800, html[data-theme=light] .bg-slate-700 { background:#e2e8f0; }
+  html[data-theme=light] .hover\:bg-slate-700:hover, html[data-theme=light] .hover\:bg-slate-600:hover { background:#cbd5e1; }
+  html[data-theme=light] .border-slate-800 { border-color:#cbd5e1; }
+  html[data-theme=light] .text-cyan-400, html[data-theme=light] .text-cyan-500 { color:#0e7490; }
+  html[data-theme=light] .text-green-400 { color:#15803d; }
+  html[data-theme=light] .text-red-400, html[data-theme=light] .text-red-500 { color:#b91c1c; }
+  html[data-theme=light] .text-yellow-500 { color:#a16207; }
+  html[data-theme=light] .bg-black\/95 { background:rgba(255,255,255,.97); }
+  html[data-theme=light] [class*="bg-cyan-6"], html[data-theme=light] [class*="bg-green-7"], html[data-theme=light] [class*="bg-yellow-"],
+  html[data-theme=light] [class*="bg-red-"] { color:#fff; }
   .no-select { user-select:none; -webkit-user-select:none; }
 </style>
 </head>
 <body oncontextmenu="return false;">
-<div id="root"></div>
+<div id="root"><div id="boot">CARREGANDO…</div></div>
+<script>
+setTimeout(function () {
+  var b = document.getElementById("boot"); if (!b) return;
+  try { if (!sessionStorage.getItem("reloaded")) { sessionStorage.setItem("reloaded", "1"); location.reload(); return; } } catch (e) {}
+  b.innerHTML = 'A conexão está lenta ou falhou.<br><br><button onclick="location.reload()" style="padding:10px 18px;border-radius:12px;background:#0891b2;color:#fff;font-weight:800">RECARREGAR</button>';
+}, 10000);
+</script>
 
-<script type="text/babel">
+<script>
+"use strict";
 /* =========================================================================
    CONFIGURAÇÃO — preencha estas 4 linhas depois de publicar o Apps Script
    ========================================================================= */
-const BACKEND_URL     = "https://script.google.com/macros/s/AKfycbxQ7lGFc8mPZv2JBz_KgxSg7KUaT76jYl1KvTWUDFnaHdTZnFrs_OEZ8W3IUkZqybs3/exec";  // URL do App da Web do Apps Script
-const GOOGLE_CLIENT_ID= "958631731368-3k90ou7s3r01fi4b1f79tnl4i5aqbabd.apps.googleusercontent.com";  // Client ID OAuth do Google
-const ALLOWED_DOMAIN  = "uniriosead.com";  // ex: "suaescola.edu.br" (vazio = qualquer Google)
-const WEB3FORMS_KEY   = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; // e-mail de aviso (opcional)
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxQ7lGFc8mPZv2JBz_KgxSg7KUaT76jYl1KvTWUDFnaHdTZnFrs_OEZ8W3IUkZqybs3/exec"; // URL do App da Web do Apps Script
+const GOOGLE_CLIENT_ID = "958631731368-3k90ou7s3r01fi4b1f79tnl4i5aqbabd.apps.googleusercontent.com"; // Client ID OAuth do Google
+const ALLOWED_DOMAIN = "uniriosead.com"; // ex: "suaescola.edu.br" (vazio = qualquer Google)
+const WEB3FORMS_KEY = "8ebd68a7-0287-41da-83e8-72aa7fa521b8"; // e-mail de aviso (opcional)
 /* ========================================================================= */
-
 const { useState, useEffect, useRef, useCallback } = React;
-
-const FETCH_HELP =
-  "Não foi possível falar com a sua Planilha Google. Verifique, nesta ordem:\n" +
-  "1) o endereço do Apps Script está colado em BACKEND_URL no index.html;\n" +
-  "2) na implantação, 'Executar como' está como 'Eu' (a proprietária do script);\n" +
-  "3) 'Quem pode acessar' está como 'Qualquer pessoa' — e NÃO 'Qualquer pessoa com uma Conta do Google';\n" +
-  "4) o endereço termina em /exec (o /dev não funciona no site);\n" +
-  "5) você autorizou a implantação quando o Google pediu permissão.";
-
-const FIX_DEPLOY =
-  "Corrija assim: Implantar > Gerenciar implantações > editar (lápis) > " +
-  "Executar como: Eu | Quem pode acessar: Qualquer pessoa (sem 'com uma Conta do Google') " +
-  "> Implantar nova versão.";
-
+const FETCH_HELP = "Não foi possível falar com a sua Planilha Google. Verifique, nesta ordem:\n" +
+    "1) o endereço do Apps Script está colado em BACKEND_URL no index.html;\n" +
+    "2) na implantação, 'Executar como' está como 'Eu' (a proprietária do script);\n" +
+    "3) 'Quem pode acessar' está como 'Qualquer pessoa' — e NÃO 'Qualquer pessoa com uma Conta do Google';\n" +
+    "4) o endereço termina em /exec (o /dev não funciona no site);\n" +
+    "5) você autorizou a implantação quando o Google pediu permissão.";
+const FIX_DEPLOY = "Corrija assim: Implantar > Gerenciar implantações > editar (lápis) > " +
+    "Executar como: Eu | Quem pode acessar: Qualquer pessoa (sem 'com uma Conta do Google') " +
+    "> Implantar nova versão.";
 async function api(action, data) {
-  if (!BACKEND_URL) throw new Error("BACKEND_URL não configurada no index.html. " + FETCH_HELP);
-  let res;
-  try {
-    res = await fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(Object.assign({ action }, data || {})),
-      redirect: "follow"
-    });
-  } catch (e) {
-    throw new Error(FETCH_HELP);
-  }
-  let out;
-  try { out = await res.json(); }
-  catch (e) {
-    throw new Error(
-      "O endereço respondeu, mas não como esperado (código " + res.status + "). " + FETCH_HELP
-    );
-  }
-  if (!out.ok) throw new Error(out.error || "Erro no servidor");
-  return out;
+    if (!BACKEND_URL)
+        throw new Error("BACKEND_URL não configurada no index.html. " + FETCH_HELP);
+    let res;
+    try {
+        res = await fetch(BACKEND_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(Object.assign({ action }, data || {})),
+            redirect: "follow"
+        });
+    }
+    catch (e) {
+        throw new Error(FETCH_HELP);
+    }
+    let out;
+    try {
+        out = await res.json();
+    }
+    catch (e) {
+        throw new Error("O endereço respondeu, mas não como esperado (código " + res.status + "). " + FETCH_HELP);
+    }
+    if (!out.ok)
+        throw new Error(out.error || "Erro no servidor");
+    return out;
 }
-
 async function testConnection() {
-  if (!BACKEND_URL) return "BACKEND_URL está vazia no index.html — cole ali o endereço /exec do Apps Script.";
-  if (!/\/exec$/.test(BACKEND_URL.trim())) return "O endereço em BACKEND_URL não termina em /exec. Use o link final da implantação.";
-  try {
-    const res = await fetch(BACKEND_URL, { method: "GET", redirect: "follow" });
-    const txt = await res.text();
-    const low = (txt || "").toLowerCase();
-    const finalUrl = (res.url || "").toLowerCase();
-    if (txt.indexOf('"service"') >= 0) return "Conexão OK! O servidor da planilha respondeu normalmente.";
-    if (finalUrl.indexOf("accounts.google.com") >= 0)
-      return "O endereço está pedindo login do Google (foi redirecionado para accounts.google.com). " +
-        "Isso acontece quando a implantação está como 'Executar como: Usuário com acesso ao app da Web' " +
-        "e/ou 'Quem pode acessar: Qualquer pessoa com uma Conta do Google'. " + FIX_DEPLOY;
-    if (low.indexOf("sign in") >= 0 || low.indexOf("fazer login") >= 0 || low.indexOf("faça login") >= 0 ||
-        low.indexOf("choose an account") >= 0 || low.indexOf("escolha uma conta") >= 0)
-      return "O servidor devolveu uma tela de login em vez do JSON da atividade. " +
-        "A implantação está executando como 'Usuário com acesso' ou exigindo Conta do Google. " + FIX_DEPLOY;
-    if (res.status === 401 || res.status === 403)
-      return "Acesso negado (código " + res.status + "). A implantação não está pública. " + FIX_DEPLOY;
-    return "O endereço respondeu (código " + res.status + "), mas não é o servidor das atividades. Confira se colou a URL certa.";
-  } catch (e) {
-    return "A chamada foi bloqueada pelo navegador (típico de implantação que redireciona para o login do Google). " +
-      FIX_DEPLOY + "\n\n" + FETCH_HELP;
-  }
+    if (!BACKEND_URL)
+        return "BACKEND_URL está vazia no index.html — cole ali o endereço /exec do Apps Script.";
+    if (!/\/exec$/.test(BACKEND_URL.trim()))
+        return "O endereço em BACKEND_URL não termina em /exec. Use o link final da implantação.";
+    try {
+        const res = await fetch(BACKEND_URL, { method: "GET", redirect: "follow" });
+        const txt = await res.text();
+        const low = (txt || "").toLowerCase();
+        const finalUrl = (res.url || "").toLowerCase();
+        if (txt.indexOf('"service"') >= 0)
+            return "Conexão OK! O servidor da planilha respondeu normalmente.";
+        if (finalUrl.indexOf("accounts.google.com") >= 0)
+            return "O endereço está pedindo login do Google (foi redirecionado para accounts.google.com). " +
+                "Isso acontece quando a implantação está como 'Executar como: Usuário com acesso ao app da Web' " +
+                "e/ou 'Quem pode acessar: Qualquer pessoa com uma Conta do Google'. " + FIX_DEPLOY;
+        if (low.indexOf("sign in") >= 0 || low.indexOf("fazer login") >= 0 || low.indexOf("faça login") >= 0 ||
+            low.indexOf("choose an account") >= 0 || low.indexOf("escolha uma conta") >= 0)
+            return "O servidor devolveu uma tela de login em vez do JSON da atividade. " +
+                "A implantação está executando como 'Usuário com acesso' ou exigindo Conta do Google. " + FIX_DEPLOY;
+        if (res.status === 401 || res.status === 403)
+            return "Acesso negado (código " + res.status + "). A implantação não está pública. " + FIX_DEPLOY;
+        return "O endereço respondeu (código " + res.status + "), mas não é o servidor das atividades. Confira se colou a URL certa.";
+    }
+    catch (e) {
+        return "A chamada foi bloqueada pelo navegador (típico de implantação que redireciona para o login do Google). " +
+            FIX_DEPLOY + "\n\n" + FETCH_HELP;
+    }
 }
-
-
 function beacon(action, data) {
-  if (!BACKEND_URL) return;
-  try {
-    fetch(BACKEND_URL, {
-      method: "POST",
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-      body: JSON.stringify(Object.assign({ action }, data || {})),
-      keepalive: true
-    }).catch(() => {});
-  } catch (e) {}
+    if (!BACKEND_URL)
+        return;
+    try {
+        fetch(BACKEND_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(Object.assign({ action }, data || {})),
+            keepalive: true
+        }).catch(() => { });
+    }
+    catch (e) { }
 }
-
 function sendEmail(payload) {
-  if (!WEB3FORMS_KEY) return;
-  try {
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(Object.assign({ access_key: WEB3FORMS_KEY }, payload)),
-      keepalive: true
-    }).catch(() => {});
-  } catch (e) {}
+    if (!WEB3FORMS_KEY)
+        return;
+    try {
+        fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify(Object.assign({ access_key: WEB3FORMS_KEY }, payload)),
+            keepalive: true
+        }).catch(() => { });
+    }
+    catch (e) { }
 }
-
 const shuffle = (arr) => {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
-  return a;
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
 };
 const store = {
-  get(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } },
-  set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
-  del(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
+    get(k) { try {
+        return JSON.parse(sessionStorage.getItem(k));
+    }
+    catch (e) {
+        return null;
+    } },
+    set(k, v) { try {
+        sessionStorage.setItem(k, JSON.stringify(v));
+    }
+    catch (e) { } },
+    del(k) { try {
+        sessionStorage.removeItem(k);
+    }
+    catch (e) { } }
 };
-
 /* ============================== APP DO ALUNO ============================== */
-
-function App() {
-  const isAdmin = new URLSearchParams(location.search).has("admin");
-  if (isAdmin) return <Admin />;
-  if (!BACKEND_URL) return <SetupNeeded />;
-  return <Student />;
-}
-
-function SetupNeeded() {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="glass p-10 rounded-3xl max-w-xl border-t-4 border-yellow-500">
-        <h1 className="text-2xl font-black mb-4">Configuração pendente</h1>
-        <p className="text-slate-300 text-sm leading-relaxed">
-          Abra o arquivo <span className="mono text-cyan-400">index.html</span> e preencha
-          <span className="mono text-cyan-400"> BACKEND_URL</span> e
-          <span className="mono text-cyan-400"> GOOGLE_CLIENT_ID</span>. O passo a passo está no
-          arquivo <span className="mono text-cyan-400">LEIA-ME.md</span>.
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function Wrap({ children, border }) {
-  return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className={"glass p-8 sm:p-10 rounded-[32px] max-w-2xl w-full animate-fade border-t-4 " + (border || "border-cyan-500")}>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function Student() {
-  const [screen, setScreen] = useState("login");      // login|choose|summary|rules|playing|blocked|end|sending
-  const [auth, setAuth] = useState(store.get("auth"));
-  const [error, setError] = useState("");
-  const [activities, setActivities] = useState([]);
-  const [activity, setActivity] = useState(null);
-  const [turma, setTurma] = useState("");
-  const [code, setCode] = useState("");
-
-  const [order, setOrder] = useState([]);             // perguntas embaralhadas
-  const [idx, setIdx] = useState(0);
-  const [score, setScore] = useState(0);
-  const [bars, setBars] = useState({});
-  const [answers, setAnswers] = useState([]);
-  const [feedback, setFeedback] = useState(null);
-  const [timer, setTimer] = useState(60);
-  const [chapterPopup, setChapterPopup] = useState(null);
-  const [blockedMsg, setBlockedMsg] = useState("");
-  const [grade, setGrade] = useState(null);
-  const [introTimer, setIntroTimer] = useState(0);
-  const [granted, setGranted] = useState(store.get("granted") || []);   // atividades liberadas por código
-  const [notice, setNotice] = useState("");
-
-  const addGranted = (act, grantCode) => {
-    setGranted((prev) => {
-      const next = prev.filter((g) => g.id !== act.id).concat([Object.assign({}, act, { grantCode: grantCode || "" })]);
-      store.set("granted", next);
-      return next;
-    });
-  };
-
-  const redeemCode = async () => {
-    setError(""); setNotice("");
-    const c = code.trim();
-    if (!c) { setError("Digite o código da atividade."); return; }
-    try {
-      const r = await api("activityByCode", { token: auth.token, code: c });
-      addGranted(r.activity, c.toUpperCase());
-      setNotice("Atividade liberada: " + r.activity.title);
-    } catch (e) { setError(e.message); }
-  };
-
-  const ref = useRef({});
-  useEffect(() => { ref.current = { screen, auth, activity, idx, score, bars, answers, turma }; });
-
-  useEffect(() => { if (auth) store.set("auth", auth); }, [auth]);
-
-  /* ---- lista de atividades ---- */
-  useEffect(() => {
-    if (!auth) return;
-    api("activities").then((r) => setActivities(r.activities)).catch((e) => setError(e.message));
-    if (screen === "login") setScreen("choose");
-  }, [auth]);
-
-  /* ---- botão Google ---- */
-  useEffect(() => {
-    if (auth || screen !== "login" || !GOOGLE_CLIENT_ID) return;
-    let tries = 0;
-    const t = setInterval(() => {
-      if (window.google && window.google.accounts && document.getElementById("gbtn")) {
-        clearInterval(t);
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          hd: ALLOWED_DOMAIN || undefined,
-          callback: async (resp) => {
-            try {
-              const r = await api("loginGoogle", { credential: resp.credential });
-              setError("");
-              setAuth({ token: r.token, email: r.email, nome: r.nome });
-            } catch (e) { setError(e.message); }
-          }
-        });
-        window.google.accounts.id.renderButton(document.getElementById("gbtn"), {
-          theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
-        });
-      } else if (++tries > 60) clearInterval(t);
-    }, 200);
-    return () => clearInterval(t);
-  }, [auth, screen]);
-
-  /* ---- detecção de saída da tela ---- */
-  const exitLock = useRef(0);
-  useEffect(() => {
-    const onExit = async () => {
-      const s = ref.current;
-      if (s.screen !== "playing" || !s.activity || !s.auth) return;
-      const nowTs = Date.now();
-      if (nowTs - exitLock.current < 1500) return;
-      exitLock.current = nowTs;
-      beacon("reportExit", { token: s.auth.token, activityId: s.activity.id });
-      try {
-        const r = await api("reportExit", { token: s.auth.token, activityId: s.activity.id });
-        if (r.blocked) {
-          setBlockedMsg(r.motivo || "Você saiu da tela durante a atividade.");
-          setScreen("blocked");
-          sendEmail({
-            estudante: s.auth.nome + " (BLOQUEADO)", turma: s.turma,
-            atividade: s.activity.title, status: "Bloqueado", motivo: r.motivo || "Saiu da tela"
-          });
+function ThemeToggle() {
+    const [t, setT] = useState(document.documentElement.getAttribute("data-theme") || "dark");
+    const flip = () => {
+        const n = t === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", n);
+        try {
+            localStorage.setItem("theme", n);
         }
-      } catch (e) {}
+        catch (e) { }
+        setT(n);
     };
-    const onVis = () => { if (document.visibilityState === "hidden") onExit(); };
-    window.addEventListener("visibilitychange", onVis);
-    document.addEventListener("visibilitychange", onVis);
-    window.addEventListener("blur", onExit);
-    window.addEventListener("pagehide", onExit);
-    return () => {
-      window.removeEventListener("visibilitychange", onVis);
-      document.removeEventListener("visibilitychange", onVis);
-      window.removeEventListener("blur", onExit);
-      window.removeEventListener("pagehide", onExit);
-    };
-  }, []);
-
-  /* ---- cronômetros ---- */
-  useEffect(() => {
-    if (screen !== "summary" && screen !== "rules") return;
-    setIntroTimer(0);
-    const t = setInterval(() => setIntroTimer((v) => v + 1), 1000);
-    return () => clearInterval(t);
-  }, [screen]);
-
-  useEffect(() => {
-    if (screen !== "playing" || feedback || chapterPopup) return;
-    if (timer <= 0) { pick({ s: 0, i: {}, f: "O tempo esgotou!" }); return; }
-    const t = setInterval(() => setTimer((v) => v - 1), 1000);
-    return () => clearInterval(t);
-  }, [screen, timer, feedback, chapterPopup]);
-
-  /* ---- entrar na atividade ---- */
-  const enter = async (act) => {
-    setError("");
-    try {
-      const r = await api("start", { token: auth.token, activityId: act.id, code: act.grantCode || code, turma });
-      if (r.blocked) {
-        setActivity(r.activity); setBlockedMsg(r.motivo || ""); setScreen("blocked"); return;
-      }
-      const a = r.activity;
-      setActivity(a);
-      setTurma(r.aluno.turma || turma);
-      const chapters = [...new Set(a.questions.map((q) => q.ch))].sort((x, y) => x - y);
-      let list = [];
-      chapters.forEach((c) => {
-        shuffle(a.questions.filter((q) => q.ch === c)).forEach((q) =>
-          list.push(Object.assign({}, q, { options: shuffle(q.options) }))
-        );
-      });
-      setOrder(list);
-      setIdx(r.progress.idx || 0);
-      setScore(r.progress.score || 0);
-      setBars(r.progress.bars || {});
-      setAnswers(r.progress.answers || []);
-      setTimer(Number(a.secondsPerQuestion) || 60);
-      if ((r.progress.idx || 0) > 0) { setScreen("playing"); setChapterPopup(list[r.progress.idx] ? list[r.progress.idx].ch : null); }
-      else setScreen("summary");
-    } catch (e) { setError(e.message); }
-  };
-
-  const startGame = () => {
-    setChapterPopup(order[0] ? order[0].ch : null);
-    setScreen("playing");
-  };
-
-  /* ---- responder ---- */
-  const pick = (opt) => {
-    const newScore = score + (Number(opt.s) || 0);
-    const newBars = Object.assign({}, bars);
-    (activity.bars || []).forEach((b) => {
-      const impact = opt.i && opt.i[b.key] !== undefined ? Number(opt.i[b.key]) : 50;
-      newBars[b.key] = Math.min(100, Math.max(0, (newBars[b.key] === undefined ? 50 : newBars[b.key]) + (impact - 50) / 4));
-    });
-    const newAnswers = answers.concat([{ q: order[idx] ? order[idx].id : idx, s: Number(opt.s) || 0 }]);
-    setScore(newScore); setBars(newBars); setAnswers(newAnswers); setFeedback(opt.f || "");
-
-    const nextIdx = idx + 1;
-    api("answer", {
-      token: auth.token, activityId: activity.id, idx: nextIdx, score: newScore,
-      bars: newBars, answers: newAnswers
-    }).then((r) => {
-      if (r.blocked) { setBlockedMsg(r.motivo || ""); setScreen("blocked"); }
-    }).catch(() => {});
-
-    setTimeout(() => {
-      setFeedback(null);
-      setTimer(Number(activity.secondsPerQuestion) || 60);
-      if (nextIdx < order.length) {
-        if (order[nextIdx].ch !== order[idx].ch) setChapterPopup(order[nextIdx].ch);
-        setIdx(nextIdx);
-      } else finish(newScore, newBars, newAnswers);
-    }, 4000);
-  };
-
-  const finish = async (fScore, fBars, fAnswers) => {
-    setScreen("sending");
-    try {
-      const r = await api("finish", { token: auth.token, activityId: activity.id, score: fScore, bars: fBars, answers: fAnswers });
-      setGrade(r.nota);
-      sendEmail({
-        estudante: auth.nome, email: auth.email, turma,
-        atividade: activity.title, nota_final: r.nota, status: "Concluído",
-        barras: (activity.bars || []).map((b) => b.label + ": " + Math.round(fBars[b.key] || 0) + "%").join(" | ")
-      });
-    } catch (e) { setError(e.message); }
-    setScreen("end");
-  };
-
-  /* ------------------------------ telas ------------------------------ */
-  const visibleList = granted
-    .filter((g) => !activities.some((a) => a.id === g.id))
-    .map((g) => Object.assign({}, g, { _granted: true }))
-    .concat(activities);
-
-  if (screen === "login") return (
-    <Wrap>
-      <h1 className="text-3xl font-black uppercase tracking-tighter mb-3 text-center">Atividades</h1>
-      <p className="text-slate-400 text-sm text-center mb-8">
-        Entre com seu e-mail institucional {ALLOWED_DOMAIN ? "(@" + ALLOWED_DOMAIN + ")" : ""} para começar.
-      </p>
-      <div className="flex justify-center mb-6"><div id="gbtn"></div></div>
-      {!GOOGLE_CLIENT_ID && <p className="text-center text-xs text-yellow-500 mb-6">GOOGLE_CLIENT_ID não configurado.</p>}
-      <details className="text-xs text-slate-400">
-        <summary className="cursor-pointer mono">Não consegui entrar com o Google</summary>
-        <div className="mt-4 space-y-3">
-          <p>Peça à professora um <strong>código de liberação</strong> e digite abaixo.</p>
-          <input className="inp" placeholder="CÓDIGO DE LIBERAÇÃO" value={code} onChange={(e) => setCode(e.target.value)} />
-          <button className="btn bg-slate-700 hover:bg-slate-600 w-full" onClick={async () => {
-            try {
-              const r = await api("loginManual", { code });
-              setError(""); setTurma(r.turma || ""); setCode("");
-              if (r.activity) addGranted(r.activity, "");
-              setAuth({ token: r.token, email: r.email, nome: r.nome });
-            } catch (e) { setError(e.message); }
-          }}>ENTRAR COM CÓDIGO</button>
-        </div>
-      </details>
-      {error && <p className="mt-6 text-center text-red-400 text-sm">{error}</p>}
-    </Wrap>
-  );
-
-  if (screen === "choose") return (
-    <Wrap>
-      <p className="text-xs mono text-cyan-400 mb-1">Olá, {auth.nome}</p>
-      <h1 className="text-2xl font-black uppercase mb-6">Escolha a atividade</h1>
-      <input className="inp mb-3" placeholder="Sua turma" value={turma} onChange={(e) => setTurma(e.target.value)} />
-      <div className="flex gap-2 mb-3">
-        <input className="inp" placeholder="Código da atividade (se houver)" value={code}
-          onChange={(e) => setCode(e.target.value.toUpperCase())}
-          onKeyDown={(e) => e.key === "Enter" && redeemCode()} />
-        <button className="btn bg-cyan-600 hover:bg-cyan-500 whitespace-nowrap" onClick={redeemCode}>LIBERAR</button>
-      </div>
-      {notice && <p className="text-green-400 text-xs mono mb-3">{notice}</p>}
-      <div className="space-y-3 mt-3">
-        {visibleList.length === 0 && <p className="text-slate-500 text-sm">Nenhuma atividade disponível no momento. Se você recebeu um código, digite-o acima e clique em LIBERAR.</p>}
-        {visibleList.map((a) => (
-          <button key={a.id} onClick={() => turma.trim() ? enter(a) : setError("Informe sua turma.")}
-            className="w-full text-left glass hover:border-cyan-500 p-5 rounded-2xl transition-all">
-            {a._granted && <div className="text-[10px] mono text-green-400 mb-1">LIBERADA PARA VOCÊ</div>}
-            <div className="font-black">{a.title}</div>
-            {a.subtitle && <div className="text-xs text-slate-400 mt-1">{a.subtitle}</div>}
-          </button>
-        ))}
-      </div>
-      {error && <p className="mt-6 text-red-400 text-sm">{error}</p>}
-      <button className="mt-8 text-xs mono text-slate-500 hover:text-slate-300" onClick={() => { store.del("auth"); store.del("granted"); setGranted([]); setNotice(""); setAuth(null); setScreen("login"); }}>SAIR</button>
-    </Wrap>
-  );
-
-  if (screen === "blocked") return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="glass p-10 rounded-[32px] max-w-xl w-full border-t-4 border-red-600 text-center animate-fade">
-        <div className="text-6xl mb-4">⛔</div>
-        <h1 className="text-2xl font-black uppercase text-red-400 mb-4">Acesso bloqueado</h1>
-        <p className="text-slate-300 text-sm leading-relaxed mb-6">
-          Você saiu da tela durante a atividade, e por isso seu acesso foi bloqueado.
-          <br /><strong>Procure a professora / administrador para liberar o seu acesso.</strong>
-        </p>
-        {blockedMsg && <p className="mono text-xs text-slate-500 mb-6">{blockedMsg}</p>}
-        <p className="mono text-xs text-slate-500">{auth && auth.nome} — {turma}</p>
-        <button className="btn bg-slate-700 hover:bg-slate-600 mt-8" onClick={() => location.reload()}>TENTAR NOVAMENTE</button>
-      </div>
-    </div>
-  );
-
-  if (screen === "summary") return (
-    <Wrap>
-      <h1 className="text-3xl font-black mb-6 uppercase tracking-tighter text-center">{activity.title}</h1>
-      <p className="text-base text-slate-300 leading-relaxed mb-10 font-light text-center">{activity.summary}</p>
-      <div className="text-center">
-        {introTimer >= 3
-          ? <button onClick={() => setScreen("rules")} className="btn bg-cyan-600 hover:bg-cyan-500 px-12 py-4">AVANÇAR</button>
-          : <div className="text-cyan-500 mono text-xs animate-pulse">AGUARDE... {3 - introTimer}s</div>}
-      </div>
-    </Wrap>
-  );
-
-  if (screen === "rules") return (
-    <Wrap border="border-yellow-500">
-      <h2 className="text-2xl font-black mb-6 uppercase text-center">Regras do jogo</h2>
-      <ul className="text-sm text-slate-300 space-y-3 font-light list-disc pl-6 mb-10">
-        {(activity.rules || []).map((r, i) => <li key={i}>{r}</li>)}
-      </ul>
-      <div className="text-center">
-        {introTimer >= 3
-          ? <button onClick={startGame} className="btn bg-yellow-600 hover:bg-yellow-500 px-12 py-4">COMEÇAR</button>
-          : <div className="text-yellow-500 mono text-xs animate-pulse">AGUARDE... {3 - introTimer}s</div>}
-      </div>
-    </Wrap>
-  );
-
-  if (screen === "sending") return (
-    <div className="min-h-screen flex items-center justify-center"><p className="mono text-cyan-400 animate-pulse">ENVIANDO RESULTADO...</p></div>
-  );
-
-  if (screen === "end") return (
-    <Wrap border="border-green-500">
-      <div className="text-center">
-        <h1 className="text-2xl font-black uppercase mb-2">Atividade concluída</h1>
-        <p className="text-slate-400 text-sm mb-8">{auth.nome} — {turma}</p>
-        <div className="text-7xl font-black text-green-400 mb-2">{grade}</div>
-        <p className="mono text-xs text-slate-500 mb-8">NOTA FINAL (de {activity.maxGrade})</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {(activity.bars || []).map((b) => (
-            <div key={b.key} className="glass rounded-2xl p-4">
-              <div className="text-xs mono text-slate-400">{b.label}</div>
-              <div className="text-2xl font-black" style={{ color: b.color }}>{Math.round(bars[b.key] || 0)}%</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </Wrap>
-  );
-
-  /* ------------------------------ jogo ------------------------------ */
-  const q = order[idx];
-  if (!q) return null;
-  const chapter = (activity.chapters || []).find((c) => Number(c.n) === Number(chapterPopup));
-
-  return (
-    <div className="min-h-screen p-4 sm:p-8 no-select">
-      {chapterPopup && chapter && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl">
-          <div className="max-w-xl text-center animate-fade">
-            <p className="mono text-cyan-500 text-xs mb-3">CAPÍTULO {chapter.n}</p>
-            <h2 className="text-3xl font-black uppercase mb-6">{chapter.title}</h2>
-            <p className="text-slate-300 font-light leading-relaxed mb-10">{chapter.context}</p>
-            <button className="btn bg-cyan-600 hover:bg-cyan-500 px-10 py-4" onClick={() => { setChapterPopup(null); setTimer(Number(activity.secondsPerQuestion) || 60); }}>INICIAR CAPÍTULO</button>
-          </div>
-        </div>
-      )}
-
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-          <div className="mono text-xs text-slate-400">QUESTÃO {idx + 1}/{order.length} · CAP. {q.ch}</div>
-          <div className={"mono text-xl font-black " + (timer <= 10 ? "text-red-500 animate-pulse" : "text-cyan-400")}>{Math.max(0, timer)}s</div>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
-          {(activity.bars || []).map((b) => (
-            <div key={b.key} className="glass rounded-2xl p-3">
-              <div className="flex justify-between text-[11px] mono mb-2"><span>{b.label}</span><span>{Math.round(bars[b.key] || 0)}%</span></div>
-              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bar-transition rounded-full" style={{ width: (bars[b.key] || 0) + "%", background: b.color }} />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="glass rounded-[28px] p-6 sm:p-8 mb-6">
-          <h3 className="text-lg font-black mb-3 text-cyan-400">{q.title}</h3>
-          <p className="text-slate-200 font-light leading-relaxed">{q.text}</p>
-        </div>
-
-        {feedback ? (
-          <div className="flex flex-col items-center gap-4 animate-fade">
-            <div className="speech-bubble">{feedback}</div>
-            {activity.avatar && <img src={activity.avatar} className="prof-avatar" alt="Professora" />}
-          </div>
-        ) : (
-          <div className="grid gap-3">
-            {q.options.map((opt, i) => (
-              <button key={i} onClick={(e) => { e.currentTarget.blur(); pick(opt); }}
-                className="text-left glass hover:border-cyan-500 rounded-2xl p-5 text-sm text-slate-200 transition-all">
-                {opt.t}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    return React.createElement("button", { className: "theme-btn", onClick: flip, title: "Alternar tema claro/escuro" }, t === "dark" ? "☀️ Tema claro" : "🌙 Tema escuro");
 }
-
+function App() {
+    useEffect(() => { try {
+        sessionStorage.removeItem("reloaded");
+    }
+    catch (e) { } }, []);
+    const isAdmin = new URLSearchParams(location.search).has("admin");
+    let page;
+    if (isAdmin)
+        page = React.createElement(Admin, null);
+    else if (!BACKEND_URL)
+        page = React.createElement(SetupNeeded, null);
+    else
+        page = React.createElement(Student, null);
+    return React.createElement(React.Fragment, null,
+        page,
+        React.createElement(ThemeToggle, null));
+}
+function SetupNeeded() {
+    return (React.createElement("div", { className: "min-h-screen flex items-center justify-center p-6" },
+        React.createElement("div", { className: "glass p-10 rounded-3xl max-w-xl border-t-4 border-yellow-500" },
+            React.createElement("h1", { className: "text-2xl font-black mb-4" }, "Configura\u00E7\u00E3o pendente"),
+            React.createElement("p", { className: "text-slate-300 text-sm leading-relaxed" },
+                "Abra o arquivo ",
+                React.createElement("span", { className: "mono text-cyan-400" }, "index.html"),
+                " e preencha",
+                React.createElement("span", { className: "mono text-cyan-400" }, " BACKEND_URL"),
+                " e",
+                React.createElement("span", { className: "mono text-cyan-400" }, " GOOGLE_CLIENT_ID"),
+                ". O passo a passo est\u00E1 no arquivo ",
+                React.createElement("span", { className: "mono text-cyan-400" }, "LEIA-ME.md"),
+                "."))));
+}
+function Wrap({ children, border }) {
+    return (React.createElement("div", { className: "min-h-screen flex items-center justify-center p-6" },
+        React.createElement("div", { className: "glass p-8 sm:p-10 rounded-[32px] max-w-2xl w-full animate-fade border-t-4 " + (border || "border-cyan-500") }, children)));
+}
+function Student() {
+    const [screen, setScreen] = useState("login"); // login|choose|summary|rules|playing|blocked|end|sending
+    const [auth, setAuth] = useState(store.get("auth"));
+    const [error, setError] = useState("");
+    const [activities, setActivities] = useState([]);
+    const [activity, setActivity] = useState(null);
+    const [turma, setTurma] = useState("");
+    const [code, setCode] = useState("");
+    const [order, setOrder] = useState([]); // perguntas embaralhadas
+    const [idx, setIdx] = useState(0);
+    const [score, setScore] = useState(0);
+    const [bars, setBars] = useState({});
+    const [answers, setAnswers] = useState([]);
+    const [feedback, setFeedback] = useState(null);
+    const [timer, setTimer] = useState(60);
+    const [chapterPopup, setChapterPopup] = useState(null);
+    const [blockedMsg, setBlockedMsg] = useState("");
+    const [grade, setGrade] = useState(null);
+    const [introTimer, setIntroTimer] = useState(0);
+    const [granted, setGranted] = useState(store.get("granted") || []); // atividades liberadas por código
+    const [notice, setNotice] = useState("");
+    const [loadingActs, setLoadingActs] = useState(false);
+    const addGranted = (act, grantCode) => {
+        setGranted((prev) => {
+            const next = prev.filter((g) => g.id !== act.id).concat([Object.assign({}, act, { grantCode: grantCode || "" })]);
+            store.set("granted", next);
+            return next;
+        });
+    };
+    const redeemCode = async () => {
+        setError("");
+        setNotice("");
+        const c = code.trim();
+        if (!c) {
+            setError("Digite o código da atividade.");
+            return;
+        }
+        try {
+            const r = await api("activityByCode", { token: auth.token, code: c });
+            addGranted(r.activity, c.toUpperCase());
+            setNotice("Atividade liberada: " + r.activity.title);
+        }
+        catch (e) {
+            setError(e.message);
+        }
+    };
+    const ref = useRef({});
+    useEffect(() => { ref.current = { screen, auth, activity, idx, score, bars, answers, turma }; });
+    useEffect(() => { if (auth)
+        store.set("auth", auth); }, [auth]);
+    /* ---- lista de atividades ---- */
+    useEffect(() => {
+        if (!auth)
+            return;
+        setLoadingActs(true);
+        api("activities").then((r) => setActivities(r.activities)).catch((e) => setError(e.message)).then(() => setLoadingActs(false));
+        if (screen === "login")
+            setScreen("choose");
+    }, [auth]);
+    /* ---- botão Google ---- */
+    useEffect(() => {
+        if (auth || screen !== "login" || !GOOGLE_CLIENT_ID)
+            return;
+        let tries = 0;
+        const t = setInterval(() => {
+            if (window.google && window.google.accounts && document.getElementById("gbtn")) {
+                clearInterval(t);
+                window.google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    hd: ALLOWED_DOMAIN || undefined,
+                    callback: async (resp) => {
+                        try {
+                            const r = await api("loginGoogle", { credential: resp.credential });
+                            setError("");
+                            setAuth({ token: r.token, email: r.email, nome: r.nome });
+                        }
+                        catch (e) {
+                            setError(e.message);
+                        }
+                    }
+                });
+                window.google.accounts.id.renderButton(document.getElementById("gbtn"), {
+                    theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
+                });
+            }
+            else if (++tries > 60)
+                clearInterval(t);
+        }, 200);
+        return () => clearInterval(t);
+    }, [auth, screen]);
+    /* ---- detecção de saída da tela ---- */
+    const exitLock = useRef(0);
+    useEffect(() => {
+        const onExit = async () => {
+            const s = ref.current;
+            if (s.screen !== "playing" || !s.activity || !s.auth)
+                return;
+            const nowTs = Date.now();
+            if (nowTs - exitLock.current < 1500)
+                return;
+            exitLock.current = nowTs;
+            beacon("reportExit", { token: s.auth.token, activityId: s.activity.id });
+            try {
+                const r = await api("reportExit", { token: s.auth.token, activityId: s.activity.id });
+                if (r.blocked) {
+                    setBlockedMsg(r.motivo || "Você saiu da tela durante a atividade.");
+                    setScreen("blocked");
+                    sendEmail({
+                        estudante: s.auth.nome + " (BLOQUEADO)", turma: s.turma,
+                        atividade: s.activity.title, status: "Bloqueado", motivo: r.motivo || "Saiu da tela"
+                    });
+                }
+            }
+            catch (e) { }
+        };
+        const onVis = () => { if (document.visibilityState === "hidden")
+            onExit(); };
+        window.addEventListener("visibilitychange", onVis);
+        document.addEventListener("visibilitychange", onVis);
+        window.addEventListener("blur", onExit);
+        window.addEventListener("pagehide", onExit);
+        return () => {
+            window.removeEventListener("visibilitychange", onVis);
+            document.removeEventListener("visibilitychange", onVis);
+            window.removeEventListener("blur", onExit);
+            window.removeEventListener("pagehide", onExit);
+        };
+    }, []);
+    /* ---- cronômetros ---- */
+    useEffect(() => {
+        if (screen !== "summary" && screen !== "rules")
+            return;
+        setIntroTimer(0);
+        const t = setInterval(() => setIntroTimer((v) => v + 1), 1000);
+        return () => clearInterval(t);
+    }, [screen]);
+    useEffect(() => {
+        if (screen !== "playing" || feedback || chapterPopup)
+            return;
+        if (timer <= 0) {
+            pick({ s: 0, i: {}, f: "O tempo esgotou!" });
+            return;
+        }
+        const t = setInterval(() => setTimer((v) => v - 1), 1000);
+        return () => clearInterval(t);
+    }, [screen, timer, feedback, chapterPopup]);
+    /* ---- entrar na atividade ---- */
+    const enter = async (act) => {
+        setError("");
+        try {
+            const r = await api("start", { token: auth.token, activityId: act.id, code: act.grantCode || code, turma });
+            if (r.blocked) {
+                setActivity(r.activity);
+                setBlockedMsg(r.motivo || "");
+                setScreen("blocked");
+                return;
+            }
+            const a = r.activity;
+            setActivity(a);
+            setTurma(r.aluno.turma || turma);
+            const chapters = [...new Set(a.questions.map((q) => q.ch))].sort((x, y) => x - y);
+            let list = [];
+            chapters.forEach((c) => {
+                shuffle(a.questions.filter((q) => q.ch === c)).forEach((q) => list.push(Object.assign({}, q, { options: shuffle(q.options) })));
+            });
+            setOrder(list);
+            setIdx(r.progress.idx || 0);
+            setScore(r.progress.score || 0);
+            setBars(r.progress.bars || {});
+            setAnswers(r.progress.answers || []);
+            setTimer(Number(a.secondsPerQuestion) || 60);
+            if ((r.progress.idx || 0) > 0) {
+                setScreen("playing");
+                setChapterPopup(list[r.progress.idx] ? list[r.progress.idx].ch : null);
+            }
+            else
+                setScreen("summary");
+        }
+        catch (e) {
+            setError(e.message);
+        }
+    };
+    const startGame = () => {
+        setChapterPopup(order[0] ? order[0].ch : null);
+        setScreen("playing");
+    };
+    /* ---- responder ---- */
+    const pick = (opt) => {
+        const newScore = score + (Number(opt.s) || 0);
+        const newBars = Object.assign({}, bars);
+        (activity.bars || []).forEach((b) => {
+            const impact = opt.i && opt.i[b.key] !== undefined ? Number(opt.i[b.key]) : 50;
+            newBars[b.key] = Math.min(100, Math.max(0, (newBars[b.key] === undefined ? 50 : newBars[b.key]) + (impact - 50) / 4));
+        });
+        const newAnswers = answers.concat([{ q: order[idx] ? order[idx].id : idx, s: Number(opt.s) || 0 }]);
+        setScore(newScore);
+        setBars(newBars);
+        setAnswers(newAnswers);
+        setFeedback(opt.f || "");
+        const nextIdx = idx + 1;
+        api("answer", {
+            token: auth.token, activityId: activity.id, idx: nextIdx, score: newScore,
+            bars: newBars, answers: newAnswers
+        }).then((r) => {
+            if (r.blocked) {
+                setBlockedMsg(r.motivo || "");
+                setScreen("blocked");
+            }
+        }).catch(() => { });
+        setTimeout(() => {
+            setFeedback(null);
+            setTimer(Number(activity.secondsPerQuestion) || 60);
+            if (nextIdx < order.length) {
+                if (order[nextIdx].ch !== order[idx].ch)
+                    setChapterPopup(order[nextIdx].ch);
+                setIdx(nextIdx);
+            }
+            else
+                finish(newScore, newBars, newAnswers);
+        }, 4000);
+    };
+    const finish = async (fScore, fBars, fAnswers) => {
+        setScreen("sending");
+        try {
+            const r = await api("finish", { token: auth.token, activityId: activity.id, score: fScore, bars: fBars, answers: fAnswers });
+            setGrade(r.nota);
+            sendEmail({
+                estudante: auth.nome, email: auth.email, turma,
+                atividade: activity.title, nota_final: r.nota, status: "Concluído",
+                barras: (activity.bars || []).map((b) => b.label + ": " + Math.round(fBars[b.key] || 0) + "%").join(" | ")
+            });
+        }
+        catch (e) {
+            setError(e.message);
+        }
+        setScreen("end");
+    };
+    /* ------------------------------ telas ------------------------------ */
+    const visibleList = granted
+        .filter((g) => !activities.some((a) => a.id === g.id))
+        .map((g) => Object.assign({}, g, { _granted: true }))
+        .concat(activities);
+    if (screen === "login")
+        return (React.createElement(Wrap, null,
+            React.createElement("h1", { className: "text-3xl font-black uppercase tracking-tighter mb-3 text-center" }, "Atividades"),
+            React.createElement("p", { className: "text-slate-400 text-sm text-center mb-8" },
+                "Entre com seu e-mail institucional ",
+                ALLOWED_DOMAIN ? "(@" + ALLOWED_DOMAIN + ")" : "",
+                " para come\u00E7ar."),
+            React.createElement("div", { className: "flex justify-center mb-6" },
+                React.createElement("div", { id: "gbtn" })),
+            !GOOGLE_CLIENT_ID && React.createElement("p", { className: "text-center text-xs text-yellow-500 mb-6" }, "GOOGLE_CLIENT_ID n\u00E3o configurado."),
+            React.createElement("details", { className: "text-xs text-slate-400" },
+                React.createElement("summary", { className: "cursor-pointer mono" }, "N\u00E3o consegui entrar com o Google"),
+                React.createElement("div", { className: "mt-4 space-y-3" },
+                    React.createElement("p", null,
+                        "Pe\u00E7a \u00E0 professora um ",
+                        React.createElement("strong", null, "c\u00F3digo de libera\u00E7\u00E3o"),
+                        " e digite abaixo."),
+                    React.createElement("input", { className: "inp", placeholder: "C\u00D3DIGO DE LIBERA\u00C7\u00C3O", value: code, onChange: (e) => setCode(e.target.value) }),
+                    React.createElement("button", { className: "btn bg-slate-700 hover:bg-slate-600 w-full", onClick: async () => {
+                            try {
+                                const r = await api("loginManual", { code });
+                                setError("");
+                                setTurma(r.turma || "");
+                                setCode("");
+                                if (r.activity)
+                                    addGranted(r.activity, "");
+                                setAuth({ token: r.token, email: r.email, nome: r.nome });
+                            }
+                            catch (e) {
+                                setError(e.message);
+                            }
+                        } }, "ENTRAR COM C\u00D3DIGO"))),
+            error && React.createElement("p", { className: "mt-6 text-center text-red-400 text-sm" }, error)));
+    if (screen === "choose")
+        return (React.createElement(Wrap, null,
+            React.createElement("p", { className: "text-xs mono text-cyan-400 mb-1" },
+                "Ol\u00E1, ",
+                auth.nome),
+            React.createElement("h1", { className: "text-2xl font-black uppercase mb-6" }, "Escolha a atividade"),
+            React.createElement("input", { className: "inp mb-3", placeholder: "Sua turma", value: turma, onChange: (e) => setTurma(e.target.value) }),
+            React.createElement("div", { className: "flex gap-2 mb-3" },
+                React.createElement("input", { className: "inp", placeholder: "C\u00F3digo da atividade (se houver)", value: code, onChange: (e) => setCode(e.target.value.toUpperCase()), onKeyDown: (e) => e.key === "Enter" && redeemCode() }),
+                React.createElement("button", { className: "btn bg-cyan-600 hover:bg-cyan-500 whitespace-nowrap", onClick: redeemCode }, "LIBERAR")),
+            notice && React.createElement("p", { className: "text-green-400 text-xs mono mb-3" }, notice),
+            React.createElement("div", { className: "space-y-3 mt-3" },
+                loadingActs && React.createElement("p", { className: "text-slate-500 text-sm mono" }, "Carregando atividades\u2026"),
+                !loadingActs && visibleList.length === 0 && React.createElement("p", { className: "text-slate-500 text-sm" }, "Nenhuma atividade dispon\u00EDvel no momento. Se voc\u00EA recebeu um c\u00F3digo, digite-o acima e clique em LIBERAR."),
+                visibleList.map((a) => (React.createElement("button", { key: a.id, onClick: () => turma.trim() ? enter(a) : setError("Informe sua turma."), className: "w-full text-left glass hover:border-cyan-500 p-5 rounded-2xl transition-all" },
+                    a._granted && React.createElement("div", { className: "text-[10px] mono text-green-400 mb-1" }, "LIBERADA PARA VOC\u00CA"),
+                    React.createElement("div", { className: "font-black" }, a.title),
+                    a.subtitle && React.createElement("div", { className: "text-xs text-slate-400 mt-1" }, a.subtitle))))),
+            error && React.createElement("p", { className: "mt-6 text-red-400 text-sm" }, error),
+            React.createElement("button", { className: "mt-8 text-xs mono text-slate-500 hover:text-slate-300", onClick: () => { store.del("auth"); store.del("granted"); setGranted([]); setNotice(""); setAuth(null); setScreen("login"); } }, "SAIR")));
+    if (screen === "blocked")
+        return (React.createElement("div", { className: "min-h-screen flex items-center justify-center p-6" },
+            React.createElement("div", { className: "glass p-10 rounded-[32px] max-w-xl w-full border-t-4 border-red-600 text-center animate-fade" },
+                React.createElement("div", { className: "text-6xl mb-4" }, "\u26D4"),
+                React.createElement("h1", { className: "text-2xl font-black uppercase text-red-400 mb-4" }, "Acesso bloqueado"),
+                React.createElement("p", { className: "text-slate-300 text-sm leading-relaxed mb-6" },
+                    "Voc\u00EA saiu da tela durante a atividade, e por isso seu acesso foi bloqueado.",
+                    React.createElement("br", null),
+                    React.createElement("strong", null, "Procure a professora / administrador para liberar o seu acesso.")),
+                blockedMsg && React.createElement("p", { className: "mono text-xs text-slate-500 mb-6" }, blockedMsg),
+                React.createElement("p", { className: "mono text-xs text-slate-500" },
+                    auth && auth.nome,
+                    " \u2014 ",
+                    turma),
+                React.createElement("button", { className: "btn bg-slate-700 hover:bg-slate-600 mt-8", onClick: () => location.reload() }, "TENTAR NOVAMENTE"))));
+    if (screen === "summary")
+        return (React.createElement(Wrap, null,
+            React.createElement("h1", { className: "text-3xl font-black mb-6 uppercase tracking-tighter text-center" }, activity.title),
+            React.createElement("p", { className: "text-base text-slate-300 leading-relaxed mb-10 font-light text-center" }, activity.summary),
+            React.createElement("div", { className: "text-center" }, introTimer >= 3
+                ? React.createElement("button", { onClick: () => setScreen("rules"), className: "btn bg-cyan-600 hover:bg-cyan-500 px-12 py-4" }, "AVAN\u00C7AR")
+                : React.createElement("div", { className: "text-cyan-500 mono text-xs animate-pulse" },
+                    "AGUARDE... ",
+                    3 - introTimer,
+                    "s"))));
+    if (screen === "rules")
+        return (React.createElement(Wrap, { border: "border-yellow-500" },
+            React.createElement("h2", { className: "text-2xl font-black mb-6 uppercase text-center" }, "Regras do jogo"),
+            React.createElement("ul", { className: "text-sm text-slate-300 space-y-3 font-light list-disc pl-6 mb-10" }, (activity.rules || []).map((r, i) => React.createElement("li", { key: i }, r))),
+            React.createElement("div", { className: "text-center" }, introTimer >= 3
+                ? React.createElement("button", { onClick: startGame, className: "btn bg-yellow-600 hover:bg-yellow-500 px-12 py-4" }, "COME\u00C7AR")
+                : React.createElement("div", { className: "text-yellow-500 mono text-xs animate-pulse" },
+                    "AGUARDE... ",
+                    3 - introTimer,
+                    "s"))));
+    if (screen === "sending")
+        return (React.createElement("div", { className: "min-h-screen flex items-center justify-center" },
+            React.createElement("p", { className: "mono text-cyan-400 animate-pulse" }, "ENVIANDO RESULTADO...")));
+    if (screen === "end")
+        return (React.createElement(Wrap, { border: "border-green-500" },
+            React.createElement("div", { className: "text-center" },
+                React.createElement("h1", { className: "text-2xl font-black uppercase mb-2" }, "Atividade conclu\u00EDda"),
+                React.createElement("p", { className: "text-slate-400 text-sm mb-8" },
+                    auth.nome,
+                    " \u2014 ",
+                    turma),
+                React.createElement("div", { className: "text-7xl font-black text-green-400 mb-2" }, grade),
+                React.createElement("p", { className: "mono text-xs text-slate-500 mb-8" },
+                    "NOTA FINAL (de ",
+                    activity.maxGrade,
+                    ")"),
+                React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3" }, (activity.bars || []).map((b) => (React.createElement("div", { key: b.key, className: "glass rounded-2xl p-4" },
+                    React.createElement("div", { className: "text-xs mono text-slate-400" }, b.label),
+                    React.createElement("div", { className: "text-2xl font-black", style: { color: b.color } },
+                        Math.round(bars[b.key] || 0),
+                        "%"))))))));
+    /* ------------------------------ jogo ------------------------------ */
+    const q = order[idx];
+    if (!q)
+        return null;
+    const chapter = (activity.chapters || []).find((c) => Number(c.n) === Number(chapterPopup));
+    return (React.createElement("div", { className: "min-h-screen p-4 sm:p-8 no-select" },
+        chapterPopup && chapter && (React.createElement("div", { className: "fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/95 backdrop-blur-xl" },
+            React.createElement("div", { className: "max-w-xl text-center animate-fade" },
+                React.createElement("p", { className: "mono text-cyan-500 text-xs mb-3" },
+                    "CAP\u00CDTULO ",
+                    chapter.n),
+                React.createElement("h2", { className: "text-3xl font-black uppercase mb-6" }, chapter.title),
+                React.createElement("p", { className: "text-slate-300 font-light leading-relaxed mb-10" }, chapter.context),
+                React.createElement("button", { className: "btn bg-cyan-600 hover:bg-cyan-500 px-10 py-4", onClick: () => { setChapterPopup(null); setTimer(Number(activity.secondsPerQuestion) || 60); } }, "INICIAR CAP\u00CDTULO")))),
+        React.createElement("div", { className: "max-w-5xl mx-auto" },
+            React.createElement("div", { className: "flex flex-wrap items-center justify-between gap-3 mb-6" },
+                React.createElement("div", { className: "mono text-xs text-slate-400" },
+                    "QUEST\u00C3O ",
+                    idx + 1,
+                    "/",
+                    order.length,
+                    " \u00B7 CAP. ",
+                    q.ch),
+                React.createElement("div", { className: "mono text-xl font-black " + (timer <= 10 ? "text-red-500 animate-pulse" : "text-cyan-400") },
+                    Math.max(0, timer),
+                    "s")),
+            React.createElement("div", { className: "grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6" }, (activity.bars || []).map((b) => (React.createElement("div", { key: b.key, className: "glass rounded-2xl p-3" },
+                React.createElement("div", { className: "flex justify-between text-[11px] mono mb-2" },
+                    React.createElement("span", null, b.label),
+                    React.createElement("span", null,
+                        Math.round(bars[b.key] || 0),
+                        "%")),
+                React.createElement("div", { className: "h-2 bg-slate-800 rounded-full overflow-hidden" },
+                    React.createElement("div", { className: "h-full bar-transition rounded-full", style: { width: (bars[b.key] || 0) + "%", background: b.color } })))))),
+            React.createElement("div", { className: "glass rounded-[28px] p-6 sm:p-8 mb-6" },
+                React.createElement("h3", { className: "text-lg font-black mb-3 text-cyan-400" }, q.title),
+                React.createElement("p", { className: "text-slate-200 font-light leading-relaxed" }, q.text)),
+            feedback ? (React.createElement("div", { className: "flex flex-col items-center gap-4 animate-fade" },
+                React.createElement("div", { className: "speech-bubble" }, feedback),
+                activity.avatar && React.createElement("img", { src: activity.avatar, className: "prof-avatar", alt: "Professora" }))) : (React.createElement("div", { className: "grid gap-3" }, q.options.map((opt, i) => (React.createElement("button", { key: i, onClick: (e) => { e.currentTarget.blur(); pick(opt); }, className: "text-left glass hover:border-cyan-500 rounded-2xl p-5 text-sm text-slate-200 transition-all" }, opt.t))))))));
+}
 /* ============================ PAINEL DA PROFESSORA ======================== */
-
 function Admin() {
-  const [token, setToken] = useState(store.get("admin"));
-  const [pass, setPass] = useState("");
-  const [error, setError] = useState("");
-  const [diag, setDiag] = useState("");
-  const [tab, setTab] = useState("atividades");
-
-  const login = async () => {
-    try { const r = await api("adminLogin", { password: pass }); store.set("admin", r.token); setToken(r.token); setError(""); }
-    catch (e) { setError(e.message); }
-  };
-
-  /* ---- botão Google da professora ---- */
-  useEffect(() => {
-    if (token || !GOOGLE_CLIENT_ID) return;
-    let tries = 0;
-    const t = setInterval(() => {
-      if (window.google && window.google.accounts && document.getElementById("gbtn-admin")) {
-        clearInterval(t);
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: async (resp) => {
-            try {
-              const r = await api("adminLoginGoogle", { credential: resp.credential });
-              store.set("admin", r.token);
-              setToken(r.token);
-              setError("");
-            } catch (e) { setError(e.message); }
-          }
-        });
-        window.google.accounts.id.renderButton(document.getElementById("gbtn-admin"), {
-          theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
-        });
-      } else if (++tries > 60) clearInterval(t);
-    }, 200);
-    return () => clearInterval(t);
-  }, [token]);
-
-  if (!BACKEND_URL) return <SetupNeeded />;
-  if (!token) return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="glass p-10 rounded-3xl max-w-sm w-full border-t-4 border-cyan-500">
-        <h1 className="text-xl font-black uppercase mb-6">Painel da professora</h1>
-
-        <div id="gbtn-admin" className="flex justify-center mb-2"></div>
-        {!GOOGLE_CLIENT_ID && (
-          <p className="text-yellow-500 text-xs mb-2 text-center">
-            GOOGLE_CLIENT_ID não configurado — use a senha.
-          </p>
-        )}
-        <p className="text-slate-500 text-[11px] mb-6 text-center">
-          Entre com a sua conta Google (cadastrada em ADMIN_EMAILS) ou com a senha.
-        </p>
-
-        <input type="password" className="inp mb-4" placeholder="Senha" value={pass}
-          onChange={(e) => setPass(e.target.value)} onKeyDown={(e) => e.key === "Enter" && login()} />
-        <button className="btn bg-cyan-600 hover:bg-cyan-500 w-full" onClick={login}>ENTRAR COM SENHA</button>
-        {error && <p className="text-red-400 text-xs mt-4 whitespace-pre-line">{error}</p>}
-
-        <button className="text-xs mono text-slate-500 hover:text-cyan-400 mt-6 w-full"
-          onClick={async () => { setDiag("Testando..."); setDiag(await testConnection()); }}>
-          TESTAR CONEXÃO COM A PLANILHA
-        </button>
-        {diag && <p className="text-slate-300 text-xs mt-3 whitespace-pre-line leading-relaxed">{diag}</p>}
-      </div>
-    </div>
-  );
-
-
-  const tabs = [["atividades", "Atividades"], ["bloqueios", "Bloqueios"], ["resultados", "Resultados"], ["acessos", "Códigos de liberação"]];
-  return (
-    <div className="min-h-screen p-4 sm:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-          <h1 className="text-2xl font-black uppercase">Painel da professora</h1>
-          <button className="text-xs mono text-slate-500 hover:text-slate-300" onClick={() => { store.del("admin"); setToken(null); }}>SAIR</button>
-        </div>
-        <div className="flex flex-wrap gap-2 mb-8">
-          {tabs.map(([k, l]) => (
-            <button key={k} onClick={() => setTab(k)}
-              className={"btn " + (tab === k ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700")}>{l.toUpperCase()}</button>
-          ))}
-        </div>
-        {tab === "atividades" && <AdminActivities token={token} />}
-        {tab === "bloqueios" && <AdminBlocks token={token} />}
-        {tab === "resultados" && <AdminResults token={token} />}
-        {tab === "acessos" && <AdminManual token={token} />}
-      </div>
-    </div>
-  );
+    const [token, setToken] = useState(store.get("admin"));
+    const [pass, setPass] = useState("");
+    const [error, setError] = useState("");
+    const [diag, setDiag] = useState("");
+    const [tab, setTab] = useState("atividades");
+    const login = async () => {
+        try {
+            const r = await api("adminLogin", { password: pass });
+            store.set("admin", r.token);
+            setToken(r.token);
+            setError("");
+        }
+        catch (e) {
+            setError(e.message);
+        }
+    };
+    /* ---- botão Google da professora ---- */
+    useEffect(() => {
+        if (token || !GOOGLE_CLIENT_ID)
+            return;
+        let tries = 0;
+        const t = setInterval(() => {
+            if (window.google && window.google.accounts && document.getElementById("gbtn-admin")) {
+                clearInterval(t);
+                window.google.accounts.id.initialize({
+                    client_id: GOOGLE_CLIENT_ID,
+                    callback: async (resp) => {
+                        try {
+                            const r = await api("adminLoginGoogle", { credential: resp.credential });
+                            store.set("admin", r.token);
+                            setToken(r.token);
+                            setError("");
+                        }
+                        catch (e) {
+                            setError(e.message);
+                        }
+                    }
+                });
+                window.google.accounts.id.renderButton(document.getElementById("gbtn-admin"), {
+                    theme: "filled_black", size: "large", text: "signin_with", locale: "pt-BR", width: 280
+                });
+            }
+            else if (++tries > 60)
+                clearInterval(t);
+        }, 200);
+        return () => clearInterval(t);
+    }, [token]);
+    if (!BACKEND_URL)
+        return React.createElement(SetupNeeded, null);
+    if (!token)
+        return (React.createElement("div", { className: "min-h-screen flex items-center justify-center p-6" },
+            React.createElement("div", { className: "glass p-10 rounded-3xl max-w-sm w-full border-t-4 border-cyan-500" },
+                React.createElement("h1", { className: "text-xl font-black uppercase mb-6" }, "Painel da professora"),
+                React.createElement("div", { id: "gbtn-admin", className: "flex justify-center mb-2" }),
+                !GOOGLE_CLIENT_ID && (React.createElement("p", { className: "text-yellow-500 text-xs mb-2 text-center" }, "GOOGLE_CLIENT_ID n\u00E3o configurado \u2014 use a senha.")),
+                React.createElement("p", { className: "text-slate-500 text-[11px] mb-6 text-center" }, "Entre com a sua conta Google (cadastrada em ADMIN_EMAILS) ou com a senha."),
+                React.createElement("input", { type: "password", className: "inp mb-4", placeholder: "Senha", value: pass, onChange: (e) => setPass(e.target.value), onKeyDown: (e) => e.key === "Enter" && login() }),
+                React.createElement("button", { className: "btn bg-cyan-600 hover:bg-cyan-500 w-full", onClick: login }, "ENTRAR COM SENHA"),
+                error && React.createElement("p", { className: "text-red-400 text-xs mt-4 whitespace-pre-line" }, error),
+                React.createElement("button", { className: "text-xs mono text-slate-500 hover:text-cyan-400 mt-6 w-full", onClick: async () => { setDiag("Testando..."); setDiag(await testConnection()); } }, "TESTAR CONEX\u00C3O COM A PLANILHA"),
+                diag && React.createElement("p", { className: "text-slate-300 text-xs mt-3 whitespace-pre-line leading-relaxed" }, diag))));
+    const tabs = [["atividades", "Atividades"], ["bloqueios", "Bloqueios"], ["resultados", "Resultados"], ["acessos", "Códigos de liberação"]];
+    return (React.createElement("div", { className: "min-h-screen p-4 sm:p-8" },
+        React.createElement("div", { className: "max-w-6xl mx-auto" },
+            React.createElement("div", { className: "flex flex-wrap items-center justify-between gap-4 mb-8" },
+                React.createElement("h1", { className: "text-2xl font-black uppercase" }, "Painel da professora"),
+                React.createElement("button", { className: "text-xs mono text-slate-500 hover:text-slate-300", onClick: () => { store.del("admin"); setToken(null); } }, "SAIR")),
+            React.createElement("div", { className: "flex flex-wrap gap-2 mb-8" }, tabs.map(([k, l]) => (React.createElement("button", { key: k, onClick: () => setTab(k), className: "btn " + (tab === k ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700") }, l.toUpperCase())))),
+            tab === "atividades" && React.createElement(AdminActivities, { token: token }),
+            tab === "bloqueios" && React.createElement(AdminBlocks, { token: token }),
+            tab === "resultados" && React.createElement(AdminResults, { token: token }),
+            tab === "acessos" && React.createElement(AdminManual, { token: token }))));
 }
-
 const blank = () => ({
-  id: "atividade-" + Date.now(), code: "", active: true, hidden: false, title: "Nova atividade", subtitle: "",
-  summary: "", rules: ["Não saia da tela durante a atividade."], avatar: "",
-  secondsPerQuestion: 60, maxGrade: 10, exitTolerance: 0,
-  bars: [{ key: "b1", label: "Barra 1", color: "#06b6d4" }],
-  chapters: [{ n: 1, title: "Capítulo 1", context: "" }],
-  questions: []
+    id: "atividade-" + Date.now(), code: "", active: true, hidden: false, title: "Nova atividade", subtitle: "",
+    summary: "", rules: ["Não saia da tela durante a atividade."], avatar: "",
+    secondsPerQuestion: 60, maxGrade: 10, exitTolerance: 0,
+    bars: [{ key: "b1", label: "Barra 1", color: "#06b6d4" }],
+    chapters: [{ n: 1, title: "Capítulo 1", context: "" }],
+    questions: []
 });
-
 function AdminActivities({ token }) {
-  const [list, setList] = useState([]);
-  const [sel, setSel] = useState(null);
-  const [msg, setMsg] = useState("");
-
-  const load = useCallback(() => {
-    api("adminActivities", { token }).then((r) => setList(r.activities)).catch((e) => setMsg(e.message));
-  }, [token]);
-  useEffect(load, [load]);
-
-  const save = async () => {
-    try { await api("adminSave", { token, activity: sel }); setMsg("Atividade salva."); load(); }
-    catch (e) { setMsg(e.message); }
-  };
-  const remove = async (id) => {
-    if (!confirm("Excluir esta atividade? Os resultados já registrados continuam na planilha.")) return;
-    await api("adminDelete", { token, id }); setSel(null); load();
-  };
-  const importFile = (file) => {
-    const fr = new FileReader();
-    fr.onload = () => { try { setSel(JSON.parse(fr.result)); setMsg("Arquivo carregado. Clique em Salvar."); } catch (e) { setMsg("Arquivo inválido."); } };
-    fr.readAsText(file);
-  };
-  const exportJson = () => {
-    const blob = new Blob([JSON.stringify(sel, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = sel.id + ".json"; a.click();
-  };
-  const up = (patch) => setSel(Object.assign({}, sel, patch));
-
-  const toggleHidden = async (a) => {
-    const next = !a.hidden;
-    try {
-      await api("adminSave", { token, activity: Object.assign({}, a, { hidden: next }) });
-      setSel((s) => (s && s.id === a.id ? Object.assign({}, s, { hidden: next }) : s));
-      setMsg(next ? "Atividade oculta: não aparece mais na lista dos alunos." : "Atividade visível: voltou para a lista dos alunos.");
-      load();
-    } catch (e) { setMsg(e.message); }
-  };
-
-  return (
-    <div className="grid lg:grid-cols-[280px_1fr] gap-6">
-      <div className="glass rounded-3xl p-5 h-fit">
-        <div className="space-y-2 mb-5">
-          {list.map((a) => (
-            <div key={a.id} className="flex gap-1">
-              <button onClick={() => setSel(JSON.parse(JSON.stringify(a)))}
-                className={"flex-1 text-left text-sm p-3 rounded-xl " + (sel && sel.id === a.id ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700")}>
-                <div className="font-bold">{a.title}</div>
-                <div className="text-[11px] mono opacity-70">{a.questions ? a.questions.length : 0} questões {a.active === false ? "· arquivada" : ""}{a.hidden ? " · oculta" : ""}</div>
-              </button>
-              <button onClick={() => toggleHidden(a)}
-                title={a.hidden ? "Oculta para os alunos — clique para mostrar na lista" : "Visível para os alunos — clique para ocultar da lista"}
-                className={"w-16 rounded-xl flex flex-col items-center justify-center " + (a.hidden ? "bg-yellow-700 hover:bg-yellow-600" : "bg-slate-800 hover:bg-slate-700")}>
-                <span className="text-base">{a.hidden ? "🙈" : "👁"}</span>
-                <span className="text-[9px] mono">{a.hidden ? "MOSTRAR" : "OCULTAR"}</span>
-              </button>
-            </div>
-          ))}
-        </div>
-        <button className="btn bg-slate-800 hover:bg-slate-700 w-full mb-2" onClick={() => setSel(blank())}>+ NOVA</button>
-        {sel && <button className="btn bg-slate-800 hover:bg-slate-700 w-full mb-2" onClick={() => setSel(Object.assign({}, sel, { id: sel.id + "-copia", title: sel.title + " (cópia)" }))}>DUPLICAR</button>}
-        <label className="btn bg-slate-800 hover:bg-slate-700 w-full block text-center cursor-pointer">
-          IMPORTAR JSON
-          <input type="file" accept="application/json" className="hidden" onChange={(e) => e.target.files[0] && importFile(e.target.files[0])} />
-        </label>
-        <p className="text-[11px] text-slate-500 mt-4 leading-relaxed">
-          Para carregar a atividade original de Filosofia do Direito, importe o arquivo
-          <span className="mono"> atividade-filosofia-do-direito.json</span>.
-        </p>
-      </div>
-
-      <div className="glass rounded-3xl p-6">
-        {!sel && <p className="text-slate-500 text-sm">Selecione ou crie uma atividade.</p>}
-        {sel && (
-          <div className="space-y-8">
-            <div className="flex flex-wrap gap-2 justify-end">
-              <button className="btn bg-slate-800 hover:bg-slate-700" onClick={exportJson}>EXPORTAR</button>
-              <button className="btn bg-red-800 hover:bg-red-700" onClick={() => remove(sel.id)}>EXCLUIR</button>
-              <button className="btn bg-cyan-600 hover:bg-cyan-500" onClick={save}>SALVAR</button>
-            </div>
-            {msg && <p className="text-xs mono text-cyan-400">{msg}</p>}
-
-            <Section title="Informações gerais">
-              <Field label="Identificador (sem espaços)"><input className="inp" value={sel.id} onChange={(e) => up({ id: e.target.value.trim() })} /></Field>
-              <Field label="Título"><input className="inp" value={sel.title} onChange={(e) => up({ title: e.target.value })} /></Field>
-              <Field label="Subtítulo"><input className="inp" value={sel.subtitle || ""} onChange={(e) => up({ subtitle: e.target.value })} /></Field>
-              <Field label="Código de acesso (opcional)"><input className="inp" value={sel.code || ""} onChange={(e) => up({ code: e.target.value.toUpperCase() })} /></Field>
-              <Field label="Segundos por questão"><input type="number" className="inp" value={sel.secondsPerQuestion} onChange={(e) => up({ secondsPerQuestion: Number(e.target.value) })} /></Field>
-              <Field label="Nota máxima"><input type="number" className="inp" value={sel.maxGrade} onChange={(e) => up({ maxGrade: Number(e.target.value) })} /></Field>
-              <Field label="Saídas toleradas antes de bloquear"><input type="number" className="inp" value={sel.exitTolerance} onChange={(e) => up({ exitTolerance: Number(e.target.value) })} /></Field>
-              <Field label="Imagem da professora (URL)"><input className="inp" value={sel.avatar || ""} onChange={(e) => up({ avatar: e.target.value })} /></Field>
-              <Field label="Atividade ativa">
-                <select className="inp" value={sel.active === false ? "n" : "s"} onChange={(e) => up({ active: e.target.value === "s" })}>
-                  <option value="s">Sim</option><option value="n">Não (arquivada — ninguém acessa)</option>
-                </select>
-              </Field>
-              <Field label="Aparece na lista dos alunos">
-                <select className="inp" value={sel.hidden ? "n" : "s"} onChange={(e) => up({ hidden: e.target.value === "n" })}>
-                  <option value="s">Sim — todos veem</option><option value="n">Não (oculta) — só com código</option>
-                </select>
-              </Field>
-              {sel.hidden && !sel.code && (
-                <p className="text-[11px] text-yellow-500 sm:col-span-2">
-                  Atividade oculta sem código de acesso: ela só abrirá para alunos que tiverem um código de liberação gerado na aba "Códigos de liberação".
-                </p>
-              )}
-              <Field label="Texto de abertura" full><textarea className="inp h-28" value={sel.summary || ""} onChange={(e) => up({ summary: e.target.value })} /></Field>
-              <Field label="Regras (uma por linha)" full>
-                <textarea className="inp h-28" value={(sel.rules || []).join("\n")} onChange={(e) => up({ rules: e.target.value.split("\n").filter((x) => x.trim()) })} />
-              </Field>
-            </Section>
-
-            <Section title="Barras de indicadores">
-              {(sel.bars || []).map((b, i) => (
-                <div key={i} className="flex gap-2 items-center sm:col-span-2">
-                  <input className="inp" placeholder="chave" value={b.key} onChange={(e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { key: e.target.value.trim() }); up({ bars: bs }); }} />
-                  <input className="inp" placeholder="nome" value={b.label} onChange={(e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { label: e.target.value }); up({ bars: bs }); }} />
-                  <input type="color" className="h-10 w-14 bg-transparent" value={b.color} onChange={(e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { color: e.target.value }); up({ bars: bs }); }} />
-                  <button className="btn bg-slate-800" onClick={() => up({ bars: sel.bars.filter((_, j) => j !== i) })}>×</button>
-                </div>
-              ))}
-              <button className="btn bg-slate-800 hover:bg-slate-700 sm:col-span-2" onClick={() => up({ bars: (sel.bars || []).concat([{ key: "b" + ((sel.bars || []).length + 1), label: "Nova barra", color: "#06b6d4" }]) })}>+ BARRA</button>
-            </Section>
-
-            <Section title="Capítulos">
-              {(sel.chapters || []).map((c, i) => (
-                <div key={i} className="sm:col-span-2 glass rounded-2xl p-4 space-y-2">
-                  <div className="flex gap-2">
-                    <input type="number" className="inp w-20" value={c.n} onChange={(e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { n: Number(e.target.value) }); up({ chapters: cs }); }} />
-                    <input className="inp" value={c.title} onChange={(e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { title: e.target.value }); up({ chapters: cs }); }} />
-                    <button className="btn bg-slate-800" onClick={() => up({ chapters: sel.chapters.filter((_, j) => j !== i) })}>×</button>
-                  </div>
-                  <textarea className="inp h-20" placeholder="Contexto do capítulo" value={c.context || ""} onChange={(e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { context: e.target.value }); up({ chapters: cs }); }} />
-                </div>
-              ))}
-              <button className="btn bg-slate-800 hover:bg-slate-700 sm:col-span-2" onClick={() => up({ chapters: (sel.chapters || []).concat([{ n: (sel.chapters || []).length + 1, title: "Novo capítulo", context: "" }]) })}>+ CAPÍTULO</button>
-            </Section>
-
-            <Questions sel={sel} up={up} />
-          </div>
-        )}
-      </div>
-    </div>
-  );
+    const [list, setList] = useState([]);
+    const [sel, setSel] = useState(null);
+    const [msg, setMsg] = useState("");
+    const load = useCallback(() => {
+        api("adminActivities", { token }).then((r) => setList(r.activities)).catch((e) => setMsg(e.message));
+    }, [token]);
+    useEffect(load, [load]);
+    const save = async () => {
+        try {
+            await api("adminSave", { token, activity: sel });
+            setMsg("Atividade salva.");
+            load();
+        }
+        catch (e) {
+            setMsg(e.message);
+        }
+    };
+    const remove = async (id) => {
+        if (!confirm("Excluir esta atividade? Os resultados já registrados continuam na planilha."))
+            return;
+        await api("adminDelete", { token, id });
+        setSel(null);
+        load();
+    };
+    const importFile = (file) => {
+        const fr = new FileReader();
+        fr.onload = () => { try {
+            setSel(JSON.parse(fr.result));
+            setMsg("Arquivo carregado. Clique em Salvar.");
+        }
+        catch (e) {
+            setMsg("Arquivo inválido.");
+        } };
+        fr.readAsText(file);
+    };
+    const exportJson = () => {
+        const blob = new Blob([JSON.stringify(sel, null, 2)], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = sel.id + ".json";
+        a.click();
+    };
+    const up = (patch) => setSel(Object.assign({}, sel, patch));
+    const toggleHidden = async (a) => {
+        const next = !a.hidden;
+        try {
+            await api("adminSave", { token, activity: Object.assign({}, a, { hidden: next }) });
+            setSel((s) => (s && s.id === a.id ? Object.assign({}, s, { hidden: next }) : s));
+            setMsg(next ? "Atividade oculta: não aparece mais na lista dos alunos." : "Atividade visível: voltou para a lista dos alunos.");
+            load();
+        }
+        catch (e) {
+            setMsg(e.message);
+        }
+    };
+    return (React.createElement("div", { className: "grid lg:grid-cols-[280px_1fr] gap-6" },
+        React.createElement("div", { className: "glass rounded-3xl p-5 h-fit" },
+            React.createElement("div", { className: "space-y-2 mb-5" }, list.map((a) => (React.createElement("div", { key: a.id, className: "flex gap-1" },
+                React.createElement("button", { onClick: () => setSel(JSON.parse(JSON.stringify(a))), className: "flex-1 text-left text-sm p-3 rounded-xl " + (sel && sel.id === a.id ? "bg-cyan-600" : "bg-slate-800 hover:bg-slate-700") },
+                    React.createElement("div", { className: "font-bold" }, a.title),
+                    React.createElement("div", { className: "text-[11px] mono opacity-70" },
+                        a.questions ? a.questions.length : 0,
+                        " quest\u00F5es ",
+                        a.active === false ? "· arquivada" : "",
+                        a.hidden ? " · oculta" : "")),
+                React.createElement("button", { onClick: () => toggleHidden(a), title: a.hidden ? "Oculta para os alunos — clique para mostrar na lista" : "Visível para os alunos — clique para ocultar da lista", className: "w-16 rounded-xl flex flex-col items-center justify-center " + (a.hidden ? "bg-yellow-700 hover:bg-yellow-600" : "bg-slate-800 hover:bg-slate-700") },
+                    React.createElement("span", { className: "text-base" }, a.hidden ? "🙈" : "👁"),
+                    React.createElement("span", { className: "text-[9px] mono" }, a.hidden ? "MOSTRAR" : "OCULTAR")))))),
+            React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700 w-full mb-2", onClick: () => setSel(blank()) }, "+ NOVA"),
+            sel && React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700 w-full mb-2", onClick: () => setSel(Object.assign({}, sel, { id: sel.id + "-copia", title: sel.title + " (cópia)" })) }, "DUPLICAR"),
+            React.createElement("label", { className: "btn bg-slate-800 hover:bg-slate-700 w-full block text-center cursor-pointer" },
+                "IMPORTAR JSON",
+                React.createElement("input", { type: "file", accept: "application/json", className: "hidden", onChange: (e) => e.target.files[0] && importFile(e.target.files[0]) })),
+            React.createElement("p", { className: "text-[11px] text-slate-500 mt-4 leading-relaxed" },
+                "Para carregar a atividade original de Filosofia do Direito, importe o arquivo",
+                React.createElement("span", { className: "mono" }, " atividade-filosofia-do-direito.json"),
+                ".")),
+        React.createElement("div", { className: "glass rounded-3xl p-6" },
+            !sel && React.createElement("p", { className: "text-slate-500 text-sm" }, "Selecione ou crie uma atividade."),
+            sel && (React.createElement("div", { className: "space-y-8" },
+                React.createElement("div", { className: "flex flex-wrap gap-2 justify-end" },
+                    React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700", onClick: exportJson }, "EXPORTAR"),
+                    React.createElement("button", { className: "btn bg-red-800 hover:bg-red-700", onClick: () => remove(sel.id) }, "EXCLUIR"),
+                    React.createElement("button", { className: "btn bg-cyan-600 hover:bg-cyan-500", onClick: save }, "SALVAR")),
+                msg && React.createElement("p", { className: "text-xs mono text-cyan-400" }, msg),
+                React.createElement(Section, { title: "Informa\u00E7\u00F5es gerais" },
+                    React.createElement(Field, { label: "Identificador (sem espa\u00E7os)" },
+                        React.createElement("input", { className: "inp", value: sel.id, onChange: (e) => up({ id: e.target.value.trim() }) })),
+                    React.createElement(Field, { label: "T\u00EDtulo" },
+                        React.createElement("input", { className: "inp", value: sel.title, onChange: (e) => up({ title: e.target.value }) })),
+                    React.createElement(Field, { label: "Subt\u00EDtulo" },
+                        React.createElement("input", { className: "inp", value: sel.subtitle || "", onChange: (e) => up({ subtitle: e.target.value }) })),
+                    React.createElement(Field, { label: "C\u00F3digo de acesso (opcional)" },
+                        React.createElement("input", { className: "inp", value: sel.code || "", onChange: (e) => up({ code: e.target.value.toUpperCase() }) })),
+                    React.createElement(Field, { label: "Segundos por quest\u00E3o" },
+                        React.createElement("input", { type: "number", className: "inp", value: sel.secondsPerQuestion, onChange: (e) => up({ secondsPerQuestion: Number(e.target.value) }) })),
+                    React.createElement(Field, { label: "Nota m\u00E1xima" },
+                        React.createElement("input", { type: "number", className: "inp", value: sel.maxGrade, onChange: (e) => up({ maxGrade: Number(e.target.value) }) })),
+                    React.createElement(Field, { label: "Sa\u00EDdas toleradas antes de bloquear" },
+                        React.createElement("input", { type: "number", className: "inp", value: sel.exitTolerance, onChange: (e) => up({ exitTolerance: Number(e.target.value) }) })),
+                    React.createElement(Field, { label: "Imagem da professora (URL)" },
+                        React.createElement("input", { className: "inp", value: sel.avatar || "", onChange: (e) => up({ avatar: e.target.value }) })),
+                    React.createElement(Field, { label: "Atividade ativa" },
+                        React.createElement("select", { className: "inp", value: sel.active === false ? "n" : "s", onChange: (e) => up({ active: e.target.value === "s" }) },
+                            React.createElement("option", { value: "s" }, "Sim"),
+                            React.createElement("option", { value: "n" }, "N\u00E3o (arquivada \u2014 ningu\u00E9m acessa)"))),
+                    React.createElement(Field, { label: "Aparece na lista dos alunos" },
+                        React.createElement("select", { className: "inp", value: sel.hidden ? "n" : "s", onChange: (e) => up({ hidden: e.target.value === "n" }) },
+                            React.createElement("option", { value: "s" }, "Sim \u2014 todos veem"),
+                            React.createElement("option", { value: "n" }, "N\u00E3o (oculta) \u2014 s\u00F3 com c\u00F3digo"))),
+                    sel.hidden && !sel.code && (React.createElement("p", { className: "text-[11px] text-yellow-500 sm:col-span-2" }, "Atividade oculta sem c\u00F3digo de acesso: ela s\u00F3 abrir\u00E1 para alunos que tiverem um c\u00F3digo de libera\u00E7\u00E3o gerado na aba \"C\u00F3digos de libera\u00E7\u00E3o\".")),
+                    React.createElement(Field, { label: "Texto de abertura", full: true },
+                        React.createElement("textarea", { className: "inp h-28", value: sel.summary || "", onChange: (e) => up({ summary: e.target.value }) })),
+                    React.createElement(Field, { label: "Regras (uma por linha)", full: true },
+                        React.createElement("textarea", { className: "inp h-28", value: (sel.rules || []).join("\n"), onChange: (e) => up({ rules: e.target.value.split("\n").filter((x) => x.trim()) }) }))),
+                React.createElement(Section, { title: "Barras de indicadores" },
+                    (sel.bars || []).map((b, i) => (React.createElement("div", { key: i, className: "flex gap-2 items-center sm:col-span-2" },
+                        React.createElement("input", { className: "inp", placeholder: "chave", value: b.key, onChange: (e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { key: e.target.value.trim() }); up({ bars: bs }); } }),
+                        React.createElement("input", { className: "inp", placeholder: "nome", value: b.label, onChange: (e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { label: e.target.value }); up({ bars: bs }); } }),
+                        React.createElement("input", { type: "color", className: "h-10 w-14 bg-transparent", value: b.color, onChange: (e) => { const bs = [...sel.bars]; bs[i] = Object.assign({}, b, { color: e.target.value }); up({ bars: bs }); } }),
+                        React.createElement("button", { className: "btn bg-slate-800", onClick: () => up({ bars: sel.bars.filter((_, j) => j !== i) }) }, "\u00D7")))),
+                    React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700 sm:col-span-2", onClick: () => up({ bars: (sel.bars || []).concat([{ key: "b" + ((sel.bars || []).length + 1), label: "Nova barra", color: "#06b6d4" }]) }) }, "+ BARRA")),
+                React.createElement(Section, { title: "Cap\u00EDtulos" },
+                    (sel.chapters || []).map((c, i) => (React.createElement("div", { key: i, className: "sm:col-span-2 glass rounded-2xl p-4 space-y-2" },
+                        React.createElement("div", { className: "flex gap-2" },
+                            React.createElement("input", { type: "number", className: "inp w-20", value: c.n, onChange: (e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { n: Number(e.target.value) }); up({ chapters: cs }); } }),
+                            React.createElement("input", { className: "inp", value: c.title, onChange: (e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { title: e.target.value }); up({ chapters: cs }); } }),
+                            React.createElement("button", { className: "btn bg-slate-800", onClick: () => up({ chapters: sel.chapters.filter((_, j) => j !== i) }) }, "\u00D7")),
+                        React.createElement("textarea", { className: "inp h-20", placeholder: "Contexto do cap\u00EDtulo", value: c.context || "", onChange: (e) => { const cs = [...sel.chapters]; cs[i] = Object.assign({}, c, { context: e.target.value }); up({ chapters: cs }); } })))),
+                    React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700 sm:col-span-2", onClick: () => up({ chapters: (sel.chapters || []).concat([{ n: (sel.chapters || []).length + 1, title: "Novo capítulo", context: "" }]) }) }, "+ CAP\u00CDTULO")),
+                React.createElement(Questions, { sel: sel, up: up }))))));
 }
-
 function Section({ title, children }) {
-  return (
-    <div>
-      <h3 className="text-sm font-black uppercase text-cyan-400 mb-4">{title}</h3>
-      <div className="grid sm:grid-cols-2 gap-4">{children}</div>
-    </div>
-  );
+    return (React.createElement("div", null,
+        React.createElement("h3", { className: "text-sm font-black uppercase text-cyan-400 mb-4" }, title),
+        React.createElement("div", { className: "grid sm:grid-cols-2 gap-4" }, children)));
 }
 function Field({ label, children, full }) {
-  return (
-    <label className={"block " + (full ? "sm:col-span-2" : "")}>
-      <span className="text-[11px] mono text-slate-400 block mb-1">{label}</span>
-      {children}
-    </label>
-  );
+    return (React.createElement("label", { className: "block " + (full ? "sm:col-span-2" : "") },
+        React.createElement("span", { className: "text-[11px] mono text-slate-400 block mb-1" }, label),
+        children));
 }
-
 function Questions({ sel, up }) {
-  const [open, setOpen] = useState(null);
-  const qs = sel.questions || [];
-  const setQ = (i, patch) => { const arr = [...qs]; arr[i] = Object.assign({}, arr[i], patch); up({ questions: arr }); };
-  const addQ = () => up({
-    questions: qs.concat([{
-      id: "q" + (qs.length + 1), ch: 1, title: "Nova questão", text: "",
-      options: [1, 2, 3, 4].map((n) => ({ t: "Alternativa " + n, s: n === 1 ? 1 : 0, i: {}, f: "" }))
-    }])
-  });
-
-  return (
-    <div>
-      <h3 className="text-sm font-black uppercase text-cyan-400 mb-4">Questões ({qs.length})</h3>
-      <div className="space-y-2">
-        {qs.map((q, i) => (
-          <div key={i} className="glass rounded-2xl">
-            <button className="w-full text-left p-4 flex justify-between gap-3" onClick={() => setOpen(open === i ? null : i)}>
-              <span className="text-sm"><span className="mono text-cyan-500">C{q.ch}</span> {q.title}</span>
-              <span className="mono text-xs text-slate-500">{open === i ? "−" : "+"}</span>
-            </button>
-            {open === i && (
-              <div className="p-4 pt-0 space-y-3">
-                <div className="flex gap-2">
-                  <input type="number" className="inp w-24" value={q.ch} onChange={(e) => setQ(i, { ch: Number(e.target.value) })} />
-                  <input className="inp" value={q.title} onChange={(e) => setQ(i, { title: e.target.value })} />
-                  <button className="btn bg-red-900 hover:bg-red-800" onClick={() => up({ questions: qs.filter((_, j) => j !== i) })}>EXCLUIR</button>
-                </div>
-                <textarea className="inp h-24" placeholder="Enunciado" value={q.text} onChange={(e) => setQ(i, { text: e.target.value })} />
-                {(q.options || []).map((o, oi) => (
-                  <div key={oi} className="glass rounded-xl p-3 space-y-2">
-                    <textarea className="inp h-16" placeholder="Alternativa" value={o.t} onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { t: e.target.value }); setQ(i, { options: os }); }} />
-                    <div className="flex flex-wrap gap-2 items-center">
-                      <span className="text-[11px] mono text-slate-400">Pontos</span>
-                      <input type="number" step="0.1" className="inp w-24" value={o.s} onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { s: Number(e.target.value) }); setQ(i, { options: os }); }} />
-                      {(sel.bars || []).map((b) => (
-                        <span key={b.key} className="flex items-center gap-1">
-                          <span className="text-[11px] mono" style={{ color: b.color }}>{b.label}</span>
-                          <input type="number" className="inp w-20" value={o.i && o.i[b.key] !== undefined ? o.i[b.key] : 50}
-                            onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { i: Object.assign({}, o.i, { [b.key]: Number(e.target.value) }) }); setQ(i, { options: os }); }} />
-                        </span>
-                      ))}
-                      <button className="btn bg-slate-800" onClick={() => { const os = q.options.filter((_, j) => j !== oi); setQ(i, { options: os }); }}>×</button>
-                    </div>
-                    <textarea className="inp h-16" placeholder="Feedback da professora" value={o.f || ""} onChange={(e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { f: e.target.value }); setQ(i, { options: os }); }} />
-                  </div>
-                ))}
-                <button className="btn bg-slate-800 hover:bg-slate-700" onClick={() => setQ(i, { options: (q.options || []).concat([{ t: "Nova alternativa", s: 0, i: {}, f: "" }]) })}>+ ALTERNATIVA</button>
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
-      <button className="btn bg-slate-800 hover:bg-slate-700 mt-4" onClick={addQ}>+ QUESTÃO</button>
-      <p className="text-[11px] text-slate-500 mt-3">
-        Impacto nas barras: 50 é neutro, acima de 50 sobe a barra, abaixo desce. A nota final é proporcional
-        aos pontos máximos possíveis.
-      </p>
-    </div>
-  );
+    const [open, setOpen] = useState(null);
+    const qs = sel.questions || [];
+    const setQ = (i, patch) => { const arr = [...qs]; arr[i] = Object.assign({}, arr[i], patch); up({ questions: arr }); };
+    const addQ = () => up({
+        questions: qs.concat([{
+                id: "q" + (qs.length + 1), ch: 1, title: "Nova questão", text: "",
+                options: [1, 2, 3, 4].map((n) => ({ t: "Alternativa " + n, s: n === 1 ? 1 : 0, i: {}, f: "" }))
+            }])
+    });
+    return (React.createElement("div", null,
+        React.createElement("h3", { className: "text-sm font-black uppercase text-cyan-400 mb-4" },
+            "Quest\u00F5es (",
+            qs.length,
+            ")"),
+        React.createElement("div", { className: "space-y-2" }, qs.map((q, i) => (React.createElement("div", { key: i, className: "glass rounded-2xl" },
+            React.createElement("button", { className: "w-full text-left p-4 flex justify-between gap-3", onClick: () => setOpen(open === i ? null : i) },
+                React.createElement("span", { className: "text-sm" },
+                    React.createElement("span", { className: "mono text-cyan-500" },
+                        "C",
+                        q.ch),
+                    " ",
+                    q.title),
+                React.createElement("span", { className: "mono text-xs text-slate-500" }, open === i ? "−" : "+")),
+            open === i && (React.createElement("div", { className: "p-4 pt-0 space-y-3" },
+                React.createElement("div", { className: "flex gap-2" },
+                    React.createElement("input", { type: "number", className: "inp w-24", value: q.ch, onChange: (e) => setQ(i, { ch: Number(e.target.value) }) }),
+                    React.createElement("input", { className: "inp", value: q.title, onChange: (e) => setQ(i, { title: e.target.value }) }),
+                    React.createElement("button", { className: "btn bg-red-900 hover:bg-red-800", onClick: () => up({ questions: qs.filter((_, j) => j !== i) }) }, "EXCLUIR")),
+                React.createElement("textarea", { className: "inp h-24", placeholder: "Enunciado", value: q.text, onChange: (e) => setQ(i, { text: e.target.value }) }),
+                (q.options || []).map((o, oi) => (React.createElement("div", { key: oi, className: "glass rounded-xl p-3 space-y-2" },
+                    React.createElement("textarea", { className: "inp h-16", placeholder: "Alternativa", value: o.t, onChange: (e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { t: e.target.value }); setQ(i, { options: os }); } }),
+                    React.createElement("div", { className: "flex flex-wrap gap-2 items-center" },
+                        React.createElement("span", { className: "text-[11px] mono text-slate-400" }, "Pontos"),
+                        React.createElement("input", { type: "number", step: "0.1", className: "inp w-24", value: o.s, onChange: (e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { s: Number(e.target.value) }); setQ(i, { options: os }); } }),
+                        (sel.bars || []).map((b) => (React.createElement("span", { key: b.key, className: "flex items-center gap-1" },
+                            React.createElement("span", { className: "text-[11px] mono", style: { color: b.color } }, b.label),
+                            React.createElement("input", { type: "number", className: "inp w-20", value: o.i && o.i[b.key] !== undefined ? o.i[b.key] : 50, onChange: (e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { i: Object.assign({}, o.i, { [b.key]: Number(e.target.value) }) }); setQ(i, { options: os }); } })))),
+                        React.createElement("button", { className: "btn bg-slate-800", onClick: () => { const os = q.options.filter((_, j) => j !== oi); setQ(i, { options: os }); } }, "\u00D7")),
+                    React.createElement("textarea", { className: "inp h-16", placeholder: "Feedback da professora", value: o.f || "", onChange: (e) => { const os = [...q.options]; os[oi] = Object.assign({}, o, { f: e.target.value }); setQ(i, { options: os }); } })))),
+                React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700", onClick: () => setQ(i, { options: (q.options || []).concat([{ t: "Nova alternativa", s: 0, i: {}, f: "" }]) }) }, "+ ALTERNATIVA"))))))),
+        React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700 mt-4", onClick: addQ }, "+ QUEST\u00C3O"),
+        React.createElement("p", { className: "text-[11px] text-slate-500 mt-3" }, "Impacto nas barras: 50 \u00E9 neutro, acima de 50 sobe a barra, abaixo desce. A nota final \u00E9 proporcional aos pontos m\u00E1ximos poss\u00EDveis.")));
 }
-
 function AdminBlocks({ token }) {
-  const [rows, setRows] = useState([]);
-  const [msg, setMsg] = useState("");
-  const load = useCallback(() => api("adminBlocks", { token }).then((r) => setRows(r.rows)).catch((e) => setMsg(e.message)), [token]);
-  useEffect(() => { load(); const t = setInterval(load, 20000); return () => clearInterval(t); }, [load]);
-
-  const unblock = async (id, reset) => {
-    await api("adminUnblock", { token, id, reset }); setMsg("Aluno liberado."); load();
-  };
-
-  return (
-    <div className="glass rounded-3xl p-6">
-      <div className="flex justify-between items-center mb-5">
-        <h3 className="text-sm font-black uppercase text-red-400">Alunos bloqueados ({rows.length})</h3>
-        <button className="btn bg-slate-800 hover:bg-slate-700" onClick={load}>ATUALIZAR</button>
-      </div>
-      {msg && <p className="text-xs mono text-cyan-400 mb-4">{msg}</p>}
-      {rows.length === 0 && <p className="text-slate-500 text-sm">Ninguém bloqueado no momento.</p>}
-      <div className="space-y-3">
-        {rows.map((r) => (
-          <div key={r.id} className="glass rounded-2xl p-4 flex flex-wrap gap-3 items-center justify-between">
-            <div>
-              <div className="font-bold text-sm">{r.nome} <span className="text-slate-500 font-normal">— {r.turma}</span></div>
-              <div className="text-[11px] mono text-slate-500">{r.email} · {r.atividade} · questão {Number(r.idx) + 1} · {r.motivo}</div>
-            </div>
-            <div className="flex gap-2">
-              <button className="btn bg-green-700 hover:bg-green-600" onClick={() => unblock(r.id, false)}>LIBERAR (CONTINUAR)</button>
-              <button className="btn bg-slate-700 hover:bg-slate-600" onClick={() => unblock(r.id, true)}>LIBERAR (REINICIAR)</button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    const [rows, setRows] = useState([]);
+    const [msg, setMsg] = useState("");
+    const load = useCallback(() => api("adminBlocks", { token }).then((r) => setRows(r.rows)).catch((e) => setMsg(e.message)), [token]);
+    useEffect(() => { load(); const t = setInterval(load, 20000); return () => clearInterval(t); }, [load]);
+    const unblock = async (id, reset) => {
+        await api("adminUnblock", { token, id, reset });
+        setMsg("Aluno liberado.");
+        load();
+    };
+    return (React.createElement("div", { className: "glass rounded-3xl p-6" },
+        React.createElement("div", { className: "flex justify-between items-center mb-5" },
+            React.createElement("h3", { className: "text-sm font-black uppercase text-red-400" },
+                "Alunos bloqueados (",
+                rows.length,
+                ")"),
+            React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700", onClick: load }, "ATUALIZAR")),
+        msg && React.createElement("p", { className: "text-xs mono text-cyan-400 mb-4" }, msg),
+        rows.length === 0 && React.createElement("p", { className: "text-slate-500 text-sm" }, "Ningu\u00E9m bloqueado no momento."),
+        React.createElement("div", { className: "space-y-3" }, rows.map((r) => (React.createElement("div", { key: r.id, className: "glass rounded-2xl p-4 flex flex-wrap gap-3 items-center justify-between" },
+            React.createElement("div", null,
+                React.createElement("div", { className: "font-bold text-sm" },
+                    r.nome,
+                    " ",
+                    React.createElement("span", { className: "text-slate-500 font-normal" },
+                        "\u2014 ",
+                        r.turma)),
+                React.createElement("div", { className: "text-[11px] mono text-slate-500" },
+                    r.email,
+                    " \u00B7 ",
+                    r.atividade,
+                    " \u00B7 quest\u00E3o ",
+                    Number(r.idx) + 1,
+                    " \u00B7 ",
+                    r.motivo)),
+            React.createElement("div", { className: "flex gap-2" },
+                React.createElement("button", { className: "btn bg-green-700 hover:bg-green-600", onClick: () => unblock(r.id, false) }, "LIBERAR (CONTINUAR)"),
+                React.createElement("button", { className: "btn bg-slate-700 hover:bg-slate-600", onClick: () => unblock(r.id, true) }, "LIBERAR (REINICIAR)"))))))));
 }
-
 function AdminResults({ token }) {
-  const [rows, setRows] = useState([]);
-  useEffect(() => { api("adminResults", { token }).then((r) => setRows(r.rows)).catch(() => {}); }, [token]);
-
-  const csv = () => {
-    const head = ["nome", "email", "turma", "atividade", "status", "nota", "saidas", "inicio", "fim"];
-    const body = rows.map((r) => head.map((h) => '"' + String(r[h] === undefined ? "" : r[h]).replace(/"/g, '""') + '"').join(","));
-    const blob = new Blob([head.join(",") + "\n" + body.join("\n")], { type: "text/csv;charset=utf-8" });
-    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "resultados.csv"; a.click();
-  };
-
-  return (
-    <div className="glass rounded-3xl p-6 overflow-x-auto">
-      <div className="flex justify-between items-center mb-5">
-        <h3 className="text-sm font-black uppercase text-cyan-400">Resultados ({rows.length})</h3>
-        <button className="btn bg-slate-800 hover:bg-slate-700" onClick={csv}>EXPORTAR CSV</button>
-      </div>
-      <table className="w-full text-sm">
-        <thead><tr className="mono text-[11px] text-slate-500 text-left">
-          <th className="p-2">Aluno</th><th className="p-2">Turma</th><th className="p-2">Atividade</th>
-          <th className="p-2">Status</th><th className="p-2">Nota</th><th className="p-2">Saídas</th>
-        </tr></thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id} className="border-t border-slate-800">
-              <td className="p-2">{r.nome}<div className="text-[11px] text-slate-500">{r.email}</div></td>
-              <td className="p-2">{r.turma}</td>
-              <td className="p-2">{r.atividade}</td>
-              <td className="p-2">{r.status}</td>
-              <td className="p-2 font-black">{r.nota}</td>
-              <td className="p-2">{r.saidas}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+    const [rows, setRows] = useState(null);
+    const [acts, setActs] = useState([]);
+    const [open, setOpen] = useState(null);
+    const [turma, setTurma] = useState("");
+    useEffect(() => {
+        api("adminResults", { token }).then((r) => setRows(r.rows || [])).catch(() => setRows([]));
+        api("adminActivities", { token }).then((r) => setActs(r.activities || [])).catch(() => { });
+    }, [token]);
+    if (rows === null)
+        return React.createElement("p", { className: "mono text-xs text-slate-500" }, "Carregando resultados\u2026");
+    const known = acts.map((a) => ({ id: a.id, title: a.title, max: a.maxGrade }));
+    rows.forEach((r) => { if (!known.some((k) => k.id === r.atividade))
+        known.push({ id: r.atividade, title: r.atividade + " (excluída)", max: "" }); });
+    const rowsOf = (id) => rows.filter((r) => r.atividade === id);
+    const avg = (list) => {
+        const n = list.filter((r) => r.status === "concluido" && r.nota !== "" && !isNaN(Number(r.nota))).map((r) => Number(r.nota));
+        return n.length ? (n.reduce((a, b) => a + b, 0) / n.length).toFixed(1) : "—";
+    };
+    const label = { concluido: "Concluído", em_andamento: "Em andamento", bloqueado: "Bloqueado", interrompido: "Interrompido" };
+    if (open) {
+        const cur = known.find((k) => k.id === open) || { id: open, title: open };
+        const all = rowsOf(open);
+        const turmas = Array.from(new Set(all.map((r) => r.turma))).filter(Boolean).sort();
+        const list = turma ? all.filter((r) => r.turma === turma) : all;
+        const csv = () => {
+            const head = ["nome", "email", "turma", "status", "nota", "saidas", "inicio", "fim"];
+            const body = list.map((r) => head.map((h) => '"' + String(r[h] === undefined ? "" : r[h]).replace(/"/g, '""') + '"').join(","));
+            const blob = new Blob(["\ufeff" + head.join(",") + "\n" + body.join("\n")], { type: "text/csv;charset=utf-8" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "resultados-" + String(cur.title).toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40) + ".csv";
+            a.click();
+        };
+        return (React.createElement("div", { className: "glass rounded-3xl p-6 overflow-x-auto" },
+            React.createElement("button", { className: "text-xs mono text-slate-500 hover:text-cyan-400 mb-4", onClick: () => { setOpen(null); setTurma(""); } }, "\u2190 VOLTAR \u00C0S ATIVIDADES"),
+            React.createElement("div", { className: "flex flex-wrap justify-between items-center gap-3 mb-5" },
+                React.createElement("div", null,
+                    React.createElement("h3", { className: "text-lg font-black text-cyan-400" }, cur.title),
+                    React.createElement("p", { className: "text-[11px] mono text-slate-500" },
+                        list.length,
+                        " participa\u00E7\u00F5es \u00B7 m\u00E9dia ",
+                        avg(list),
+                        cur.max ? " de " + cur.max : "")),
+                React.createElement("div", { className: "flex gap-2" },
+                    React.createElement("select", { className: "inp", style: { width: "auto" }, value: turma, onChange: (e) => setTurma(e.target.value) },
+                        React.createElement("option", { value: "" }, "Todas as turmas"),
+                        turmas.map((t) => React.createElement("option", { key: t, value: t }, t))),
+                    React.createElement("button", { className: "btn bg-slate-800 hover:bg-slate-700", onClick: csv }, "EXPORTAR CSV"))),
+            list.length === 0 && React.createElement("p", { className: "text-sm text-slate-500" }, "Nenhum aluno participou ainda."),
+            list.length > 0 && (React.createElement("table", { className: "w-full text-sm" },
+                React.createElement("thead", null,
+                    React.createElement("tr", { className: "mono text-[11px] text-slate-500 text-left" },
+                        React.createElement("th", { className: "p-2" }, "Aluno"),
+                        React.createElement("th", { className: "p-2" }, "Turma"),
+                        React.createElement("th", { className: "p-2" }, "Status"),
+                        React.createElement("th", { className: "p-2" }, "Nota"),
+                        React.createElement("th", { className: "p-2" }, "Sa\u00EDdas"))),
+                React.createElement("tbody", null, list.map((r) => (React.createElement("tr", { key: r.id, className: "border-t border-slate-800" },
+                    React.createElement("td", { className: "p-2" },
+                        r.nome,
+                        React.createElement("div", { className: "text-[11px] text-slate-500" }, r.email)),
+                    React.createElement("td", { className: "p-2" }, r.turma),
+                    React.createElement("td", { className: "p-2" }, label[r.status] || r.status),
+                    React.createElement("td", { className: "p-2 font-black" }, r.nota),
+                    React.createElement("td", { className: "p-2" }, r.saidas)))))))));
+    }
+    return (React.createElement("div", null,
+        React.createElement("h3", { className: "text-sm font-black uppercase text-cyan-400 mb-4" }, "Resultados por atividade"),
+        known.length === 0 && React.createElement("p", { className: "text-sm text-slate-500" }, "Nenhuma atividade cadastrada."),
+        React.createElement("div", { className: "grid sm:grid-cols-2 gap-4" }, known.map((k) => {
+            const l = rowsOf(k.id);
+            const done = l.filter((r) => r.status === "concluido").length;
+            return (React.createElement("button", { key: k.id, onClick: () => setOpen(k.id), className: "text-left glass hover:border-cyan-500 rounded-2xl p-5 transition-all" },
+                React.createElement("div", { className: "font-black mb-1" }, k.title),
+                React.createElement("div", { className: "text-[11px] mono text-slate-500" },
+                    l.length,
+                    " participa\u00E7\u00F5es \u00B7 ",
+                    done,
+                    " conclu\u00EDdas"),
+                React.createElement("div", { className: "text-[11px] mono text-slate-500" },
+                    "M\u00E9dia: ",
+                    avg(l),
+                    k.max ? " de " + k.max : "")));
+        }))));
 }
-
 function AdminManual({ token }) {
-  const [rows, setRows] = useState([]);
-  const [form, setForm] = useState({ nome: "", turma: "", atividade: "", code: "" });
-  const [msg, setMsg] = useState("");
-  const load = useCallback(() => api("adminManualList", { token }).then((r) => setRows(r.rows)).catch(() => {}), [token]);
-  useEffect(load, [load]);
-
-  return (
-    <div className="glass rounded-3xl p-6">
-      <h3 className="text-sm font-black uppercase text-cyan-400 mb-2">Códigos de liberação</h3>
-      <p className="text-xs text-slate-500 mb-5">Use quando um aluno não conseguir entrar com o e-mail institucional.</p>
-      <div className="grid sm:grid-cols-4 gap-3 mb-4">
-        <input className="inp" placeholder="Nome do aluno" value={form.nome} onChange={(e) => setForm({ ...form, nome: e.target.value })} />
-        <input className="inp" placeholder="Turma" value={form.turma} onChange={(e) => setForm({ ...form, turma: e.target.value })} />
-        <input className="inp" placeholder="Id da atividade" value={form.atividade} onChange={(e) => setForm({ ...form, atividade: e.target.value })} />
-        <input className="inp" placeholder="Código (opcional)" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value.toUpperCase() })} />
-      </div>
-      <button className="btn bg-cyan-600 hover:bg-cyan-500" onClick={async () => {
-        const r = await api("adminManual", { token, ...form });
-        setMsg("Código criado: " + r.code); setForm({ nome: "", turma: "", atividade: "", code: "" }); load();
-      }}>GERAR CÓDIGO</button>
-      {msg && <p className="mono text-sm text-green-400 mt-4">{msg}</p>}
-      <div className="mt-6 space-y-2">
-        {rows.map((r, i) => (
-          <div key={i} className="text-xs mono flex justify-between border-t border-slate-800 py-2">
-            <span className="text-cyan-400">{r.codigo}</span>
-            <span>{r.nome} · {r.turma} · {r.atividade}</span>
-            <span className={r.usado === "sim" ? "text-slate-600" : "text-green-400"}>{r.usado === "sim" ? "usado" : "disponível"}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+    const [rows, setRows] = useState([]);
+    const [form, setForm] = useState({ nome: "", turma: "", atividade: "", code: "" });
+    const [msg, setMsg] = useState("");
+    const load = useCallback(() => api("adminManualList", { token }).then((r) => setRows(r.rows)).catch(() => { }), [token]);
+    useEffect(load, [load]);
+    return (React.createElement("div", { className: "glass rounded-3xl p-6" },
+        React.createElement("h3", { className: "text-sm font-black uppercase text-cyan-400 mb-2" }, "C\u00F3digos de libera\u00E7\u00E3o"),
+        React.createElement("p", { className: "text-xs text-slate-500 mb-5" }, "Use quando um aluno n\u00E3o conseguir entrar com o e-mail institucional."),
+        React.createElement("div", { className: "grid sm:grid-cols-4 gap-3 mb-4" },
+            React.createElement("input", { className: "inp", placeholder: "Nome do aluno", value: form.nome, onChange: (e) => setForm({ ...form, nome: e.target.value }) }),
+            React.createElement("input", { className: "inp", placeholder: "Turma", value: form.turma, onChange: (e) => setForm({ ...form, turma: e.target.value }) }),
+            React.createElement("input", { className: "inp", placeholder: "Id da atividade", value: form.atividade, onChange: (e) => setForm({ ...form, atividade: e.target.value }) }),
+            React.createElement("input", { className: "inp", placeholder: "C\u00F3digo (opcional)", value: form.code, onChange: (e) => setForm({ ...form, code: e.target.value.toUpperCase() }) })),
+        React.createElement("button", { className: "btn bg-cyan-600 hover:bg-cyan-500", onClick: async () => {
+                const r = await api("adminManual", { token, ...form });
+                setMsg("Código criado: " + r.code);
+                setForm({ nome: "", turma: "", atividade: "", code: "" });
+                load();
+            } }, "GERAR C\u00D3DIGO"),
+        msg && React.createElement("p", { className: "mono text-sm text-green-400 mt-4" }, msg),
+        React.createElement("div", { className: "mt-6 space-y-2" }, rows.map((r, i) => (React.createElement("div", { key: i, className: "text-xs mono flex justify-between border-t border-slate-800 py-2" },
+            React.createElement("span", { className: "text-cyan-400" }, r.codigo),
+            React.createElement("span", null,
+                r.nome,
+                " \u00B7 ",
+                r.turma,
+                " \u00B7 ",
+                r.atividade),
+            React.createElement("span", { className: r.usado === "sim" ? "text-slate-600" : "text-green-400" }, r.usado === "sim" ? "usado" : "disponível")))))));
 }
+ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App, null));
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
 </html>
